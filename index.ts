@@ -5,3 +5,20 @@ export function reverse<T>(array: ReadonlyArray<T>): T[] {
     }
     return result;
 }
+
+export interface Grouped<TElement> {
+    [key: string]: TElement[];
+}
+
+export function groupBy<TElement>(array: ReadonlyArray<TElement>, keyOf: (element: TElement) => string): Grouped<TElement> {
+    let grouped = {} as Grouped<TElement>;
+
+    for (let element of array) {
+        let key = keyOf(element);
+        let group = grouped[key] || [];
+        group.push(element);
+        grouped[key] = group;
+    }
+
+    return grouped;
+}

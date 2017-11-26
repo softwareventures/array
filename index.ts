@@ -22,3 +22,11 @@ export function groupBy<TElement>(array: ReadonlyArray<TElement>, keyOf: (elemen
 
     return grouped;
 }
+
+export function last<T>(array: ReadonlyArray<T>): T {
+    if (array.length > 0) {
+        return array[array.length - 1];
+    } else {
+        throw new Error("Empty array.");
+    }
+}

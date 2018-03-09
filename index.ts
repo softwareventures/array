@@ -30,3 +30,9 @@ export function last<T>(array: ReadonlyArray<T>): T {
         throw new Error("Empty array.");
     }
 }
+
+export function concatMap<T, U>(array: ReadonlyArray<T>, f: (element: T) => U[]): U[] {
+    return array
+            .map(f)
+            .reduce((result, subarray) => result.concat(subarray), []);
+}

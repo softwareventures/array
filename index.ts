@@ -1,3 +1,5 @@
+import {Comparator, Comparison} from "@softwareventures/ordered";
+
 export function reverse<T>(array: ReadonlyArray<T>): T[] {
     const result = new Array<T>(array.length);
     for (let i = 0; i < array.length; ++i) {
@@ -36,4 +38,24 @@ export function concatMap<T, U>(array: ReadonlyArray<T>, f: (element: T) => U[])
     return array
         .map(f)
         .reduce((result, subarray) => result.concat(subarray), []);
+}
+
+export function group<T>(elements: ReadonlyArray<T>, compare: Comparator<T>): T[][] {
+    return elements.slice(0)
+        .sort(compare)
+        .reduce((groups, element) => {
+            if (groups.length === 0) {
+                return [[element]];
+            }
+
+            const group = groups[groups.length - 1];
+            const exemplar = group[0];
+
+            if (compare(exemplar, element) === Comparison.equal) {
+                return groups.slice(0, groups.length - 1)
+                    .concat(group.concat([element]));
+            } else {
+                return groups.concat([[element]]);
+            }
+        }, [] as T[][]);
 }

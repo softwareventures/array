@@ -39,7 +39,6 @@ export function concatMap<T, U>(array: ReadonlyArray<T>, f: (element: T) => U[])
         .map(f)
         .reduce((result, subarray) => result.concat(subarray), []);
 }
-
 export function group<T>(elements: ReadonlyArray<T>, compare: Comparator<T>): T[][] {
     return elements.slice(0)
         .sort(compare)
@@ -58,4 +57,9 @@ export function group<T>(elements: ReadonlyArray<T>, compare: Comparator<T>): T[
                 return groups.concat([[element]]);
             }
         }, [] as T[][]);
+}
+
+export function sum<T>(array: ReadonlyArray<T>, value: (element: T) => number): number {
+    return array.map(value)
+                .reduce((sum, value) => sum + value, 0);
 }

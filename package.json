@@ -6,7 +6,8 @@
   "keywords": [
     "array",
     "functional",
-    "lambda"
+    "lambda",
+    "typescript"
   ],
   "author": "Daniel Cassidy <mail@danielcassidy.me.uk>",
   "license": "ISC",

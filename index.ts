@@ -1,5 +1,5 @@
 export function reverse<T>(array: ReadonlyArray<T>): T[] {
-    let result = new Array<T>(array.length);
+    const result = new Array<T>(array.length);
     for (let i = 0; i < array.length; ++i) {
         result[i] = array[array.length - i - 1];
     }
@@ -10,12 +10,13 @@ export interface Grouped<TElement> {
     [key: string]: TElement[];
 }
 
-export function groupBy<TElement>(array: ReadonlyArray<TElement>, keyOf: (element: TElement) => string): Grouped<TElement> {
-    let grouped = {} as Grouped<TElement>;
+export function groupBy<TElement>(array: ReadonlyArray<TElement>,
+                                  keyOf: (element: TElement) => string): Grouped<TElement> {
+    const grouped = {} as Grouped<TElement>;
 
-    for (let element of array) {
-        let key = keyOf(element);
-        let group = grouped[key] || [];
+    for (const element of array) {
+        const key = keyOf(element);
+        const group = grouped[key] || [];
         group.push(element);
         grouped[key] = group;
     }
@@ -33,6 +34,6 @@ export function last<T>(array: ReadonlyArray<T>): T {
 
 export function concatMap<T, U>(array: ReadonlyArray<T>, f: (element: T) => U[]): U[] {
     return array
-            .map(f)
-            .reduce((result, subarray) => result.concat(subarray), []);
+        .map(f)
+        .reduce((result, subarray) => result.concat(subarray), []);
 }

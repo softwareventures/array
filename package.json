@@ -13,5 +13,8 @@
   "bugs": {
     "url": "https://github.com/softwareventures/array/issues"
   },
-  "homepage": "https://github.com/softwareventures/array"
+  "homepage": "https://github.com/softwareventures/array",
+  "devDependencies": {
+    "typescript": "^3.1.6"
+  }
 }

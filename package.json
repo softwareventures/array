@@ -16,7 +16,8 @@
   },
   "homepage": "https://github.com/softwareventures/array",
   "scripts": {
-    "prepare": "tslint --project . && tsc"
+    "prepare": "tslint --project . && tsc",
+    "lint": "tslint --project ."
   },
   "devDependencies": {
     "@softwareventures/tslint-rules": "^0.5.0",

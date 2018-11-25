@@ -1,6 +1,6 @@
 import {Comparator, Comparison} from "@softwareventures/ordered";
 
-export function reverse<T>(array: ReadonlyArray<T>): T[] {
+export function reverse<T>(array: ArrayLike<T>): T[] {
     const result = new Array<T>(array.length);
     for (let i = 0; i < array.length; ++i) {
         result[i] = array[array.length - i - 1];
@@ -26,7 +26,7 @@ export function groupBy<TElement>(array: ReadonlyArray<TElement>,
     return grouped;
 }
 
-export function last<T>(array: ReadonlyArray<T>): T {
+export function last<T>(array: ArrayLike<T>): T {
     if (array.length > 0) {
         return array[array.length - 1];
     } else {

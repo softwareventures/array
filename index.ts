@@ -1,5 +1,13 @@
 import {Comparator, Comparison} from "@softwareventures/ordered";
 
+export function map<T, U>(array: ArrayLike<T>, f: (element: T) => U): U[] {
+    const result = new Array<U>(array.length);
+    for (let i = 0; i < array.length; ++i) {
+        result[i] = f(array[i]);
+    }
+    return result;
+}
+
 export function reverse<T>(array: ArrayLike<T>): T[] {
     const result = new Array<T>(array.length);
     for (let i = 0; i < array.length; ++i) {
@@ -34,9 +42,8 @@ export function last<T>(array: ArrayLike<T>): T {
     }
 }
 
-export function concatMap<T, U>(array: ReadonlyArray<T>, f: (element: T) => U[]): U[] {
-    return array
-        .map(f)
+export function concatMap<T, U>(array: ArrayLike<T>, f: (element: T) => U[]): U[] {
+    return map(array, f)
         .reduce((result, subarray) => result.concat(subarray), []);
 }
 
@@ -60,7 +67,7 @@ export function group<T>(elements: ReadonlyArray<T>, compare: Comparator<T>): T[
         }, [] as T[][]);
 }
 
-export function sum<T>(array: ReadonlyArray<T>, value: (element: T) => number): number {
-    return array.map(value)
+export function sum<T>(array: ArrayLike<T>, value: (element: T) => number): number {
+    return map(array, value)
         .reduce((sum, value) => sum + value, 0);
 }

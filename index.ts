@@ -39,6 +39,7 @@ export function concatMap<T, U>(array: ReadonlyArray<T>, f: (element: T) => U[])
         .map(f)
         .reduce((result, subarray) => result.concat(subarray), []);
 }
+
 export function group<T>(elements: ReadonlyArray<T>, compare: Comparator<T>): T[][] {
     return elements.slice(0)
         .sort(compare)
@@ -52,7 +53,7 @@ export function group<T>(elements: ReadonlyArray<T>, compare: Comparator<T>): T[
 
             if (compare(exemplar, element) === Comparison.equal) {
                 return groups.slice(0, groups.length - 1)
-                    .concat(group.concat([element]));
+                    .concat([group.concat([element])]);
             } else {
                 return groups.concat([[element]]);
             }
@@ -61,5 +62,5 @@ export function group<T>(elements: ReadonlyArray<T>, compare: Comparator<T>): T[
 
 export function sum<T>(array: ReadonlyArray<T>, value: (element: T) => number): number {
     return array.map(value)
-                .reduce((sum, value) => sum + value, 0);
+        .reduce((sum, value) => sum + value, 0);
 }

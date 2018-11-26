@@ -8,13 +8,13 @@ export const copy: <T>(array: ArrayLike<T>) => T[] =
         ? Array.from // tslint:disable-line:no-unbound-method
         : array => internalSlice.call(array);
 
-export function map<T, U>(array: ArrayLike<T>, f: (element: T) => U): U[] {
-    const result = new Array<U>(array.length);
-    for (let i = 0; i < array.length; ++i) {
-        result[i] = f(array[i]);
-    }
-    return result;
-}
+// tslint:disable-next-line:no-unbound-method
+const internalMap = Array.prototype.map;
+
+export const map: <T, U>(array: ArrayLike<T>, f: (element: T) => U) => U[] =
+    Array.from != null
+        ? Array.from // tslint:disable-line:no-unbound-method
+        : (array, f) => internalMap.call(array, f);
 
 export function reverse<T>(array: ArrayLike<T>): T[] {
     const result = new Array<T>(array.length);

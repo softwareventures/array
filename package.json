@@ -1,6 +1,6 @@
 {
   "name": "@softwareventures/array",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Simple typesafe functions for working with arrays.",
   "repository": "github:softwareventures/array",
   "keywords": [

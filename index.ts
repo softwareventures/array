@@ -1,5 +1,13 @@
 import {Comparator, Comparison} from "@softwareventures/ordered";
 
+// tslint:disable-next-line:no-unbound-method
+const internalSlice = Array.prototype.slice;
+
+export const copy: <T>(array: ArrayLike<T>) => T[] =
+    Array.from != null
+        ? Array.from // tslint:disable-line:no-unbound-method
+        : array => internalSlice.call(array);
+
 export function map<T, U>(array: ArrayLike<T>, f: (element: T) => U): U[] {
     const result = new Array<U>(array.length);
     for (let i = 0; i < array.length; ++i) {
@@ -48,7 +56,7 @@ export function concatMap<T, U>(array: ArrayLike<T>, f: (element: T) => U[]): U[
 }
 
 export function group<T>(elements: ReadonlyArray<T>, compare: Comparator<T>): T[][] {
-    return elements.slice(0)
+    return copy(elements)
         .sort(compare)
         .reduce((groups, element) => {
             if (groups.length === 0) {

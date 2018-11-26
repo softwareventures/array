@@ -17,7 +17,7 @@ export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => 
         : (array, f) => internalMap.call(array, f);
 
 export function reverse<T>(array: ArrayLike<T>): T[] {
-    const result = new Array<T>(array.length);
+    const result = copy<T>({length: array.length});
     for (let i = 0; i < array.length; ++i) {
         result[i] = array[array.length - i - 1];
     }

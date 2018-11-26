@@ -1,4 +1,5 @@
 import {Comparator, Comparison} from "@softwareventures/ordered";
+import {Dictionary} from "dictionary-types";
 
 // tslint:disable-next-line:no-unbound-method
 const internalSlice = Array.prototype.slice;
@@ -24,13 +25,9 @@ export function reverse<T>(array: ArrayLike<T>): T[] {
     return result;
 }
 
-export interface Grouped<TElement> {
-    [key: string]: TElement[];
-}
-
 export function groupBy<TElement>(array: ReadonlyArray<TElement>,
-                                  keyOf: (element: TElement) => string): Grouped<TElement> {
-    const grouped = {} as Grouped<TElement>;
+                                  keyOf: (element: TElement) => string): Dictionary<TElement[]> {
+    const grouped = {} as Dictionary<TElement[]>;
 
     for (const element of array) {
         const key = keyOf(element);

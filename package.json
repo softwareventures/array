@@ -25,6 +25,7 @@
     "typescript": "^3.1.6"
   },
   "dependencies": {
-    "@softwareventures/ordered": "^0.1.1"
+    "@softwareventures/ordered": "^0.1.1",
+    "tslib": "^1.9.3"
   }
 }

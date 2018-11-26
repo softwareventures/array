@@ -20,11 +20,11 @@
     "lint": "tslint --project ."
   },
   "devDependencies": {
-    "@softwareventures/tslint-rules": "^0.5.0",
+    "@softwareventures/tslint-rules": "^0.5.2",
     "tslint": "^5.11.0",
     "typescript": "^3.1.6"
   },
   "dependencies": {
-    "@softwareventures/ordered": "^0.1.0"
+    "@softwareventures/ordered": "^0.1.1"
   }
 }

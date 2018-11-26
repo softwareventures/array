@@ -11,7 +11,7 @@ export const copy: <T>(array: ArrayLike<T>) => T[] =
 // tslint:disable-next-line:no-unbound-method
 const internalMap = Array.prototype.map;
 
-export const map: <T, U>(array: ArrayLike<T>, f: (element: T) => U) => U[] =
+export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
     Array.from != null
         ? Array.from // tslint:disable-line:no-unbound-method
         : (array, f) => internalMap.call(array, f);

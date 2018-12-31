@@ -11,9 +11,7 @@
   ],
   "author": "Daniel Cassidy <mail@danielcassidy.me.uk>",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/softwareventures/array/issues"
-  },
+  "bugs": "https://github.com/softwareventures/array/issues",
   "homepage": "https://github.com/softwareventures/array",
   "scripts": {
     "prepare": "tslint --project . && tsc",

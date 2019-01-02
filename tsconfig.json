@@ -1,13 +1,9 @@
 {
+  "extends": "@softwareventures/tsconfig",
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "lib": ["es5", "es2015.core"],
-    "strict": true,
-    "declaration": true,
-    "downlevelIteration": true,
-    "forceConsistentCasingInFileNames": true,
-    "importHelpers": true,
-    "moduleResolution": "node"
+    "lib": [
+      "es5",
+      "es2015.core"
+    ]
   }
 }

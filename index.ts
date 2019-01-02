@@ -14,7 +14,8 @@ const internalMap = Array.prototype.map;
 
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
     Array.from != null
-        ? Array.from // tslint:disable-line:no-unbound-method
+        // tslint:disable-next-line:no-unbound-method
+        ? Array.from as any // TypeScript 3.2 incorrectly requires this cast to any.
         : (array, f) => internalMap.call(array, f);
 
 export function reverse<T>(array: ArrayLike<T>): T[] {

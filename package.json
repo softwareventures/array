@@ -1,6 +1,6 @@
 {
   "name": "@softwareventures/array",
-  "version": "0.1.2",
+  "version": "0.0.0-development",
   "description": "Pure functional array manipulation and traversal",
   "repository": "github:softwareventures/array",
   "keywords": [
@@ -15,13 +15,15 @@
   "homepage": "https://github.com/softwareventures/array",
   "scripts": {
     "prepare": "tslint --project . && tsc",
-    "test": "echo No tests yet"
+    "test": "echo No tests yet",
+    "semantic-release": "semantic-release"
   },
   "sideEffects": false,
   "devDependencies": {
     "@softwareventures/tsconfig": "1.0.0",
     "@softwareventures/tslint-rules": "0.6.4",
     "cz-conventional-changelog": "2.1.0",
+    "semantic-release": "15.13.3",
     "tslint": "5.12.1",
     "typescript": "3.2.4"
   },

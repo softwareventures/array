@@ -122,10 +122,10 @@
     into-stream "^4.0.0"
     lodash "^4.17.4"
 
-"@softwareventures/ordered@^0.1.1":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@softwareventures/ordered/-/ordered-0.1.2.tgz#837367d73ffb21ee0e3772508217a27c61a36f79"
-  integrity sha512-IXsnqPnz2Kzw51UR9WBk33UOjNwWLF2rjn+DqAmWwGwTvFgbOy6hIrQpGAe6W9BmlJR1/GUgvMvsBOCXLJhx9w==
+"@softwareventures/ordered@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@softwareventures/ordered/-/ordered-0.2.0.tgz#93e53f5adafaae5a88b674c8b919f95c6f9634be"
+  integrity sha512-20W6I2c1LoIDFCKLnkvWm+fgeITPZKtxV+P50Bhk+YFHfDCGdpwCW64zl/6j3ur+qIy64rs0a2bFimPU0t0v+A==
   dependencies:
     tslib "^1.9.3"
 

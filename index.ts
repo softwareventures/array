@@ -9,6 +9,10 @@ export const copy: <T>(array: ArrayLike<T>) => T[] =
         ? Array.from // tslint:disable-line:no-unbound-method
         : array => nativeSlice.call(array);
 
+export function copyFn(): typeof copy {
+    return copy;
+}
+
 // tslint:disable-next-line:no-unbound-method
 const nativeMap = Array.prototype.map;
 
@@ -18,12 +22,20 @@ export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => 
         ? Array.from as any // TypeScript 3.2 incorrectly requires this cast to any.
         : (array, f) => nativeMap.call(array, f);
 
+export function mapFn<T, U>(f: (element: T, index: number) => U): (array: ArrayLike<T>) => U[] {
+    return array => map(array, f);
+}
+
 export function reverse<T>(array: ArrayLike<T>): T[] {
     const result = copy<T>({length: array.length});
     for (let i = 0; i < array.length; ++i) {
         result[i] = array[array.length - i - 1];
     }
     return result;
+}
+
+export function reverseFn(): typeof reverse {
+    return reverse;
 }
 
 export function groupBy<TElement>(array: ReadonlyArray<TElement>,
@@ -40,6 +52,10 @@ export function groupBy<TElement>(array: ReadonlyArray<TElement>,
     return grouped;
 }
 
+export function groupByFn<T>(keyOf: (element: T) => string): (array: ReadonlyArray<T>) => Dictionary<T[]> {
+    return array => groupBy(array, keyOf);
+}
+
 export function last<T>(array: ArrayLike<T>): T {
     if (array.length > 0) {
         return array[array.length - 1];
@@ -48,9 +64,17 @@ export function last<T>(array: ArrayLike<T>): T {
     }
 }
 
+export function lastFn(): typeof last {
+    return last;
+}
+
 export function concatMap<T, U>(array: ArrayLike<T>, f: (element: T) => U[]): U[] {
     return map(array, f)
         .reduce((result, subarray) => result.concat(subarray), []);
+}
+
+export function concatMapFn<T, U>(f: (element: T) => U[]): (array: ArrayLike<T>) => U[] {
+    return array => concatMap(array, f);
 }
 
 export function group<T>(elements: ReadonlyArray<T>, compare: Comparator<T>): T[][] {
@@ -73,7 +97,15 @@ export function group<T>(elements: ReadonlyArray<T>, compare: Comparator<T>): T[
         }, [] as T[][]);
 }
 
+export function groupFn<T>(compare: Comparator<T>): (array: ReadonlyArray<T>) => T[][] {
+    return array => group(array, compare);
+}
+
 export function sum<T>(array: ArrayLike<T>, value: (element: T) => number): number {
     return map(array, value)
         .reduce((sum, value) => sum + value, 0);
+}
+
+export function sumFn<T>(value: (element: T) => number): (array: ReadonlyArray<T>) => number {
+    return array => sum(array, value);
 }

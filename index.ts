@@ -2,21 +2,21 @@ import {Comparator, Comparison} from "@softwareventures/ordered";
 import {Dictionary} from "dictionary-types";
 
 // tslint:disable-next-line:no-unbound-method
-const internalSlice = Array.prototype.slice;
+const nativeSlice = Array.prototype.slice;
 
 export const copy: <T>(array: ArrayLike<T>) => T[] =
     Array.from != null
         ? Array.from // tslint:disable-line:no-unbound-method
-        : array => internalSlice.call(array);
+        : array => nativeSlice.call(array);
 
 // tslint:disable-next-line:no-unbound-method
-const internalMap = Array.prototype.map;
+const nativeMap = Array.prototype.map;
 
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
     Array.from != null
         // tslint:disable-next-line:no-unbound-method
         ? Array.from as any // TypeScript 3.2 incorrectly requires this cast to any.
-        : (array, f) => internalMap.call(array, f);
+        : (array, f) => nativeMap.call(array, f);
 
 export function reverse<T>(array: ArrayLike<T>): T[] {
     const result = copy<T>({length: array.length});

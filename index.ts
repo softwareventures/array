@@ -15,10 +15,6 @@ export const copy: <T>(array: ArrayLike<T>) => T[] =
         ? Array.from // tslint:disable-line:no-unbound-method
         : array => nativeSlice.call(array);
 
-export function copyFn(): typeof copy {
-    return copy;
-}
-
 export function concat<T>(a: ArrayLike<T>, b: ArrayLike<T>): T[] {
     return nativeConcat.call(copy(a), copy(b));
 }
@@ -37,10 +33,6 @@ export function head<T>(array: ArrayLike<T>): T | null {
         : array[0];
 }
 
-export function headFn(): <T>(array: ArrayLike<T>) => T | null {
-    return head;
-}
-
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
     Array.from != null
         // tslint:disable-next-line:no-unbound-method
@@ -57,10 +49,6 @@ export function reverse<T>(array: ArrayLike<T>): T[] {
         result[i] = array[array.length - i - 1];
     }
     return result;
-}
-
-export function reverseFn(): typeof reverse {
-    return reverse;
 }
 
 export function keyBy<T>(array: ArrayLike<T>,
@@ -88,10 +76,6 @@ export function last<T>(array: ArrayLike<T>): T {
     } else {
         throw new Error("Empty array.");
     }
-}
-
-export function lastFn(): typeof last {
-    return last;
 }
 
 export function concatMap<T, U>(array: ArrayLike<T>, f: (element: T) => U[]): U[] {

@@ -49,6 +49,10 @@ export function last<T>(array: ArrayLike<T>): T | null {
         : array[array.length - 1];
 }
 
+export function empty<T>(array: ArrayLike<T>): boolean {
+    return array.length === 0;
+}
+
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
     Array.from != null
         // tslint:disable-next-line:no-unbound-method

@@ -33,6 +33,10 @@ export function head<T>(array: ArrayLike<T>): T | null {
         : array[0];
 }
 
+export function tail<T>(array: ArrayLike<T>): T[] {
+    return nativeSlice.call(array, 1);
+}
+
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
     Array.from != null
         // tslint:disable-next-line:no-unbound-method

@@ -61,6 +61,30 @@ export function reverse<T>(array: ArrayLike<T>): T[] {
     return result;
 }
 
+export function slice<T>(array: ArrayLike<T>, start?: number, end?: number): T[] {
+    return nativeSlice.call(array, start, end);
+}
+
+export function sliceFn<T>(start?: number, end?: number): (array: ArrayLike<T>) => T[] {
+    return array => nativeSlice.call(array, start, end);
+}
+
+export function take<T>(array: ArrayLike<T>, count: number): T[] {
+    return nativeSlice.call(array, 0, count);
+}
+
+export function takeFn<T>(count: number): (array: ArrayLike<T>) => T[] {
+    return array => nativeSlice.call(array, 0, count);
+}
+
+export function drop<T>(array: ArrayLike<T>, count: number): T[] {
+    return nativeSlice.call(array, count);
+}
+
+export function dropFn<T>(count: number): (array: ArrayLike<T>) => T[] {
+    return array => nativeSlice.call(array, count);
+}
+
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
     Array.from != null
         // tslint:disable-next-line:no-unbound-method

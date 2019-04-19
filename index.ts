@@ -38,11 +38,12 @@ export function reverseFn(): typeof reverse {
     return reverse;
 }
 
-export function groupBy<TElement>(array: ReadonlyArray<TElement>,
+export function groupBy<TElement>(array: ArrayLike<TElement>,
                                   keyOf: (element: TElement) => string): Dictionary<TElement[]> {
     const grouped = {} as Dictionary<TElement[]>;
 
-    for (const element of array) {
+    for (let i = 0; i < array.length; ++i) {
+        const element = array[i];
         const key = keyOf(element);
         const group = grouped[key] || [];
         group.push(element);
@@ -52,7 +53,7 @@ export function groupBy<TElement>(array: ReadonlyArray<TElement>,
     return grouped;
 }
 
-export function groupByFn<T>(keyOf: (element: T) => string): (array: ReadonlyArray<T>) => Dictionary<T[]> {
+export function groupByFn<T>(keyOf: (element: T) => string): (array: ArrayLike<T>) => Dictionary<T[]> {
     return array => groupBy(array, keyOf);
 }
 

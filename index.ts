@@ -4,6 +4,9 @@ import {Dictionary} from "dictionary-types";
 // tslint:disable-next-line:no-unbound-method
 const nativeSlice = Array.prototype.slice;
 
+// tslint:disable-next-line:no-unbound-method
+const nativeMap = Array.prototype.map;
+
 export const copy: <T>(array: ArrayLike<T>) => T[] =
     Array.from != null
         ? Array.from // tslint:disable-line:no-unbound-method
@@ -12,9 +15,6 @@ export const copy: <T>(array: ArrayLike<T>) => T[] =
 export function copyFn(): typeof copy {
     return copy;
 }
-
-// tslint:disable-next-line:no-unbound-method
-const nativeMap = Array.prototype.map;
 
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
     Array.from != null

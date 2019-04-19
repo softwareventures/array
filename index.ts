@@ -78,7 +78,7 @@ export function concatMapFn<T, U>(f: (element: T) => U[]): (array: ArrayLike<T>)
     return array => concatMap(array, f);
 }
 
-export function group<T>(elements: ReadonlyArray<T>, compare: Comparator<T>): T[][] {
+export function group<T>(elements: ArrayLike<T>, compare: Comparator<T>): T[][] {
     return copy(elements)
         .sort(compare)
         .reduce((groups, element) => {
@@ -98,7 +98,7 @@ export function group<T>(elements: ReadonlyArray<T>, compare: Comparator<T>): T[
         }, [] as T[][]);
 }
 
-export function groupFn<T>(compare: Comparator<T>): (array: ReadonlyArray<T>) => T[][] {
+export function groupFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[][] {
     return array => group(array, compare);
 }
 

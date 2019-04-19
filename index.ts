@@ -78,8 +78,8 @@ export function concatMapFn<T, U>(f: (element: T) => U[]): (array: ArrayLike<T>)
     return array => concatMap(array, f);
 }
 
-export function group<T>(elements: ArrayLike<T>, compare: Comparator<T>): T[][] {
-    return copy(elements)
+export function group<T>(array: ArrayLike<T>, compare: Comparator<T>): T[][] {
+    return copy(array)
         .sort(compare)
         .reduce((groups, element) => {
             if (groups.length === 0) {
@@ -102,11 +102,11 @@ export function groupFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[]
     return array => group(array, compare);
 }
 
-export function sum<T>(array: ArrayLike<T>, value: (element: T) => number): number {
-    return map(array, value)
+export function sum<T>(array: ArrayLike<T>, f: (element: T) => number): number {
+    return map(array, f)
         .reduce((sum, value) => sum + value, 0);
 }
 
-export function sumFn<T>(value: (element: T) => number): (array: ReadonlyArray<T>) => number {
-    return array => sum(array, value);
+export function sumFn<T>(f: (element: T) => number): (array: ReadonlyArray<T>) => number {
+    return array => sum(array, f);
 }

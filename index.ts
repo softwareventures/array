@@ -43,6 +43,12 @@ export function initial<T>(array: ArrayLike<T>): T[] {
         : nativeSlice.call(array, array.length - 1);
 }
 
+export function last<T>(array: ArrayLike<T>): T | null {
+    return array.length === 0
+        ? null
+        : array[array.length - 1];
+}
+
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
     Array.from != null
         // tslint:disable-next-line:no-unbound-method
@@ -78,14 +84,6 @@ export function keyBy<T>(array: ArrayLike<T>,
 
 export function keyByFn<T>(f: (element: T) => string): (array: ArrayLike<T>) => Dictionary<T[]> {
     return array => keyBy(array, f);
-}
-
-export function last<T>(array: ArrayLike<T>): T {
-    if (array.length > 0) {
-        return array[array.length - 1];
-    } else {
-        throw new Error("Empty array.");
-    }
 }
 
 export function concatMap<T, U>(array: ArrayLike<T>, f: (element: T) => U[]): U[] {

@@ -5,6 +5,9 @@ import {Dictionary} from "dictionary-types";
 const nativeSlice = Array.prototype.slice;
 
 // tslint:disable-next-line:no-unbound-method
+const nativeConcat = Array.prototype.concat;
+
+// tslint:disable-next-line:no-unbound-method
 const nativeMap = Array.prototype.map;
 
 export const copy: <T>(array: ArrayLike<T>) => T[] =
@@ -14,6 +17,18 @@ export const copy: <T>(array: ArrayLike<T>) => T[] =
 
 export function copyFn(): typeof copy {
     return copy;
+}
+
+export function concat<T>(a: ArrayLike<T>, b: ArrayLike<T>): T[] {
+    return nativeConcat.call(copy(a), copy(b));
+}
+
+export function prepend<T>(a: ArrayLike<T>): (b: ArrayLike<T>) => T[] {
+    return b => concat(a, b);
+}
+
+export function append<T>(b: ArrayLike<T>): (a: ArrayLike<T>) => T[] {
+    return a => concat(a, b);
 }
 
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =

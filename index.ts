@@ -53,6 +53,14 @@ export function empty<T>(array: ArrayLike<T>): boolean {
     return array.length === 0;
 }
 
+export function reverse<T>(array: ArrayLike<T>): T[] {
+    const result = copy<T>({length: array.length});
+    for (let i = 0; i < array.length; ++i) {
+        result[i] = array[array.length - i - 1];
+    }
+    return result;
+}
+
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
     Array.from != null
         // tslint:disable-next-line:no-unbound-method
@@ -61,14 +69,6 @@ export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => 
 
 export function mapFn<T, U>(f: (element: T, index: number) => U): (array: ArrayLike<T>) => U[] {
     return array => map(array, f);
-}
-
-export function reverse<T>(array: ArrayLike<T>): T[] {
-    const result = copy<T>({length: array.length});
-    for (let i = 0; i < array.length; ++i) {
-        result[i] = array[array.length - i - 1];
-    }
-    return result;
 }
 
 export function keyBy<T>(array: ArrayLike<T>,

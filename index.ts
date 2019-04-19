@@ -38,9 +38,9 @@ export function reverseFn(): typeof reverse {
     return reverse;
 }
 
-export function groupBy<TElement>(array: ArrayLike<TElement>,
-                                  keyOf: (element: TElement) => string): Dictionary<TElement[]> {
-    const grouped = {} as Dictionary<TElement[]>;
+export function groupBy<T>(array: ArrayLike<T>,
+                           keyOf: (element: T) => string): Dictionary<T[]> {
+    const grouped = {} as Dictionary<T[]>;
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];

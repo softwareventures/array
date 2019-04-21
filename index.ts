@@ -30,6 +30,17 @@ export const copy: <T>(array: ArrayLike<T>) => T[] =
         ? Array.from // tslint:disable-line:no-unbound-method
         : array => nativeSlice.call(array);
 
+const isArray: (value: any) => value is any[] =
+    Array.isArray == null
+        ? ((value: any) => value instanceof Array) as any
+        : Array.isArray;
+
+export function coerce<T>(array: ArrayLike<T>): ReadonlyArray<T> {
+    return isArray(array)
+        ? array
+        : copy(array);
+}
+
 export function concat<T>(a: ArrayLike<T>, b: ArrayLike<T>): T[] {
     return nativeConcat.call(copy(a), copy(b));
 }

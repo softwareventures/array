@@ -242,6 +242,10 @@ function internalMinimum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | nu
     return result;
 }
 
+export function sum(array: ArrayLike<number>): number {
+    return fold(array, (a, b) => a + b, 0);
+}
+
 export function keyBy<T>(array: ArrayLike<T>,
                          f: (element: T) => string): Dictionary<T[]> {
     const dictionary = {} as Dictionary<T[]>;
@@ -292,13 +296,4 @@ export function group<T>(array: ArrayLike<T>, compare: Comparator<T>): T[][] {
 
 export function groupFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[][] {
     return array => group(array, compare);
-}
-
-export function sum<T>(array: ArrayLike<T>, f: (element: T) => number): number {
-    return map(array, f)
-        .reduce((sum, value) => sum + value, 0);
-}
-
-export function sumFn<T>(f: (element: T) => number): (array: ReadonlyArray<T>) => number {
-    return array => sum(array, f);
 }

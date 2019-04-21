@@ -41,18 +41,6 @@ export function coerce<T>(array: ArrayLike<T>): ReadonlyArray<T> {
         : copy(array);
 }
 
-export function concat<T>(a: ArrayLike<T>, b: ArrayLike<T>): T[] {
-    return nativeConcat.call(copy(a), copy(b));
-}
-
-export function prepend<T>(a: ArrayLike<T>): (b: ArrayLike<T>) => T[] {
-    return b => concat(a, b);
-}
-
-export function append<T>(b: ArrayLike<T>): (a: ArrayLike<T>) => T[] {
-    return a => concat(a, b);
-}
-
 export function head<T>(array: ArrayLike<T>): T | null {
     return array.length === 0
         ? null
@@ -283,6 +271,18 @@ export function all<T>(array: ArrayLike<T>, predicate: (element: T, index: numbe
 
 export function allFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => boolean {
     return array => all(array, predicate);
+}
+
+export function concat<T>(arrays: ArrayLike<ArrayLike<T>>): T[] {
+    return nativeConcat.apply([], map(arrays, coerce));
+}
+
+export function prepend<T>(a: ArrayLike<T>): (b: ArrayLike<T>) => T[] {
+    return b => concat([a, b]);
+}
+
+export function append<T>(b: ArrayLike<T>): (a: ArrayLike<T>) => T[] {
+    return a => concat([a, b]);
 }
 
 export function keyBy<T>(array: ArrayLike<T>,

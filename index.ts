@@ -33,7 +33,7 @@ export const copy: <T>(array: ArrayLike<T>) => T[] =
 const isArray: (value: any) => value is any[] =
     Array.isArray == null
         ? ((value: any) => value instanceof Array) as any
-        : Array.isArray;
+        : Array.isArray; // tslint: disable-line:no-unbound-method
 
 export function coerce<T>(array: ArrayLike<T>): ReadonlyArray<T> {
     return isArray(array)

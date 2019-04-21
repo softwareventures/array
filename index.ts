@@ -26,9 +26,9 @@ const nativeIndexOf = Array.prototype.indexOf;
 const nativeFind = Array.prototype.find;
 
 export const copy: <T>(array: ArrayLike<T>) => T[] =
-    Array.from != null
-        ? Array.from // tslint:disable-line:no-unbound-method
-        : array => nativeSlice.call(array);
+    Array.from == null
+        ? array => nativeSlice.call(array)
+        : Array.from;
 
 const isArray: (value: any) => value is any[] =
     Array.isArray == null

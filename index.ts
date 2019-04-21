@@ -10,6 +10,9 @@ const nativeConcat = Array.prototype.concat;
 // tslint:disable-next-line:no-unbound-method
 const nativeMap = Array.prototype.map;
 
+// tslint:disable-next-line:no-unbound-method
+const nativeFilter = Array.prototype.filter;
+
 export const copy: <T>(array: ArrayLike<T>) => T[] =
     Array.from != null
         ? Array.from // tslint:disable-line:no-unbound-method
@@ -93,6 +96,20 @@ export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => 
 
 export function mapFn<T, U>(f: (element: T, index: number) => U): (array: ArrayLike<T>) => U[] {
     return array => map(array, f);
+}
+
+export function filter<T, U extends T>(array: ArrayLike<T>,
+                                       predicate: (element: T, index: number) => element is U): U[];
+export function filter<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): T[];
+export function filter<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): T[] {
+    return nativeFilter.call(array, predicate);
+}
+
+export function filterFn<T, U extends T>(predicate: (element: T, index: number) => element is U)
+    : (array: ArrayLike<T>) => U[];
+export function filterFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => T[];
+export function filterFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => T[] {
+    return array => filter(array, predicate);
 }
 
 export function keyBy<T>(array: ArrayLike<T>,

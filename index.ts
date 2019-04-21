@@ -254,6 +254,10 @@ export function and(array: ArrayLike<boolean>): boolean {
     return find(array, element => !element) == null;
 }
 
+export function or(array: ArrayLike<boolean>): boolean {
+    return find(array, element => !!element) != null;
+}
+
 export function keyBy<T>(array: ArrayLike<T>,
                          f: (element: T) => string): Dictionary<T[]> {
     const dictionary = {} as Dictionary<T[]>;

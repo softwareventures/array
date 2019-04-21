@@ -246,6 +246,10 @@ export function sum(array: ArrayLike<number>): number {
     return fold(array, (a, b) => a + b, 0);
 }
 
+export function product(array: ArrayLike<number>): number {
+    return fold(array, (a, b) => a * b, 1);
+}
+
 export function keyBy<T>(array: ArrayLike<T>,
                          f: (element: T) => string): Dictionary<T[]> {
     const dictionary = {} as Dictionary<T[]>;

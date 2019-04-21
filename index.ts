@@ -16,6 +16,9 @@ const nativeFilter = Array.prototype.filter;
 // tslint:disable-next-line:no-unbound-method
 const nativeReduce = Array.prototype.reduce;
 
+// tslint:disable-next-line:no-unbound-method
+const nativeReduceRight = Array.prototype.reduceRight;
+
 export const copy: <T>(array: ArrayLike<T>) => T[] =
     Array.from != null
         ? Array.from // tslint:disable-line:no-unbound-method
@@ -130,6 +133,25 @@ export function foldMonoid<T>(array: ArrayLike<T>, f: (accumulator: T, element: 
 
 export function foldMonoidFn<T>(f: (accumulator: T, element: T, index: number) => T): (array: ArrayLike<T>) => T {
     return array => (nativeReduce as any).call(array, f);
+}
+
+export function foldRight<T, U>(array: ArrayLike<T>,
+                                f: (accumulator: U, element: T, index: number) => U,
+                                initial: U): U {
+    return (nativeReduceRight as any).call(array, f, initial);
+}
+
+export function foldRightFn<T, U>(f: (accumulator: U, element: T, index: number) => U,
+                                  initial: U): (array: ArrayLike<T>) => U {
+    return array => (nativeReduceRight as any).call(array, f, initial);
+}
+
+export function foldMonoidRight<T>(array: ArrayLike<T>, f: (accumulator: T, element: T, index: number) => T): T {
+    return (nativeReduceRight as any).call(array, f);
+}
+
+export function foldMonoidRightFn<T>(f: (accumulator: T, element: T, index: number) => T): (array: ArrayLike<T>) => T {
+    return array => (nativeReduceRight as any).call(array, f);
 }
 
 export function keyBy<T>(array: ArrayLike<T>,

@@ -214,6 +214,34 @@ function internalMaximum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | nu
     return result;
 }
 
+export function minimum<T extends string | number | boolean>(array: ArrayLike<T>): T | null;
+export function minimum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | null;
+export function minimum<T>(array: ArrayLike<T>, compare: Comparator<any> = defaultCompare): T | null {
+    return internalMinimum(array, compare);
+}
+
+export function minimumFn<T extends string | number | boolean>(): (array: ArrayLike<T>) => T | null;
+export function minimumFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T | null;
+export function minimumFn<T>(compare: Comparator<any> = defaultCompare): (array: ArrayLike<T>) => T | null {
+    return array => internalMinimum(array, compare);
+}
+
+function internalMinimum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | null {
+    if (array.length === 0) {
+        return null;
+    }
+
+    let result = array[0];
+
+    for (let i = 1; i < array.length; ++i) {
+        if (compare(array[i], result) < 0) {
+            result = array[i];
+        }
+    }
+
+    return result;
+}
+
 export function keyBy<T>(array: ArrayLike<T>,
                          f: (element: T) => string): Dictionary<T[]> {
     const dictionary = {} as Dictionary<T[]>;

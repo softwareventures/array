@@ -285,6 +285,14 @@ export function append<T>(b: ArrayLike<T>): (a: ArrayLike<T>) => T[] {
     return a => concat([a, b]);
 }
 
+export function concatMap<T, U>(array: ArrayLike<T>, f: (element: T) => U[]): U[] {
+    return concat(map(array, f));
+}
+
+export function concatMapFn<T, U>(f: (element: T) => U[]): (array: ArrayLike<T>) => U[] {
+    return array => concatMap(array, f);
+}
+
 export function keyBy<T>(array: ArrayLike<T>,
                          f: (element: T) => string): Dictionary<T[]> {
     const dictionary = {} as Dictionary<T[]>;
@@ -302,15 +310,6 @@ export function keyBy<T>(array: ArrayLike<T>,
 
 export function keyByFn<T>(f: (element: T) => string): (array: ArrayLike<T>) => Dictionary<T[]> {
     return array => keyBy(array, f);
-}
-
-export function concatMap<T, U>(array: ArrayLike<T>, f: (element: T) => U[]): U[] {
-    return map(array, f)
-        .reduce((result, subarray) => result.concat(subarray), []);
-}
-
-export function concatMapFn<T, U>(f: (element: T) => U[]): (array: ArrayLike<T>) => U[] {
-    return array => concatMap(array, f);
 }
 
 export function group<T>(array: ArrayLike<T>, compare: Comparator<T>): T[][] {

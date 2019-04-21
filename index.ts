@@ -1,4 +1,4 @@
-import {Comparator, Comparison} from "@softwareventures/ordered";
+import {Comparator, compare as defaultCompare, Comparison} from "@softwareventures/ordered";
 import {Dictionary} from "dictionary-types";
 
 // tslint:disable-next-line:no-unbound-method
@@ -184,6 +184,34 @@ export function find<T>(array: ArrayLike<T>, predicate: (element: T, index: numb
 
 export function findFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => number | null {
     return array => find(array, predicate);
+}
+
+export function maximum<T extends string | number | boolean>(array: ArrayLike<T>): T | null;
+export function maximum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | null;
+export function maximum<T>(array: ArrayLike<T>, compare: Comparator<any> = defaultCompare): T | null {
+    return internalMaximum(array, compare);
+}
+
+export function maximumFn<T extends string | number | boolean>(): (array: ArrayLike<T>) => T | null;
+export function maximumFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T | null;
+export function maximumFn<T>(compare: Comparator<any> = defaultCompare): (array: ArrayLike<T>) => T | null {
+    return array => internalMaximum(array, compare);
+}
+
+function internalMaximum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | null {
+    if (array.length === 0) {
+        return null;
+    }
+
+    let result = array[0];
+
+    for (let i = 1; i < array.length; ++i) {
+        if (compare(array[i], result) > 0) {
+            result = array[i];
+        }
+    }
+
+    return result;
 }
 
 export function keyBy<T>(array: ArrayLike<T>,

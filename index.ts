@@ -266,6 +266,14 @@ export function anyFn<T>(predicate: (element: T, index: number) => boolean): (ar
     return array => any(array, predicate);
 }
 
+export function all<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): boolean {
+    return !any(array, (element, index) => !predicate(element, index));
+}
+
+export function allFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => boolean {
+    return array => all(array, predicate);
+}
+
 export function keyBy<T>(array: ArrayLike<T>,
                          f: (element: T) => string): Dictionary<T[]> {
     const dictionary = {} as Dictionary<T[]>;

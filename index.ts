@@ -165,6 +165,15 @@ export function containsFn<T>(value: T): (array: ArrayLike<T>) => boolean {
     return array => nativeIndexOf.call(array, value) !== -1;
 }
 
+export function indexOf<T>(array: ArrayLike<T>, value: T): number | null {
+    const index = nativeIndexOf.call(array, value);
+    return index === -1 ? null : index;
+}
+
+export function indexOfFn<T>(value: T): (array: ArrayLike<T>) => number | null {
+    return array => indexOf(array, value);
+}
+
 export function keyBy<T>(array: ArrayLike<T>,
                          f: (element: T) => string): Dictionary<T[]> {
     const dictionary = {} as Dictionary<T[]>;

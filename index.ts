@@ -367,7 +367,7 @@ export function scanMonoidRightFn<T>(f: (accumulator: T,
 
 export function keyBy<T>(array: ArrayLike<T>,
                          f: (element: T) => string): Dictionary<T[]> {
-    const dictionary = {} as Dictionary<T[]>;
+    const dictionary = Object.create(null) as Dictionary<T[]>;
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];

@@ -401,6 +401,22 @@ export function groupByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => b
     return result;
 }
 
+export interface EqualityGrouping<T> {
+    readonly equal: (a: T, b: T) => boolean;
+    readonly hash?: (element: T, index: number) => string;
+}
+
+export interface OrderedGrouping<T> {
+    readonly compare: Comparator<T>;
+    readonly hash?: (element: T, index: number) => string;
+}
+
+export interface HashGrouping<T> {
+    readonly hash: (element: T, index: number) => string;
+}
+
+export type Grouping<T> = EqualityGrouping<T> | OrderedGrouping<T> | HashGrouping<T>;
+
 export function groupByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: ArrayLike<T>) => T[][] {
     return array => groupByEquality(array, equal);
 }

@@ -384,23 +384,6 @@ export function keyByFn<T>(f: (element: T) => string): (array: ArrayLike<T>) => 
     return array => keyBy(array, f);
 }
 
-export function groupByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[][] {
-    const result: T[][] = [];
-
-    outer: for (let i = 0; i < array.length; ++i) {
-        for (let j = 0; j < result.length; ++j) {
-            if (equal(result[j][0], array[i])) {
-                result[j].push(array[i]);
-                continue outer;
-            }
-        }
-
-        result.push([array[i]]);
-    }
-
-    return result;
-}
-
 export interface EqualityGrouping<T> {
     readonly equal: (a: T, b: T) => boolean;
     readonly hash?: (element: T, index: number) => string;
@@ -437,6 +420,23 @@ export function group<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[][] {
 
 export function groupFn<T>(grouping: Grouping<T>): (array: ArrayLike<T>) => T[][] {
     return array => group(array, grouping);
+}
+
+export function groupByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[][] {
+    const result: T[][] = [];
+
+    outer: for (let i = 0; i < array.length; ++i) {
+        for (let j = 0; j < result.length; ++j) {
+            if (equal(result[j][0], array[i])) {
+                result[j].push(array[i]);
+                continue outer;
+            }
+        }
+
+        result.push([array[i]]);
+    }
+
+    return result;
 }
 
 export function groupByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: ArrayLike<T>) => T[][] {

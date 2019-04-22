@@ -417,6 +417,28 @@ export interface HashGrouping<T> {
 
 export type Grouping<T> = EqualityGrouping<T> | OrderedGrouping<T> | HashGrouping<T>;
 
+export function group<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[][] {
+    if ("compare" in grouping) {
+        if (typeof grouping.hash === "function") {
+            return groupOrderedWithHash(array, grouping.compare, grouping.hash);
+        } else {
+            return groupOrdered(array, grouping.compare);
+        }
+    } else if ("equal" in grouping) {
+        if (typeof grouping.hash === "function") {
+            return groupByEqualityWithHash(array, grouping.equal, grouping.hash);
+        } else {
+            return groupByEquality(array, grouping.equal);
+        }
+    } else {
+        return groupByHash(array, grouping.hash);
+    }
+}
+
+export function groupFn<T>(grouping: Grouping<T>): (array: ArrayLike<T>) => T[][] {
+    return array => group(array, grouping);
+}
+
 export function groupByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: ArrayLike<T>) => T[][] {
     return array => groupByEquality(array, equal);
 }

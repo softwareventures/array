@@ -387,11 +387,11 @@ export function keyByFn<T>(f: (element: T) => string): (array: ArrayLike<T>) => 
 export function group<T>(array: ArrayLike<T>, compare: Comparator<T>): T[][] {
     const result: T[][] = [];
 
-    for (let i = 0; i < array.length; ++i) {
+    outer: for (let i = 0; i < array.length; ++i) {
         for (let j = 0; j < result.length; ++j) {
             if (compare(result[j][0], array[i]) === Comparison.equal) {
                 result[j].push(array[i]);
-                break;
+                continue outer;
             }
         }
 

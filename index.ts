@@ -449,3 +449,42 @@ export function groupByHash<T>(array: ArrayLike<T>, hash: (element: T, index: nu
 export function groupByHashFn<T>(hash: (element: T, index: number) => string): (array: ArrayLike<T>) => T[][] {
     return array => groupByHash(array, hash);
 }
+
+export function groupByEqualityWithHash<T>(array: ArrayLike<T>,
+                                           equal: (a: T, b: T) => boolean,
+                                           hash: (element: T, index: number) => string): T[][] {
+    const groups: Dictionary<T[][]> = Object.create(null);
+    const result: T[][] = [];
+
+    outer: for (let i = 0; i < array.length; ++i) {
+        const element = array[i];
+        const h = hash(element, i);
+
+        if (h in groups) {
+            const hashGroups = groups[h];
+            for (let j = 0; j < hashGroups.length; ++j) {
+                if (equal(hashGroups[j][0], element)) {
+                    hashGroups[j].push(element);
+                    continue outer;
+                }
+            }
+
+            const group = [element];
+            hashGroups.push(group);
+            result.push(group);
+        } else {
+            const group = [element];
+            groups[h] = [group];
+            result.push(group);
+        }
+    }
+
+    return result;
+}
+
+export function groupByEqualityWithHashFn<T>(
+    equal: (a: T, b: T) => boolean,
+    hash: (element: T, index: number) => string
+): (array: ArrayLike<T>) => T[][] {
+    return array => groupByEqualityWithHash(array, equal, hash);
+}

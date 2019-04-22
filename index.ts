@@ -488,3 +488,16 @@ export function groupByEqualityWithHashFn<T>(
 ): (array: ArrayLike<T>) => T[][] {
     return array => groupByEqualityWithHash(array, equal, hash);
 }
+
+export function groupOrderedWithHash<T>(array: ArrayLike<T>,
+                                        compare: Comparator<T>,
+                                        hash: (element: T, index: number) => string): T[][] {
+    return groupByEqualityWithHash(array, (a, b) => compare(a, b) === Comparison.equal, hash);
+}
+
+export function groupOrderedWithHashFn<T>(
+    compare: Comparator<T>,
+    hash: (element: T, index: number) => string
+): (array: ArrayLike<T>) => T[][] {
+    return array => groupOrderedWithHash(array, compare, hash);
+}

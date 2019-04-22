@@ -384,27 +384,6 @@ export function keyByFn<T>(f: (element: T) => string): (array: ArrayLike<T>) => 
     return array => keyBy(array, f);
 }
 
-export function group<T>(array: ArrayLike<T>, compare: Comparator<T>): T[][] {
-    const result: T[][] = [];
-
-    outer: for (let i = 0; i < array.length; ++i) {
-        for (let j = 0; j < result.length; ++j) {
-            if (compare(result[j][0], array[i]) === Comparison.equal) {
-                result[j].push(array[i]);
-                continue outer;
-            }
-        }
-
-        result.push([array[i]]);
-    }
-
-    return result;
-}
-
-export function groupFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[][] {
-    return array => group(array, compare);
-}
-
 export function groupByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[][] {
     const result: T[][] = [];
 
@@ -424,6 +403,27 @@ export function groupByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => b
 
 export function groupByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: ArrayLike<T>) => T[][] {
     return array => groupByEquality(array, equal);
+}
+
+export function groupOrdered<T>(array: ArrayLike<T>, compare: Comparator<T>): T[][] {
+    const result: T[][] = [];
+
+    outer: for (let i = 0; i < array.length; ++i) {
+        for (let j = 0; j < result.length; ++j) {
+            if (compare(result[j][0], array[i]) === Comparison.equal) {
+                result[j].push(array[i]);
+                continue outer;
+            }
+        }
+
+        result.push([array[i]]);
+    }
+
+    return result;
+}
+
+export function groupOrderedFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[][] {
+    return array => groupOrdered(array, compare);
 }
 
 export function groupByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => string): T[][] {

@@ -293,6 +293,22 @@ export function concatMapFn<T, U>(f: (element: T) => U[]): (array: ArrayLike<T>)
     return array => concatMap(array, f);
 }
 
+export function scan<T, U>(array: ArrayLike<T>, f: (accumulator: U, element: T, index: number) => U, initial: U): U[] {
+    const result: U[] = copy({length: array.length});
+    let accumulator = initial;
+
+    for (let i = 0; i < array.length; ++i) {
+        result[i] = accumulator = f(accumulator, array[i], i);
+    }
+
+    return result;
+}
+
+export function scanFn<T, U>(f: (accumulator: U, element: T, index: number) => U,
+                             initial: U): (array: ArrayLike<T>) => U[] {
+    return array => scan(array, f, initial);
+}
+
 export function keyBy<T>(array: ArrayLike<T>,
                          f: (element: T) => string): Dictionary<T[]> {
     const dictionary = {} as Dictionary<T[]>;

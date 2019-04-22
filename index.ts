@@ -405,6 +405,27 @@ export function groupFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[]
     return array => group(array, compare);
 }
 
+export function groupByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[][] {
+    const result: T[][] = [];
+
+    outer: for (let i = 0; i < array.length; ++i) {
+        for (let j = 0; j < result.length; ++j) {
+            if (equal(result[j][0], array[i])) {
+                result[j].push(array[i]);
+                continue outer;
+            }
+        }
+
+        result.push([array[i]]);
+    }
+
+    return result;
+}
+
+export function groupByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: ArrayLike<T>) => T[][] {
+    return array => groupByEquality(array, equal);
+}
+
 export function groupByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => string): T[][] {
     const groups: Dictionary<T[]> = Object.create(null);
     const result: T[][] = [];

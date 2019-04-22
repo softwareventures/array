@@ -420,9 +420,9 @@ export type Grouping<T> = EqualityGrouping<T> | OrderedGrouping<T> | HashGroupin
 export function group<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[][] {
     if ("compare" in grouping) {
         if (typeof grouping.hash === "function") {
-            return groupOrderedWithHash(array, grouping.compare, grouping.hash);
+            return groupByOrderWithHash(array, grouping.compare, grouping.hash);
         } else {
-            return groupOrdered(array, grouping.compare);
+            return groupByOrder(array, grouping.compare);
         }
     } else if ("equal" in grouping) {
         if (typeof grouping.hash === "function") {
@@ -443,7 +443,7 @@ export function groupByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: Ar
     return array => groupByEquality(array, equal);
 }
 
-export function groupOrdered<T>(array: ArrayLike<T>, compare: Comparator<T>): T[][] {
+export function groupByOrder<T>(array: ArrayLike<T>, compare: Comparator<T>): T[][] {
     const result: T[][] = [];
 
     outer: for (let i = 0; i < array.length; ++i) {
@@ -460,8 +460,8 @@ export function groupOrdered<T>(array: ArrayLike<T>, compare: Comparator<T>): T[
     return result;
 }
 
-export function groupOrderedFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[][] {
-    return array => groupOrdered(array, compare);
+export function groupByOrderFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[][] {
+    return array => groupByOrder(array, compare);
 }
 
 export function groupByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => string): T[][] {
@@ -527,15 +527,15 @@ export function groupByEqualityWithHashFn<T>(
     return array => groupByEqualityWithHash(array, equal, hash);
 }
 
-export function groupOrderedWithHash<T>(array: ArrayLike<T>,
+export function groupByOrderWithHash<T>(array: ArrayLike<T>,
                                         compare: Comparator<T>,
                                         hash: (element: T, index: number) => string): T[][] {
     return groupByEqualityWithHash(array, (a, b) => compare(a, b) === Comparison.equal, hash);
 }
 
-export function groupOrderedWithHashFn<T>(
+export function groupByOrderWithHashFn<T>(
     compare: Comparator<T>,
     hash: (element: T, index: number) => string
 ): (array: ArrayLike<T>) => T[][] {
-    return array => groupOrderedWithHash(array, compare, hash);
+    return array => groupByOrderWithHash(array, compare, hash);
 }

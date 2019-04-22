@@ -345,6 +345,26 @@ export function scanRightFn<T, U>(f: (accumulator: U, element: T, index: number)
     return array => scanRight(array, f, initial);
 }
 
+export function scanMonoidRight<T>(array: ArrayLike<T>, f: (accumulator: T, element: T, index: number) => T): T[] {
+    if (array.length === 0) {
+        return [];
+    }
+
+    const result: T[] = copy({0: array[0], length: array.length});
+
+    for (let i = array.length - 2; i >= 0; --i) {
+        result[i] = f(result[i + 1], array[i], i);
+    }
+
+    return result;
+}
+
+export function scanMonoidRightFn<T>(f: (accumulator: T,
+                                         element: T,
+                                         index: number) => T): (array: ArrayLike<T>) => T[] {
+    return array => scanMonoidRight(array, f);
+}
+
 export function keyBy<T>(array: ArrayLike<T>,
                          f: (element: T) => string): Dictionary<T[]> {
     const dictionary = {} as Dictionary<T[]>;

@@ -404,3 +404,27 @@ export function group<T>(array: ArrayLike<T>, compare: Comparator<T>): T[][] {
 export function groupFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[][] {
     return array => group(array, compare);
 }
+
+export function groupByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => string): T[][] {
+    const groups: Dictionary<T[]> = Object.create(null);
+    const result: T[][] = [];
+
+    for (let i = 0; i < array.length; ++i) {
+        const element = array[i];
+        const h = hash(element, i);
+
+        if (h in groups) {
+            groups[h].push(element);
+        } else {
+            const group = [element];
+            groups[h] = group;
+            result.push(group);
+        }
+    }
+
+    return result;
+}
+
+export function groupByHashFn<T>(hash: (element: T, index: number) => string): (array: ArrayLike<T>) => T[][] {
+    return array => groupByHash(array, hash);
+}

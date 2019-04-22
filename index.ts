@@ -385,23 +385,20 @@ export function keyByFn<T>(f: (element: T) => string): (array: ArrayLike<T>) => 
 }
 
 export function group<T>(array: ArrayLike<T>, compare: Comparator<T>): T[][] {
-    return copy(array)
-        .sort(compare)
-        .reduce((groups, element) => {
-            if (groups.length === 0) {
-                return [[element]];
-            }
+    const result: T[][] = [];
 
-            const group = groups[groups.length - 1];
-            const exemplar = group[0];
-
-            if (compare(exemplar, element) === Comparison.equal) {
-                return groups.slice(0, groups.length - 1)
-                    .concat([group.concat([element])]);
-            } else {
-                return groups.concat([[element]]);
+    for (let i = 0; i < array.length; ++i) {
+        for (let j = 0; j < result.length; ++j) {
+            if (compare(result[j][0], array[i]) === Comparison.equal) {
+                result[j].push(array[i]);
+                break;
             }
-        }, [] as T[][]);
+        }
+
+        result.push([array[i]]);
+    }
+
+    return result;
 }
 
 export function groupFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[][] {

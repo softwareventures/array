@@ -540,6 +540,16 @@ export function groupByOrderWithHashFn<T>(
     return array => groupByOrderWithHash(array, compare, hash);
 }
 
+export function groupAdjacent<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[][] {
+    if ("equal" in grouping) {
+        return groupAdjacentByEquality(array, grouping.equal);
+    } else if ("compare" in grouping) {
+        return groupAdjacentByOrder(array, grouping.compare);
+    } else {
+        return groupByHash(array, grouping.hash);
+    }
+}
+
 export function groupAdjacentByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[][] {
     if (array.length === 0) {
         return [];

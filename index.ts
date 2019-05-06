@@ -539,3 +539,30 @@ export function groupByOrderWithHashFn<T>(
 ): (array: ArrayLike<T>) => T[][] {
     return array => groupByOrderWithHash(array, compare, hash);
 }
+
+export function groupAdjacentByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[][] {
+    if (array.length === 0) {
+        return [];
+    }
+
+    let element: T = array[0];
+    let group: T[] = [element];
+    const result: T[][] = [group];
+
+    for (let i = 1; i < array.length; ++i) {
+        const prev = element;
+        element = array[i];
+        if (equal(prev, element)) {
+            group.push(element);
+        } else {
+            group = [element];
+            result.push(group);
+        }
+    }
+
+    return result;
+}
+
+export function groupAdjacentByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: ArrayLike<T>) => T[][] {
+    return array => groupAdjacentByEquality(array, equal);
+}

@@ -285,11 +285,11 @@ export function append<T>(b: ArrayLike<T>): (a: ArrayLike<T>) => T[] {
     return a => concat([a, b]);
 }
 
-export function concatMap<T, U>(array: ArrayLike<T>, f: (element: T) => U[]): U[] {
+export function concatMap<T, U>(array: ArrayLike<T>, f: (element: T) => ArrayLike<U>): U[] {
     return concat(map(array, f));
 }
 
-export function concatMapFn<T, U>(f: (element: T) => U[]): (array: ArrayLike<T>) => U[] {
+export function concatMapFn<T, U>(f: (element: T) => ArrayLike<U>): (array: ArrayLike<T>) => U[] {
     return array => concatMap(array, f);
 }
 

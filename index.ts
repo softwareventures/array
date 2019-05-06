@@ -293,6 +293,12 @@ export function concatMapFn<T, U>(f: (element: T) => ArrayLike<U>): (array: Arra
     return array => concatMap(array, f);
 }
 
+export function noneNull<T>(array: ArrayLike<T | null>): ArrayLike<T> | null {
+    return any(array, e => e == null)
+        ? null
+        : array as ArrayLike<T>;
+}
+
 export function scan<T, U>(array: ArrayLike<T>, f: (accumulator: U, element: T, index: number) => U, initial: U): U[] {
     const result: U[] = copy({length: array.length});
     let accumulator = initial;

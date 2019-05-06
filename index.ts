@@ -574,3 +574,32 @@ export function groupAdjacentByOrder<T>(array: ArrayLike<T>, compare: Comparator
 export function groupAdjacentByOrderFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[][] {
     return array => groupAdjacentByOrder(array, compare);
 }
+
+export function groupAdjacentByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => string): T[][] {
+    if (array.length === 0) {
+        return [];
+    }
+
+    const element = array[0];
+    let h = hash(element, 0);
+    let group: T[] = [element];
+    const result: T[][] = [group];
+
+    for (let i = 1; i < array.length; ++i) {
+        const element = array[i];
+        const h1 = hash(element, i);
+        if (h === h1) {
+            group.push(element);
+        } else {
+            h = h1;
+            group = [element];
+            result.push(group);
+        }
+    }
+
+    return result;
+}
+
+export function groupAdjacentByHashFn<T>(hash: (element: T, index: number) => string): (array: ArrayLike<T>) => T[][] {
+    return array => groupAdjacentByHash(array, hash);
+}

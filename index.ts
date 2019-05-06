@@ -550,6 +550,10 @@ export function groupAdjacent<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[
     }
 }
 
+export function groupAdjacentFn<T>(grouping: Grouping<T>): (array: ArrayLike<T>) => T[][] {
+    return array => groupAdjacent(array, grouping);
+}
+
 export function groupAdjacentByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[][] {
     if (array.length === 0) {
         return [];

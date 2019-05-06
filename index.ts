@@ -566,3 +566,11 @@ export function groupAdjacentByEquality<T>(array: ArrayLike<T>, equal: (a: T, b:
 export function groupAdjacentByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: ArrayLike<T>) => T[][] {
     return array => groupAdjacentByEquality(array, equal);
 }
+
+export function groupAdjacentByOrder<T>(array: ArrayLike<T>, compare: Comparator<T>): T[][] {
+    return groupAdjacentByEquality(array, (a, b) => compare(a, b) === Comparison.equal);
+}
+
+export function groupAdjacentByOrderFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[][] {
+    return array => groupAdjacentByOrder(array, compare);
+}

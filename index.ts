@@ -159,6 +159,21 @@ export function foldMonoidRightFn<T>(f: (accumulator: T, element: T, index: numb
     return array => (nativeReduceRight as any).call(array, f);
 }
 
+export function foldMap<T, U>(array: ArrayLike<T>,
+                              f: (accumulator: U, element: U, index: number) => U,
+                              m: (element: T) => U): U {
+    if (array.length === 0) {
+        throw new TypeError("Fold of empty array with no initial value");
+    }
+
+    let accumulator = m(array[0]);
+    for (let i = 0; i < array.length; ++i) {
+        accumulator = f(accumulator, m(array[i]), i);
+    }
+
+    return accumulator;
+}
+
 export function contains<T>(array: ArrayLike<T>, value: T): boolean {
     return nativeIndexOf.call(array, value) !== -1;
 }

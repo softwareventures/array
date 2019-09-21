@@ -174,6 +174,11 @@ export function foldMap<T, U>(array: ArrayLike<T>,
     return accumulator;
 }
 
+export function foldMapFn<T, U>(f: (accumulator: U, element: U, index: number) => U,
+                                m: (element: T) => U): (array: ArrayLike<T>) => U {
+    return array => foldMap(array, f, m);
+}
+
 export function contains<T>(array: ArrayLike<T>, value: T): boolean {
     return nativeIndexOf.call(array, value) !== -1;
 }

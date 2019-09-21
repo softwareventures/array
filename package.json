@@ -15,15 +15,17 @@
   "homepage": "https://github.com/softwareventures/array",
   "scripts": {
     "prepare": "tsc",
-    "test": "tslint --project .",
+    "test": "tslint --project . && ava",
     "semantic-release": "semantic-release"
   },
   "sideEffects": false,
   "devDependencies": {
     "@softwareventures/tsconfig": "2.0.0",
     "@softwareventures/tslint-rules": "0.7.1",
+    "ava": "2.4.0",
     "cz-conventional-changelog": "3.0.2",
     "semantic-release": "15.13.24",
+    "ts-node": "8.4.1",
     "tslint": "5.20.0",
     "typescript": "3.6.3"
   },
@@ -36,5 +38,14 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
   }
 }

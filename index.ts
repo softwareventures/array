@@ -167,7 +167,7 @@ export function foldMap<T, U>(array: ArrayLike<T>,
     }
 
     let accumulator = m(array[0]);
-    for (let i = 0; i < array.length; ++i) {
+    for (let i = 1; i < array.length; ++i) {
         accumulator = f(accumulator, m(array[i]), i);
     }
 

@@ -1,6 +1,6 @@
 {
   "name": "@softwareventures/array",
-  "version": "0.1.2-development",
+  "version": "0.0.0-development",
   "description": "Pure functional array manipulation and traversal",
   "repository": "github:softwareventures/array",
   "keywords": [

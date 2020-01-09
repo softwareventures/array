@@ -196,12 +196,28 @@ export function indexOfFn<T>(value: T): (array: ArrayLike<T>) => number | null {
     return array => indexOf(array, value);
 }
 
-export function find<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): number | null {
+export function findIndex<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): number | null {
     const index = nativeFind.call(array, predicate);
     return index === -1 ? null : index;
 }
 
-export function findFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => number | null {
+export function findIndexFn<T>(predicate: (element: T,
+                                           index: number) => boolean): (array: ArrayLike<T>) => number | null {
+    return array => findIndex(array, predicate);
+}
+
+export function find<T, U extends T>(array: ArrayLike<T>, predicate: (element: T) => element is U): U | null;
+export function find<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): T | null;
+export function find<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): T | null {
+    const index = findIndex(array, predicate);
+    return index == null
+        ? null
+        : array[index];
+}
+
+export function findFn<T, U extends T>(predicate: (element: T) => element is U): (array: ArrayLike<T>) => U | null;
+export function findFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => T | null;
+export function findFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => T | null {
     return array => find(array, predicate);
 }
 
@@ -270,15 +286,15 @@ export function product(array: ArrayLike<number>): number {
 }
 
 export function and(array: ArrayLike<boolean>): boolean {
-    return find(array, element => !element) == null;
+    return findIndex(array, element => !element) == null;
 }
 
 export function or(array: ArrayLike<boolean>): boolean {
-    return find(array, element => !!element) != null;
+    return findIndex(array, element => !!element) != null;
 }
 
 export function any<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): boolean {
-    return find(array, predicate) != null;
+    return findIndex(array, predicate) != null;
 }
 
 export function anyFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => boolean {

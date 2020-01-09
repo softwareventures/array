@@ -391,6 +391,31 @@ export function scanMonoidRightFn<T>(f: (accumulator: T,
     return array => scanMonoidRight(array, f);
 }
 
+export function partition<T, U extends T>(array: ArrayLike<T>,
+                                          predicate: (element: T) => element is U): [U[], Array<Exclude<T, U>>];
+export function partition<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): [T[], T[]];
+export function partition<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): [T[], T[]] {
+    const a: T[] = [];
+    const b: T[] = [];
+
+    for (let i = 0; i < array.length; ++i) {
+        if (predicate(array[i], i)) {
+            a.push(array[i]);
+        } else {
+            b.push(array[i]);
+        }
+    }
+
+    return [a, b];
+}
+
+export function partitionFn<T, U extends T>(
+    predicate: (element: T) => element is U): (array: ArrayLike<T>) => [U[], Array<Exclude<T, U>>];
+export function partitionFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => [T[], T[]];
+export function partitionFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => [T[], T[]] {
+    return array => partition(array, predicate);
+}
+
 export function keyBy<T>(array: ArrayLike<T>,
                          f: (element: T) => string): Dictionary<T[]> {
     const dictionary = Object.create(null) as Dictionary<T[]>;

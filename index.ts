@@ -451,6 +451,25 @@ export function keyByFn<T>(f: (element: T) => string): (array: ArrayLike<T>) => 
     return array => keyBy(array, f);
 }
 
+export function keyFirstBy<T>(array: ArrayLike<T>,
+                              f: (element: T) => string): Dictionary<T> {
+    const dictionary = Object.create(null) as Dictionary<T>;
+
+    for (let i = 0; i < array.length; ++i) {
+        const element = array[i];
+        const key = f(element);
+        if (!(key in dictionary)) {
+            dictionary[key] = element;
+        }
+    }
+
+    return dictionary;
+}
+
+export function keyFirstByFn<T>(f: (element: T) => string): (array: ArrayLike<T>) => Dictionary<T> {
+    return array => keyFirstBy(array, f);
+}
+
 export function keyLastBy<T>(array: ArrayLike<T>,
                              f: (element: T) => string): Dictionary<T> {
     const dictionary = Object.create(null) as Dictionary<T>;

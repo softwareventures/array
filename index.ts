@@ -451,6 +451,22 @@ export function keyByFn<T>(f: (element: T) => string): (array: ArrayLike<T>) => 
     return array => keyBy(array, f);
 }
 
+export function keyLastBy<T>(array: ArrayLike<T>,
+                             f: (element: T) => string): Dictionary<T> {
+    const dictionary = Object.create(null) as Dictionary<T>;
+
+    for (let i = 0; i < array.length; ++i) {
+        const element = array[i];
+        dictionary[f(element)] = element;
+    }
+
+    return dictionary;
+}
+
+export function keyLastByFn<T>(f: (element: T) => string): (array: ArrayLike<T>) => Dictionary<T> {
+    return array => keyLastBy(array, f);
+}
+
 export interface EqualityGrouping<T> {
     readonly equal: (a: T, b: T) => boolean;
     readonly hash?: (element: T, index: number) => string;

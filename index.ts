@@ -432,9 +432,11 @@ export function partitionFn<T>(predicate: (element: T, index: number) => boolean
     return array => partition(array, predicate);
 }
 
-export function keyBy<T>(array: ArrayLike<T>,
-                         f: (element: T) => string): Dictionary<T[]> {
-    const dictionary = Object.create(null) as Dictionary<T[]>;
+export function keyBy<TElement, TKey extends keyof any>(
+    array: ArrayLike<TElement>,
+    f: (element: TElement) => TKey
+): Dictionary<TElement[], TKey> {
+    const dictionary = Object.create(null) as Dictionary<TElement[], TKey>;
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];
@@ -447,13 +449,17 @@ export function keyBy<T>(array: ArrayLike<T>,
     return dictionary;
 }
 
-export function keyByFn<T>(f: (element: T) => string): (array: ArrayLike<T>) => Dictionary<T[]> {
+export function keyByFn<TElement, TKey extends keyof any>(
+    f: (element: TElement) => TKey
+): (array: ArrayLike<TElement>) => Dictionary<TElement[], TKey> {
     return array => keyBy(array, f);
 }
 
-export function keyFirstBy<T>(array: ArrayLike<T>,
-                              f: (element: T) => string): Dictionary<T> {
-    const dictionary = Object.create(null) as Dictionary<T>;
+export function keyFirstBy<TElement, TKey extends keyof any>(
+    array: ArrayLike<TElement>,
+    f: (element: TElement) => TKey
+): Dictionary<TElement, TKey> {
+    const dictionary = Object.create(null) as Dictionary<TElement, TKey>;
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];
@@ -466,13 +472,17 @@ export function keyFirstBy<T>(array: ArrayLike<T>,
     return dictionary;
 }
 
-export function keyFirstByFn<T>(f: (element: T) => string): (array: ArrayLike<T>) => Dictionary<T> {
+export function keyFirstByFn<TElement, TKey extends keyof any>(
+    f: (element: TElement) => TKey
+): (array: ArrayLike<TElement>) => Dictionary<TElement, TKey> {
     return array => keyFirstBy(array, f);
 }
 
-export function keyLastBy<T>(array: ArrayLike<T>,
-                             f: (element: T) => string): Dictionary<T> {
-    const dictionary = Object.create(null) as Dictionary<T>;
+export function keyLastBy<TElement, TKey extends keyof any>(
+    array: ArrayLike<TElement>,
+    f: (element: TElement) => TKey
+): Dictionary<TElement, TKey> {
+    const dictionary = Object.create(null) as Dictionary<TElement, TKey>;
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];
@@ -482,7 +492,9 @@ export function keyLastBy<T>(array: ArrayLike<T>,
     return dictionary;
 }
 
-export function keyLastByFn<T>(f: (element: T) => string): (array: ArrayLike<T>) => Dictionary<T> {
+export function keyLastByFn<TElement, TKey extends keyof any>(
+    f: (element: TElement) => TKey
+): (array: ArrayLike<TElement>) => Dictionary<TElement, TKey> {
     return array => keyLastBy(array, f);
 }
 

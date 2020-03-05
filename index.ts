@@ -123,6 +123,28 @@ export function filterFn<T>(predicate: (element: T, index: number) => boolean): 
     return array => filter(array, predicate);
 }
 
+export function filterFirst<T>(array: ArrayLike<T>,
+                               predicate: (element: T, index: number) => boolean): T[] {
+    const result = [];
+    let i = 0;
+    for (; i < array.length; ++i) {
+        const element = array[i];
+        if (predicate(element, i)) {
+            result.push(element);
+        } else {
+            break;
+        }
+    }
+    for (++i; i < array.length; ++i) {
+        result.push(array[i]);
+    }
+    return result;
+}
+
+export function filterFirstFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => T[] {
+    return array => filterFirst(array, predicate);
+}
+
 export function fold<T, U>(array: ArrayLike<T>, f: (accumulator: U, element: T, index: number) => U, initial: U): U {
     return (nativeReduce as any).call(array, f, initial);
 }

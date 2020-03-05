@@ -1,5 +1,9 @@
 import test from "ava";
-import {foldMap, partition} from "./index";
+import {filterFirst, foldMap, partition} from "./index";
+
+test("filterFirst", t => {
+    t.deepEqual(filterFirst([1, 2, 3, 4, 3, 2, 1], n => n < 3), [1, 2, 4, 3, 2, 1]);
+});
 
 test("foldMap", t => {
     t.is(foldMap(["2", "3", "4"], (a, b) => a + b, parseFloat), 9);

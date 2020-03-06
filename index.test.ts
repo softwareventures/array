@@ -1,5 +1,5 @@
 import test from "ava";
-import {filterFirst, foldMap, partition} from "./index";
+import {filterFirst, find, findIndex, foldMap, partition} from "./index";
 
 test("filterFirst", t => {
     t.deepEqual(filterFirst([1, 2, 3, 4, 3, 2, 1], n => n < 3), [1, 2, 4, 3, 2, 1]);
@@ -13,6 +13,14 @@ test("foldMap", t => {
             String),
         "trualsalse");
     t.is(foldMap(["2"], (a, b) => a + b, parseFloat), 2);
+});
+
+test("findIndex", t => {
+    t.is(findIndex([1, 2, 3, 4, 3, 2, 1], n => n >= 3), 2);
+});
+
+test("find", t => {
+    t.is(find([1, 2, 3, 4, 3, 2, 1], n => n >= 3), 3);
 });
 
 type Result<T> = Success<T> | Error;

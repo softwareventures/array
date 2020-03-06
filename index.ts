@@ -23,7 +23,7 @@ const nativeReduceRight = Array.prototype.reduceRight;
 const nativeIndexOf = Array.prototype.indexOf;
 
 // tslint:disable-next-line:no-unbound-method
-const nativeFind = Array.prototype.find;
+const nativeFindIndex = Array.prototype.findIndex;
 
 export const copy: <T>(array: ArrayLike<T>) => T[] =
     Array.from == null
@@ -218,10 +218,20 @@ export function indexOfFn<T>(value: T): (array: ArrayLike<T>) => number | null {
     return array => indexOf(array, value);
 }
 
-export function findIndex<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): number | null {
-    const index = nativeFind.call(array, predicate);
-    return index === -1 ? null : index;
-}
+export const findIndex: <T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean) => number | null =
+    nativeFindIndex == null
+        ? (array, predicate) => {
+            for (let i = 0; i < array.length; ++i) {
+                if (predicate(array[i], i)) {
+                    return i;
+                }
+            }
+            return null;
+        }
+        : (array, predicate) => {
+            const index = nativeFindIndex.call(array, predicate);
+            return index === -1 ? null : index;
+        };
 
 export function findIndexFn<T>(predicate: (element: T,
                                            index: number) => boolean): (array: ArrayLike<T>) => number | null {

@@ -1006,3 +1006,28 @@ export function uniqueAdjacentByOrder<T>(array: ArrayLike<T>, compare: Comparato
 export function uniqueAdjacentByOrderFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[] {
     return array => uniqueAdjacentByOrder(array, compare);
 }
+
+export function uniqueAdjacentByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => Key): T[] {
+    if (array.length === 0) {
+        return [];
+    }
+
+    const element = array[0];
+    let h = hash(element, 0);
+    const result = [element];
+
+    for (let i = 1; i < array.length; ++i) {
+        const element = array[i];
+        const h1 = hash(element, i);
+        if (h !== h1) {
+            h = h1;
+            result.push(element);
+        }
+    }
+
+    return result;
+}
+
+export function uniqueAdjacentByHashFn<T>(hash: (element: T, index: number) => Key): (array: ArrayLike<T>) => T[] {
+    return array => uniqueAdjacentByHash(array, hash);
+}

@@ -998,3 +998,11 @@ export function uniqueAdjacentByEquality<T>(array: ArrayLike<T>, equal: (a: T, b
 export function uniqueAdjacentByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: ArrayLike<T>) => T[] {
     return array => uniqueAdjacentByEquality(array, equal);
 }
+
+export function uniqueAdjacentByOrder<T>(array: ArrayLike<T>, compare: Comparator<T>): T[] {
+    return uniqueAdjacentByEquality(array, (a, b) => compare(a, b) === Comparison.equal);
+}
+
+export function uniqueAdjacentByOrderFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[] {
+    return array => uniqueAdjacentByOrder(array, compare);
+}

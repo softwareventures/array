@@ -861,3 +861,24 @@ export function uniqueByOrderFn<T>(compare: Comparator<T>): (array: ArrayLike<T>
     // TODO: This could use a binary tree to be more efficient
     return array => uniqueByOrder(array, compare);
 }
+
+export function uniqueByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => Key): T[] {
+    const seen = dictionary<boolean, Key>();
+    const result: T[] = [];
+
+    for (let i = 0; i < array.length; ++i) {
+        const element = array[i];
+        const h = hash(element, i);
+        if (seen[h as any] == null) {
+            // Cast to any because TypeScript doesn't support symbol indexers yet
+            seen[h as any] = true;
+            result.push(element);
+        }
+    }
+
+    return result;
+}
+
+export function uniqueByHashFn<T>(hash: (element: T, index: number) => Key): (array: ArrayLike<T>) => T[] {
+    return array => uniqueByHash(array, hash);
+}

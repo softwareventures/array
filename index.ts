@@ -882,3 +882,37 @@ export function uniqueByHash<T>(array: ArrayLike<T>, hash: (element: T, index: n
 export function uniqueByHashFn<T>(hash: (element: T, index: number) => Key): (array: ArrayLike<T>) => T[] {
     return array => uniqueByHash(array, hash);
 }
+
+export function uniqueByEqualityWithHash<T>(array: ArrayLike<T>,
+                                            equal: (a: T, b: T) => boolean,
+                                            hash: (element: T, index: number) => Key): T[] {
+    const seenGroups = dictionary<T[], Key>();
+    const result: T[] = [];
+
+    outer: for (let i = 0; i < array.length; ++i) {
+        const element = array[i];
+        const h = hash(element, i);
+
+        const seenGroup = seenGroups[h as any]; // Cast to any because TypeScript doesn't support symbol indexers yet
+        if (seenGroup == null) {
+            seenGroups[h as any] = [element];
+            result.push(element);
+        } else {
+            for (let j = 0; j < seenGroup.length; ++j) {
+                if (equal(seenGroup[j], element)) {
+                    continue outer;
+                }
+            }
+
+            seenGroup.push(element);
+            result.push(element);
+        }
+    }
+
+    return result;
+}
+
+export function uniqueByEqualityWithHashFn<T>(equal: (a: T, b: T) => boolean,
+                                              hash: (element: T, index: number) => Key): (array: ArrayLike<T>) => T[] {
+    return array => uniqueByEqualityWithHash(array, equal, hash);
+}

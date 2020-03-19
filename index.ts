@@ -966,6 +966,22 @@ export function uniqueByOrderWithHashFn<T>(compare: Comparator<T>,
     return array => uniqueByOrderWithHash(array, compare, hash);
 }
 
+export function uniqueAdjacent<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[] {
+    if ("identity" in grouping) {
+        return uniqueAdjacentByIdentity(array, grouping.identity);
+    } else if ("equal" in grouping) {
+        return uniqueAdjacentByEquality(array, grouping.equal);
+    } else if ("compare" in grouping) {
+        return uniqueAdjacentByOrder(array, grouping.compare);
+    } else {
+        return uniqueAdjacentByHash(array, grouping.hash);
+    }
+}
+
+export function uniqueAdjacentFn<T>(grouping: Grouping<T>): (array: ArrayLike<T>) => T[] {
+    return array => uniqueAdjacent(array, grouping);
+}
+
 export function uniqueAdjacentByIdentity<T>(array: ArrayLike<T>, identity?: (element: T) => unknown): T[] {
     return identity == null
         ? uniqueAdjacentByEquality(array, (a, b) => a === b)

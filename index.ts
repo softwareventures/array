@@ -533,16 +533,16 @@ export function keyLastByFn<TElement, TKey extends Key>(
 
 export interface EqualityGrouping<T> {
     readonly equal: (a: T, b: T) => boolean;
-    readonly hash?: (element: T, index: number) => string;
+    readonly hash?: (element: T, index: number) => Key;
 }
 
 export interface OrderedGrouping<T> {
     readonly compare: Comparator<T>;
-    readonly hash?: (element: T, index: number) => string;
+    readonly hash?: (element: T, index: number) => Key;
 }
 
 export interface HashGrouping<T> {
-    readonly hash: (element: T, index: number) => string;
+    readonly hash: (element: T, index: number) => Key;
 }
 
 export type Grouping<T> = EqualityGrouping<T> | OrderedGrouping<T> | HashGrouping<T>;
@@ -611,8 +611,8 @@ export function groupByOrderFn<T>(compare: Comparator<T>): (array: ArrayLike<T>)
     return array => groupByOrder(array, compare);
 }
 
-export function groupByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => string): T[][] {
-    const groups = dictionary<T[]>();
+export function groupByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => Key): T[][] {
+    const groups = dictionary<T[], Key>();
     const result: T[][] = [];
 
     for (let i = 0; i < array.length; ++i) {
@@ -620,10 +620,10 @@ export function groupByHash<T>(array: ArrayLike<T>, hash: (element: T, index: nu
         const h = hash(element, i);
 
         if (h in groups) {
-            groups[h].push(element);
+            groups[h as any].push(element); // Cast to any because TypeScript doesn't support symbol indexers yet
         } else {
             const group = [element];
-            groups[h] = group;
+            groups[h as any] = group; // Cast to any because TypeScript doesn't support symbol indexers yet
             result.push(group);
         }
     }
@@ -631,14 +631,14 @@ export function groupByHash<T>(array: ArrayLike<T>, hash: (element: T, index: nu
     return result;
 }
 
-export function groupByHashFn<T>(hash: (element: T, index: number) => string): (array: ArrayLike<T>) => T[][] {
+export function groupByHashFn<T>(hash: (element: T, index: number) => Key): (array: ArrayLike<T>) => T[][] {
     return array => groupByHash(array, hash);
 }
 
 export function groupByEqualityWithHash<T>(array: ArrayLike<T>,
                                            equal: (a: T, b: T) => boolean,
-                                           hash: (element: T, index: number) => string): T[][] {
-    const groups = dictionary<T[][]>();
+                                           hash: (element: T, index: number) => Key): T[][] {
+    const groups = dictionary<T[][], Key>();
     const result: T[][] = [];
 
     outer: for (let i = 0; i < array.length; ++i) {
@@ -646,7 +646,7 @@ export function groupByEqualityWithHash<T>(array: ArrayLike<T>,
         const h = hash(element, i);
 
         if (h in groups) {
-            const hashGroups = groups[h];
+            const hashGroups = groups[h as any]; // Cast to any because TypeScript doesn't support symbol indexers yet
             for (let j = 0; j < hashGroups.length; ++j) {
                 if (equal(hashGroups[j][0], element)) {
                     hashGroups[j].push(element);
@@ -659,7 +659,7 @@ export function groupByEqualityWithHash<T>(array: ArrayLike<T>,
             result.push(group);
         } else {
             const group = [element];
-            groups[h] = [group];
+            groups[h as any] = [group]; // Cast to any because TypeScript doesn't support symbol indexers yet
             result.push(group);
         }
     }
@@ -669,20 +669,20 @@ export function groupByEqualityWithHash<T>(array: ArrayLike<T>,
 
 export function groupByEqualityWithHashFn<T>(
     equal: (a: T, b: T) => boolean,
-    hash: (element: T, index: number) => string
+    hash: (element: T, index: number) => Key
 ): (array: ArrayLike<T>) => T[][] {
     return array => groupByEqualityWithHash(array, equal, hash);
 }
 
 export function groupByOrderWithHash<T>(array: ArrayLike<T>,
                                         compare: Comparator<T>,
-                                        hash: (element: T, index: number) => string): T[][] {
+                                        hash: (element: T, index: number) => Key): T[][] {
     return groupByEqualityWithHash(array, (a, b) => compare(a, b) === Comparison.equal, hash);
 }
 
 export function groupByOrderWithHashFn<T>(
     compare: Comparator<T>,
-    hash: (element: T, index: number) => string
+    hash: (element: T, index: number) => Key
 ): (array: ArrayLike<T>) => T[][] {
     return array => groupByOrderWithHash(array, compare, hash);
 }
@@ -736,7 +736,7 @@ export function groupAdjacentByOrderFn<T>(compare: Comparator<T>): (array: Array
     return array => groupAdjacentByOrder(array, compare);
 }
 
-export function groupAdjacentByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => string): T[][] {
+export function groupAdjacentByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => Key): T[][] {
     if (array.length === 0) {
         return [];
     }

@@ -824,3 +824,23 @@ export function groupAdjacentByHash<T>(array: ArrayLike<T>, hash: (element: T, i
 export function groupAdjacentByHashFn<T>(hash: (element: T, index: number) => string): (array: ArrayLike<T>) => T[][] {
     return array => groupAdjacentByHash(array, hash);
 }
+
+export function uniqueByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[] {
+    const result: T[] = [];
+
+    outer: for (let i = 0; i < array.length; ++i) {
+        const element = array[i];
+        for (let j = 0; j < result.length; ++j) {
+            if (equal(element, result[j])) {
+                continue outer;
+            }
+        }
+        result.push(element);
+    }
+
+    return result;
+}
+
+export function uniqueByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: ArrayLike<T>) => T[] {
+    return array => uniqueByEquality(array, equal);
+}

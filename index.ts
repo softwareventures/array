@@ -813,6 +813,30 @@ export function groupAdjacentByHashFn<T>(hash: (element: T, index: number) => st
     return array => groupAdjacentByHash(array, hash);
 }
 
+export function unique<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[] {
+    if ("identity" in grouping) {
+        if (typeof grouping.hash === "function") {
+            return uniqueByIdentityWithHash(array, grouping.identity, grouping.hash);
+        } else {
+            return uniqueByIdentityInternal(array, grouping.identity);
+        }
+    } else if ("compare" in grouping) {
+        if (typeof grouping.hash === "function") {
+            return uniqueByOrderWithHash(array, grouping.compare, grouping.hash);
+        } else {
+            return uniqueByOrder(array, grouping.compare);
+        }
+    } else if ("equal" in grouping) {
+        if (typeof grouping.hash === "function") {
+            return uniqueByEqualityWithHash(array, grouping.equal, grouping.hash);
+        } else {
+            return uniqueByEquality(array, grouping.equal);
+        }
+    } else {
+        return uniqueByHash(array, grouping.hash);
+    }
+}
+
 export function uniqueByIdentity<T>(array: ArrayLike<T>, identity?: (element: T) => unknown): T[] {
     return uniqueByIdentityInternal(array, identity ?? (element => element));
 }

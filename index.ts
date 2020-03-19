@@ -852,3 +852,12 @@ export function uniqueByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => 
 export function uniqueByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: ArrayLike<T>) => T[] {
     return array => uniqueByEquality(array, equal);
 }
+
+export function uniqueByOrder<T>(array: ArrayLike<T>, compare: Comparator<T>): T[] {
+    return uniqueByEquality(array, (a, b) => compare(a, b) === Comparison.equal);
+}
+
+export function uniqueByOrderFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T[] {
+    // TODO: This could use a binary tree to be more efficient
+    return array => uniqueByOrder(array, compare);
+}

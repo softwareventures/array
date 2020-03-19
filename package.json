@@ -30,6 +30,7 @@
     "typescript": "3.8.3"
   },
   "dependencies": {
+    "@softwareventures/dictionary": "^0.6.0",
     "@softwareventures/ordered": "^0.2.0",
     "dictionary-types": "1.2.0",
     "tslib": "^1.9.3"

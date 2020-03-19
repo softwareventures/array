@@ -1,3 +1,4 @@
+import {dictionary} from "@softwareventures/dictionary";
 import {Comparator, compare as defaultCompare, Comparison} from "@softwareventures/ordered";
 import {Dictionary} from "dictionary-types";
 
@@ -468,17 +469,17 @@ export function keyBy<TElement, TKey extends keyof any>(
     array: ArrayLike<TElement>,
     f: (element: TElement) => TKey
 ): Dictionary<TElement[], TKey> {
-    const dictionary = Object.create(null) as Dictionary<TElement[], TKey>;
+    const result = dictionary<TElement[], TKey>();
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];
         const key = f(element);
-        const group = dictionary[key] || [];
+        const group = result[key] || [];
         group.push(element);
-        dictionary[key] = group;
+        result[key] = group;
     }
 
-    return dictionary;
+    return result;
 }
 
 export function keyByFn<TElement, TKey extends keyof any>(
@@ -491,17 +492,17 @@ export function keyFirstBy<TElement, TKey extends keyof any>(
     array: ArrayLike<TElement>,
     f: (element: TElement) => TKey
 ): Dictionary<TElement, TKey> {
-    const dictionary = Object.create(null) as Dictionary<TElement, TKey>;
+    const result = dictionary<TElement, TKey>();
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];
         const key = f(element);
-        if (!(key in dictionary)) {
-            dictionary[key] = element;
+        if (!(key in result)) {
+            result[key] = element;
         }
     }
 
-    return dictionary;
+    return result;
 }
 
 export function keyFirstByFn<TElement, TKey extends keyof any>(
@@ -514,14 +515,14 @@ export function keyLastBy<TElement, TKey extends keyof any>(
     array: ArrayLike<TElement>,
     f: (element: TElement) => TKey
 ): Dictionary<TElement, TKey> {
-    const dictionary = Object.create(null) as Dictionary<TElement, TKey>;
+    const result = dictionary<TElement, TKey>();
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];
-        dictionary[f(element)] = element;
+        result[f(element)] = element;
     }
 
-    return dictionary;
+    return result;
 }
 
 export function keyLastByFn<TElement, TKey extends keyof any>(
@@ -611,7 +612,7 @@ export function groupByOrderFn<T>(compare: Comparator<T>): (array: ArrayLike<T>)
 }
 
 export function groupByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => string): T[][] {
-    const groups: Dictionary<T[]> = Object.create(null);
+    const groups = dictionary<T[]>();
     const result: T[][] = [];
 
     for (let i = 0; i < array.length; ++i) {
@@ -637,7 +638,7 @@ export function groupByHashFn<T>(hash: (element: T, index: number) => string): (
 export function groupByEqualityWithHash<T>(array: ArrayLike<T>,
                                            equal: (a: T, b: T) => boolean,
                                            hash: (element: T, index: number) => string): T[][] {
-    const groups: Dictionary<T[][]> = Object.create(null);
+    const groups = dictionary<T[][]>();
     const result: T[][] = [];
 
     outer: for (let i = 0; i < array.length; ++i) {

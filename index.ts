@@ -837,6 +837,10 @@ export function unique<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[] {
     }
 }
 
+export function uniqueFn<T>(grouping: Grouping<T>): (array: ArrayLike<T>) => T[] {
+    return array => unique(array, grouping);
+}
+
 export function uniqueByIdentity<T>(array: ArrayLike<T>, identity?: (element: T) => unknown): T[] {
     return uniqueByIdentityInternal(array, identity ?? (element => element));
 }

@@ -1,6 +1,6 @@
 import {dictionary} from "@softwareventures/dictionary";
 import {Comparator, compare as defaultCompare, Comparison} from "@softwareventures/ordered";
-import {Dictionary} from "dictionary-types";
+import {Dictionary, Key} from "dictionary-types";
 
 // tslint:disable-next-line:no-unbound-method
 const nativeSlice = Array.prototype.slice;
@@ -465,7 +465,7 @@ export function partitionFn<T>(predicate: (element: T, index: number) => boolean
     return array => partition(array, predicate);
 }
 
-export function keyBy<TElement, TKey extends keyof any>(
+export function keyBy<TElement, TKey extends Key>(
     array: ArrayLike<TElement>,
     f: (element: TElement) => TKey
 ): Dictionary<TElement[], TKey> {
@@ -482,13 +482,13 @@ export function keyBy<TElement, TKey extends keyof any>(
     return result;
 }
 
-export function keyByFn<TElement, TKey extends keyof any>(
+export function keyByFn<TElement, TKey extends Key>(
     f: (element: TElement) => TKey
 ): (array: ArrayLike<TElement>) => Dictionary<TElement[], TKey> {
     return array => keyBy(array, f);
 }
 
-export function keyFirstBy<TElement, TKey extends keyof any>(
+export function keyFirstBy<TElement, TKey extends Key>(
     array: ArrayLike<TElement>,
     f: (element: TElement) => TKey
 ): Dictionary<TElement, TKey> {
@@ -505,13 +505,13 @@ export function keyFirstBy<TElement, TKey extends keyof any>(
     return result;
 }
 
-export function keyFirstByFn<TElement, TKey extends keyof any>(
+export function keyFirstByFn<TElement, TKey extends Key>(
     f: (element: TElement) => TKey
 ): (array: ArrayLike<TElement>) => Dictionary<TElement, TKey> {
     return array => keyFirstBy(array, f);
 }
 
-export function keyLastBy<TElement, TKey extends keyof any>(
+export function keyLastBy<TElement, TKey extends Key>(
     array: ArrayLike<TElement>,
     f: (element: TElement) => TKey
 ): Dictionary<TElement, TKey> {
@@ -525,7 +525,7 @@ export function keyLastBy<TElement, TKey extends keyof any>(
     return result;
 }
 
-export function keyLastByFn<TElement, TKey extends keyof any>(
+export function keyLastByFn<TElement, TKey extends Key>(
     f: (element: TElement) => TKey
 ): (array: ArrayLike<TElement>) => Dictionary<TElement, TKey> {
     return array => keyLastBy(array, f);

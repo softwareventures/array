@@ -631,6 +631,7 @@ export function groupByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: Ar
 export function groupByOrder<T>(array: ArrayLike<T>, compare: Comparator<T>): T[][] {
     const result: T[][] = [];
 
+    // TODO: This could use a binary tree to be way more efficient
     outer: for (let i = 0; i < array.length; ++i) {
         for (let j = 0; j < result.length; ++j) {
             if (compare(result[j][0], array[i]) === Comparison.equal) {

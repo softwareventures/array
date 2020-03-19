@@ -883,6 +883,16 @@ export function uniqueByHashFn<T>(hash: (element: T, index: number) => Key): (ar
     return array => uniqueByHash(array, hash);
 }
 
+export const uniqueByIdentityWithHash = Set == null
+    ? <T>(array: ArrayLike<T>, identity: (element: T) => unknown, hash: (element: T) => Key): T[] =>
+        uniqueByEqualityWithHash(array, (a, b) => identity(a) === identity(b), hash)
+    : uniqueByIdentityInternal;
+
+export function uniqueByIdentityWithHashFn<T>(identity: (element: T) => unknown,
+                                              hash: (element: T) => Key): (array: ArrayLike<T>) => T[] {
+    return array => uniqueByIdentityWithHash(array, identity, hash);
+}
+
 export function uniqueByEqualityWithHash<T>(array: ArrayLike<T>,
                                             equal: (a: T, b: T) => boolean,
                                             hash: (element: T, index: number) => Key): T[] {

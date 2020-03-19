@@ -531,6 +531,11 @@ export function keyLastByFn<TElement, TKey extends Key>(
     return array => keyLastBy(array, f);
 }
 
+export interface IdentityGrouping<T> {
+    readonly identity: (element: T) => unknown;
+    readonly hash?: (element: T) => Key;
+}
+
 export interface EqualityGrouping<T> {
     readonly equal: (a: T, b: T) => boolean;
     readonly hash?: (element: T, index: number) => Key;
@@ -545,10 +550,16 @@ export interface HashGrouping<T> {
     readonly hash: (element: T, index: number) => Key;
 }
 
-export type Grouping<T> = EqualityGrouping<T> | OrderedGrouping<T> | HashGrouping<T>;
+export type Grouping<T> = IdentityGrouping<T> | EqualityGrouping<T> | OrderedGrouping<T> | HashGrouping<T>;
 
 export function group<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[][] {
-    if ("compare" in grouping) {
+    if ("identity" in grouping) {
+        if (typeof grouping.hash === "function") {
+            return groupByIdentityWithHash(array, grouping.identity, grouping.hash);
+        } else {
+            return groupByIdentity(array, grouping.identity);
+        }
+    } else if ("compare" in grouping) {
         if (typeof grouping.hash === "function") {
             return groupByOrderWithHash(array, grouping.compare, grouping.hash);
         } else {
@@ -567,6 +578,33 @@ export function group<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[][] {
 
 export function groupFn<T>(grouping: Grouping<T>): (array: ArrayLike<T>) => T[][] {
     return array => group(array, grouping);
+}
+
+export function groupByIdentity<T>(array: ArrayLike<T>, identity?: (element: T) => unknown): T[][] {
+    return groupByIdentityInternal(array, identity ?? (element => element));
+}
+
+const groupByIdentityInternal = Map == null
+    ? <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[][] =>
+        groupByEquality(array, (a, b) => identity(a) === identity(b))
+    : <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[][] => {
+        const groups: T[][] = [];
+        const map = new Map<unknown, T[]>();
+        for (let i = 0; i < array.length; ++i) {
+            const element = array[i];
+            const key = identity(element);
+            const group = map.get(key) ?? [];
+            group.push(element);
+            if (map.has(key)) {
+                groups.push(group);
+                map.set(key, group);
+            }
+        }
+        return groups;
+    };
+
+export function groupByIdentityFn<T>(identity: (element: T) => unknown): (array: ArrayLike<T>) => T[][] {
+    return array => groupByIdentityInternal(array, identity);
 }
 
 export function groupByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[][] {
@@ -635,6 +673,16 @@ export function groupByHashFn<T>(hash: (element: T, index: number) => Key): (arr
     return array => groupByHash(array, hash);
 }
 
+export const groupByIdentityWithHash = Map == null
+    ? <T>(array: ArrayLike<T>, identity: (element: T) => unknown, hash: (element: T) => Key): T[][] =>
+        groupByEqualityWithHash(array, (a, b) => identity(a) === identity(b), hash)
+    : groupByIdentityInternal;
+
+export function groupByIdentityWithHashFn<T>(identity: (element: T) => unknown,
+                                             hash: (element: T) => Key): (array: ArrayLike<T>) => T[][] {
+    return array => groupByIdentityWithHash(array, identity, hash);
+}
+
 export function groupByEqualityWithHash<T>(array: ArrayLike<T>,
                                            equal: (a: T, b: T) => boolean,
                                            hash: (element: T, index: number) => Key): T[][] {
@@ -688,7 +736,9 @@ export function groupByOrderWithHashFn<T>(
 }
 
 export function groupAdjacent<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[][] {
-    if ("equal" in grouping) {
+    if ("identity" in grouping) {
+        return groupAdjacentByIdentity(array, grouping.identity);
+    } else if ("equal" in grouping) {
         return groupAdjacentByEquality(array, grouping.equal);
     } else if ("compare" in grouping) {
         return groupAdjacentByOrder(array, grouping.compare);
@@ -699,6 +749,16 @@ export function groupAdjacent<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[
 
 export function groupAdjacentFn<T>(grouping: Grouping<T>): (array: ArrayLike<T>) => T[][] {
     return array => groupAdjacent(array, grouping);
+}
+
+export function groupAdjacentByIdentity<T>(array: ArrayLike<T>, identity?: (element: T) => unknown): T[][] {
+    return identity == null
+        ? groupAdjacentByEquality(array, (a, b) => a === b)
+        : groupAdjacentByEquality(array, (a, b) => identity(a) === identity(b));
+}
+
+export function groupAdjacentByIdentityFn<T>(identity: (element: T) => unknown): (array: ArrayLike<T>) => T[][] {
+    return array => groupAdjacentByEquality(array, (a, b) => identity(a) === identity(b));
 }
 
 export function groupAdjacentByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[][] {

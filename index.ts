@@ -926,3 +926,14 @@ export function uniqueByEqualityWithHashFn<T>(equal: (a: T, b: T) => boolean,
                                               hash: (element: T, index: number) => Key): (array: ArrayLike<T>) => T[] {
     return array => uniqueByEqualityWithHash(array, equal, hash);
 }
+
+export function uniqueByOrderWithHash<T>(array: ArrayLike<T>,
+                                         compare: Comparator<T>,
+                                         hash: (element: T, index: number) => Key): T[] {
+    return uniqueByEqualityWithHash(array, (a, b) => compare(a, b) === Comparison.equal, hash);
+}
+
+export function uniqueByOrderWithHashFn<T>(compare: Comparator<T>,
+                                           hash: (element: T, index: number) => Key): (array: ArrayLike<T>) => T[] {
+    return array => uniqueByOrderWithHash(array, compare, hash);
+}

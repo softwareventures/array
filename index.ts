@@ -825,6 +825,26 @@ export function groupAdjacentByHashFn<T>(hash: (element: T, index: number) => st
     return array => groupAdjacentByHash(array, hash);
 }
 
+export function uniqueByIdentity<T>(array: ArrayLike<T>, identity?: (element: T) => unknown): T[] {
+    return uniqueByIdentityInternal(array, identity ?? (element => element));
+}
+
+const uniqueByIdentityInternal = Set == null
+    ? <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[] =>
+        uniqueByEquality(array, (a, b) => identity(a) === identity(b))
+    : <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[] => {
+        const seen = new Set<T>();
+        const result: T[] = [];
+        for (let i = 0; i < array.length; ++i) {
+            const element = array[i];
+            if (!seen.has(element)) {
+                seen.add(element);
+                result.push(element);
+            }
+        }
+        return result;
+    };
+
 export function uniqueByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[] {
     const result: T[] = [];
 

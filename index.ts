@@ -116,6 +116,18 @@ export function takeWhileFn<T>(predicate: (element: T) => boolean): (array: Arra
     return array => takeWhile(array, predicate);
 }
 
+export function dropWhile<T>(array: ArrayLike<T>, predicate: (element: T) => boolean): T[] {
+    let i = 0;
+    while (i < array.length && predicate(array[i])) {
+        ++i;
+    }
+    return drop(array, i);
+}
+
+export function dropWhileFn<T>(predicate: (element: T) => boolean): (array: ArrayLike<T>) => T[] {
+    return array => dropWhile(array, predicate);
+}
+
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
     Array.from != null
         // tslint:disable-next-line:no-unbound-method

@@ -465,6 +465,27 @@ export function partitionFn<T>(predicate: (element: T, index: number) => boolean
     return array => partition(array, predicate);
 }
 
+export function partitionWhile<T, U extends T>(array: ArrayLike<T>,
+                                               predicate: (element: T) => element is U): [U[], T[]];
+export function partitionWhile<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): [T[], T[]];
+export function partitionWhile<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): [T[], T[]] {
+    let i;
+    for (i = 0; i < array.length; ++i) {
+        if (!predicate(array[i], i)) {
+            break;
+        }
+    }
+
+    return [take(array, i), drop(array, i)];
+}
+
+export function partitionWhileFn<T, U extends T>(
+    predicate: (element: T) => element is U): (array: ReadonlyArray<T>) => [U[], T[]];
+export function partitionWhileFn<T>(predicate: (element: T) => boolean): (array: ReadonlyArray<T>) => [T[], T[]];
+export function partitionWhileFn<T>(predicate: (element: T) => boolean): (array: ReadonlyArray<T>) => [T[], T[]] {
+    return array => partitionWhile(array, predicate);
+}
+
 export function keyBy<TElement, TKey extends Key>(
     array: ArrayLike<TElement>,
     f: (element: TElement) => TKey

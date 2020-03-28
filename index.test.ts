@@ -1,5 +1,5 @@
 import test from "ava";
-import {filterFirst, find, findIndex, foldMap, partition} from "./index";
+import {filterFirst, find, findIndex, foldMap, partition, partitionWhile} from "./index";
 
 test("filterFirst", t => {
     t.deepEqual(filterFirst([1, 2, 3, 4, 3, 2, 1], n => n < 3), [1, 2, 4, 3, 2, 1]);
@@ -55,5 +55,25 @@ test("partition", t => {
         {type: "success", value: "goodbye"}
     ], [
         {type: "error"}
+    ]]);
+});
+
+test("partitionWhile", t => {
+    t.deepEqual(partitionWhile(["abc", "def", "ghi"], (_: string, i: number) => (i % 2 === 0)),
+        [["abc"], ["def", "ghi"]]);
+
+    const results: Array<Result<string>> = [
+        {type: "success", value: "hello"},
+        {type: "error"},
+        {type: "success", value: "goodbye"}
+    ];
+
+    const partitionedResults: [Array<Success<string>>, Array<Result<string>>] = partitionWhile(results, isSuccess);
+
+    t.deepEqual(partitionedResults, [[
+        {type: "success", value: "hello"}
+    ], [
+        {type: "error"},
+        {type: "success", value: "goodbye"}
     ]]);
 });

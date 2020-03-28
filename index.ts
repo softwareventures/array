@@ -100,6 +100,22 @@ export function dropFn<T>(count: number): (array: ArrayLike<T>) => T[] {
     return array => nativeSlice.call(array, count);
 }
 
+export function takeWhile<T, U extends T>(array: ArrayLike<T>, predicate: (element: T) => element is U): U[];
+export function takeWhile<T>(array: ArrayLike<T>, predicate: (element: T) => boolean): T[];
+export function takeWhile<T>(array: ArrayLike<T>, predicate: (element: T) => boolean): T[] {
+    let i = 0;
+    while (i < array.length && predicate(array[i])) {
+        ++i;
+    }
+    return take(array, i);
+}
+
+export function takeWhileFn<T, U extends T>(predicate: (element: T) => element is U): (array: ArrayLike<T>) => U[];
+export function takeWhileFn<T>(predicate: (element: T) => boolean): (array: ArrayLike<T>) => T[];
+export function takeWhileFn<T>(predicate: (element: T) => boolean): (array: ArrayLike<T>) => T[] {
+    return array => takeWhile(array, predicate);
+}
+
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
     Array.from != null
         // tslint:disable-next-line:no-unbound-method

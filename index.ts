@@ -31,9 +31,16 @@ export const copy: <T>(array: ArrayLike<T>) => T[] =
         ? array => nativeSlice.call(array)
         : Array.from; // tslint:disable-line:no-unbound-method
 
-const isArray: (value: any) => value is any[] =
+const toString = Object.prototype.toString; // tslint:disable-line:no-unbound-method
+
+// @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
+export function isArray<T = unknown>(value: ReadonlyArray<T> | unknown): value is ReadonlyArray<T>;
+
+/** @internal This implementation is for internal use only, the exported declaration is above */
+// @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
+export const isArray: (value: any) => value is any[] =
     Array.isArray == null
-        ? ((value: any) => value instanceof Array) as any
+        ? ((value: any) => toString.call(value) === "[object Array]") as any
         : Array.isArray; // tslint:disable-line:no-unbound-method
 
 export function coerce<T>(array: ArrayLike<T>): ReadonlyArray<T> {

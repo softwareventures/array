@@ -4,7 +4,7 @@ import {filterFirst, find, findIndex, foldMap, isArray, partition, partitionWhil
 test("isArray", t => {
     t.true(isArray([1, 2, 3]));
     t.false(isArray({length: 3}));
-})
+});
 
 test("filterFirst", t => {
     t.deepEqual(filterFirst([1, 2, 3, 4, 3, 2, 1], n => n < 3), [1, 2, 4, 3, 2, 1]);

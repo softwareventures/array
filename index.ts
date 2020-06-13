@@ -38,6 +38,13 @@ export function isArray<T = unknown>(value: ReadonlyArray<T> | unknown): value i
 export const isArray: (value: any) => value is any[] =
     Array.isArray ?? (((value: any) => toString.call(value) === "[object Array]") as any);
 
+export function isArrayLike<T>(value: ArrayLike<T> | unknown): value is ArrayLike<T> {
+    return typeof value === "object"
+        && value != null
+        && "length" in value
+        && typeof (value as { length: unknown }).length === "number";
+}
+
 export function coerce<T>(array: ArrayLike<T>): ReadonlyArray<T> {
     return isArray(array)
         ? array

@@ -26,10 +26,7 @@ const nativeIndexOf = Array.prototype.indexOf;
 // tslint:disable-next-line:no-unbound-method
 const nativeFindIndex = Array.prototype.findIndex;
 
-export const copy: <T>(array: ArrayLike<T>) => T[] =
-    Array.from == null
-        ? array => nativeSlice.call(array)
-        : Array.from; // tslint:disable-line:no-unbound-method
+export const copy: <T>(array: ArrayLike<T>) => T[] = Array.from ?? (array => nativeSlice.call(array));
 
 const toString = Object.prototype.toString; // tslint:disable-line:no-unbound-method
 
@@ -39,9 +36,7 @@ export function isArray<T = unknown>(value: ReadonlyArray<T> | unknown): value i
 /** @internal This implementation is for internal use only, the exported declaration is above */
 // @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
 export const isArray: (value: any) => value is any[] =
-    Array.isArray == null
-        ? ((value: any) => toString.call(value) === "[object Array]") as any
-        : Array.isArray; // tslint:disable-line:no-unbound-method
+    Array.isArray ?? (((value: any) => toString.call(value) === "[object Array]") as any);
 
 export function coerce<T>(array: ArrayLike<T>): ReadonlyArray<T> {
     return isArray(array)

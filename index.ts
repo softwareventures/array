@@ -192,14 +192,6 @@ export function foldFn<T, U>(f: (accumulator: U, element: T, index: number) => U
     return array => (nativeReduce as any).call(array, f, initial);
 }
 
-export function foldMonoid<T>(array: ArrayLike<T>, f: (accumulator: T, element: T, index: number) => T): T {
-    return (nativeReduce as any).call(array, f);
-}
-
-export function foldMonoidFn<T>(f: (accumulator: T, element: T, index: number) => T): (array: ArrayLike<T>) => T {
-    return array => (nativeReduce as any).call(array, f);
-}
-
 export function foldRight<T, U>(array: ArrayLike<T>,
                                 f: (accumulator: U, element: T, index: number) => U,
                                 initial: U): U {
@@ -209,14 +201,6 @@ export function foldRight<T, U>(array: ArrayLike<T>,
 export function foldRightFn<T, U>(f: (accumulator: U, element: T, index: number) => U,
                                   initial: U): (array: ArrayLike<T>) => U {
     return array => (nativeReduceRight as any).call(array, f, initial);
-}
-
-export function foldMonoidRight<T>(array: ArrayLike<T>, f: (accumulator: T, element: T, index: number) => T): T {
-    return (nativeReduceRight as any).call(array, f);
-}
-
-export function foldMonoidRightFn<T>(f: (accumulator: T, element: T, index: number) => T): (array: ArrayLike<T>) => T {
-    return array => (nativeReduceRight as any).call(array, f);
 }
 
 export function foldMap<T, U>(array: ArrayLike<T>,

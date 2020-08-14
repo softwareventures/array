@@ -254,6 +254,29 @@ export function foldMapFn<T, U>(
     return array => foldMap(array, f, m, initial);
 }
 
+export function foldMapRight<T, U>(
+    array: ArrayLike<T>,
+    f: (accumulator: U, element: U, index: number) => U,
+    m: (element: T) => U,
+    initial: U
+): U {
+    let accumulator = initial;
+    const length = array.length;
+    for (let i = 0; i < array.length; ++i) {
+        accumulator = f(accumulator, m(array[length - i]), i);
+    }
+
+    return accumulator;
+}
+
+export function foldMapRightFn<T, U>(
+    f: (accumulator: U, element: U, index: number) => U,
+    m: (element: T) => U,
+    initial: U
+): (array: ArrayLike<T>) => U {
+    return array => foldMapRight(array, f, m, initial);
+}
+
 export function contains<T>(array: ArrayLike<T>, value: T): boolean {
     return nativeIndexOf.call(array, value) !== -1;
 }

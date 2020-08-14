@@ -2,59 +2,61 @@ import {dictionary} from "@softwareventures/dictionary";
 import {Comparator, compare as defaultCompare, Comparison} from "@softwareventures/ordered";
 import {Dictionary, Key} from "dictionary-types";
 
-// tslint:disable-next-line:no-unbound-method
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeSlice = Array.prototype.slice;
 
-// tslint:disable-next-line:no-unbound-method
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeConcat = Array.prototype.concat;
 
-// tslint:disable-next-line:no-unbound-method
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeMap = Array.prototype.map;
 
-// tslint:disable-next-line:no-unbound-method
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeFilter = Array.prototype.filter;
 
-// tslint:disable-next-line:no-unbound-method
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeReduce = Array.prototype.reduce;
 
-// tslint:disable-next-line:no-unbound-method
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeReduceRight = Array.prototype.reduceRight;
 
-// tslint:disable-next-line:no-unbound-method
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeIndexOf = Array.prototype.indexOf;
 
-// tslint:disable-next-line:no-unbound-method
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeFindIndex = Array.prototype.findIndex;
 
-export const copy: <T>(array: ArrayLike<T>) => T[] = Array.from ?? (array => nativeSlice.call(array));
+export const copy: <T>(array: ArrayLike<T>) => T[] =
+    Array.from ?? (array => nativeSlice.call(array));
 
-const toString = Object.prototype.toString; // tslint:disable-line:no-unbound-method
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const toString = Object.prototype.toString;
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
-export function isArray<T = unknown>(value: ReadonlyArray<T> | unknown): value is ReadonlyArray<T>;
+export function isArray<T = unknown>(value: readonly T[] | unknown): value is readonly T[];
 
 /** @internal This implementation is for internal use only, the exported declaration is above */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
 export const isArray: (value: any) => value is any[] =
     Array.isArray ?? (((value: any) => toString.call(value) === "[object Array]") as any);
 
 export function isArrayLike<T>(value: ArrayLike<T> | unknown): value is ArrayLike<T> {
-    return typeof value === "object"
-        && value != null
-        && "length" in value
-        && typeof (value as { length: unknown }).length === "number";
+    return (
+        typeof value === "object" &&
+        value != null &&
+        "length" in value &&
+        typeof (value as {length: unknown}).length === "number"
+    );
 }
 
-export function coerce<T>(array: ArrayLike<T>): ReadonlyArray<T> {
-    return isArray(array)
-        ? array
-        : copy(array);
+export function coerce<T>(array: ArrayLike<T>): readonly T[] {
+    return isArray(array) ? array : copy(array);
 }
 
 export function head<T>(array: ArrayLike<T>): T | null {
-    return array.length === 0
-        ? null
-        : array[0];
+    return array.length === 0 ? null : array[0];
 }
 
 export function tail<T>(array: ArrayLike<T>): T[] {
@@ -62,15 +64,11 @@ export function tail<T>(array: ArrayLike<T>): T[] {
 }
 
 export function initial<T>(array: ArrayLike<T>): T[] {
-    return array.length === 0
-        ? []
-        : nativeSlice.call(array, array.length - 1);
+    return array.length === 0 ? [] : nativeSlice.call(array, array.length - 1);
 }
 
 export function last<T>(array: ArrayLike<T>): T | null {
-    return array.length === 0
-        ? null
-        : array[array.length - 1];
+    return array.length === 0 ? null : array[array.length - 1];
 }
 
 export function empty<T>(array: ArrayLike<T>): boolean {
@@ -109,7 +107,10 @@ export function dropFn<T>(count: number): (array: ArrayLike<T>) => T[] {
     return array => nativeSlice.call(array, count);
 }
 
-export function takeWhile<T, U extends T>(array: ArrayLike<T>, predicate: (element: T) => element is U): U[];
+export function takeWhile<T, U extends T>(
+    array: ArrayLike<T>,
+    predicate: (element: T) => element is U
+): U[];
 export function takeWhile<T>(array: ArrayLike<T>, predicate: (element: T) => boolean): T[];
 export function takeWhile<T>(array: ArrayLike<T>, predicate: (element: T) => boolean): T[] {
     let i = 0;
@@ -119,7 +120,9 @@ export function takeWhile<T>(array: ArrayLike<T>, predicate: (element: T) => boo
     return take(array, i);
 }
 
-export function takeWhileFn<T, U extends T>(predicate: (element: T) => element is U): (array: ArrayLike<T>) => U[];
+export function takeWhileFn<T, U extends T>(
+    predicate: (element: T) => element is U
+): (array: ArrayLike<T>) => U[];
 export function takeWhileFn<T>(predicate: (element: T) => boolean): (array: ArrayLike<T>) => T[];
 export function takeWhileFn<T>(predicate: (element: T) => boolean): (array: ArrayLike<T>) => T[] {
     return array => takeWhile(array, predicate);
@@ -139,30 +142,44 @@ export function dropWhileFn<T>(predicate: (element: T) => boolean): (array: Arra
 
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
     Array.from != null
-        // tslint:disable-next-line:no-unbound-method
-        ? Array.from as any // TypeScript 3.2 incorrectly requires this cast to any.
+        ? (Array.from as any) // TypeScript 3.2 incorrectly requires this cast to any.
         : (array, f) => nativeMap.call(array, f);
 
 export function mapFn<T, U>(f: (element: T, index: number) => U): (array: ArrayLike<T>) => U[] {
     return array => map(array, f);
 }
 
-export function filter<T, U extends T>(array: ArrayLike<T>,
-                                       predicate: (element: T, index: number) => element is U): U[];
-export function filter<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): T[];
-export function filter<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): T[] {
+export function filter<T, U extends T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => element is U
+): U[];
+export function filter<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): T[];
+export function filter<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): T[] {
     return nativeFilter.call(array, predicate);
 }
 
-export function filterFn<T, U extends T>(predicate: (element: T, index: number) => element is U)
-    : (array: ArrayLike<T>) => U[];
-export function filterFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => T[];
-export function filterFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => T[] {
+export function filterFn<T, U extends T>(
+    predicate: (element: T, index: number) => element is U
+): (array: ArrayLike<T>) => U[];
+export function filterFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => T[];
+export function filterFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => T[] {
     return array => filter(array, predicate);
 }
 
-export function filterFirst<T>(array: ArrayLike<T>,
-                               predicate: (element: T, index: number) => boolean): T[] {
+export function filterFirst<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): T[] {
     const result = [];
     let i = 0;
     for (; i < array.length; ++i) {
@@ -179,33 +196,47 @@ export function filterFirst<T>(array: ArrayLike<T>,
     return result;
 }
 
-export function filterFirstFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => T[] {
+export function filterFirstFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => T[] {
     return array => filterFirst(array, predicate);
 }
 
-export function fold<T, U>(array: ArrayLike<T>, f: (accumulator: U, element: T, index: number) => U, initial: U): U {
-    return (nativeReduce as any).call(array, f, initial);
+export function fold<T, U>(
+    array: ArrayLike<T>,
+    f: (accumulator: U, element: T, index: number) => U,
+    initial: U
+): U {
+    return (nativeReduce as (...args: any[]) => any).call(array, f, initial);
 }
 
-export function foldFn<T, U>(f: (accumulator: U, element: T, index: number) => U,
-                             initial: U): (array: ArrayLike<T>) => U {
-    return array => (nativeReduce as any).call(array, f, initial);
+export function foldFn<T, U>(
+    f: (accumulator: U, element: T, index: number) => U,
+    initial: U
+): (array: ArrayLike<T>) => U {
+    return array => (nativeReduce as (...args: any[]) => any).call(array, f, initial);
 }
 
-export function foldRight<T, U>(array: ArrayLike<T>,
-                                f: (accumulator: U, element: T, index: number) => U,
-                                initial: U): U {
-    return (nativeReduceRight as any).call(array, f, initial);
+export function foldRight<T, U>(
+    array: ArrayLike<T>,
+    f: (accumulator: U, element: T, index: number) => U,
+    initial: U
+): U {
+    return (nativeReduceRight as (...args: any[]) => any).call(array, f, initial);
 }
 
-export function foldRightFn<T, U>(f: (accumulator: U, element: T, index: number) => U,
-                                  initial: U): (array: ArrayLike<T>) => U {
-    return array => (nativeReduceRight as any).call(array, f, initial);
+export function foldRightFn<T, U>(
+    f: (accumulator: U, element: T, index: number) => U,
+    initial: U
+): (array: ArrayLike<T>) => U {
+    return array => (nativeReduceRight as (...args: any[]) => any).call(array, f, initial);
 }
 
-export function foldMap<T, U>(array: ArrayLike<T>,
-                              f: (accumulator: U, element: U, index: number) => U,
-                              m: (element: T) => U): U {
+export function foldMap<T, U>(
+    array: ArrayLike<T>,
+    f: (accumulator: U, element: U, index: number) => U,
+    m: (element: T) => U
+): U {
     if (array.length === 0) {
         throw new TypeError("Fold of empty array with no initial value");
     }
@@ -218,8 +249,10 @@ export function foldMap<T, U>(array: ArrayLike<T>,
     return accumulator;
 }
 
-export function foldMapFn<T, U>(f: (accumulator: U, element: U, index: number) => U,
-                                m: (element: T) => U): (array: ArrayLike<T>) => U {
+export function foldMapFn<T, U>(
+    f: (accumulator: U, element: U, index: number) => U,
+    m: (element: T) => U
+): (array: ArrayLike<T>) => U {
     return array => foldMap(array, f, m);
 }
 
@@ -240,50 +273,72 @@ export function indexOfFn<T>(value: T): (array: ArrayLike<T>) => number | null {
     return array => indexOf(array, value);
 }
 
-export const findIndex: <T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean) => number | null =
+export const findIndex: <T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+) => number | null =
     nativeFindIndex == null
         ? (array, predicate) => {
-            for (let i = 0; i < array.length; ++i) {
-                if (predicate(array[i], i)) {
-                    return i;
-                }
-            }
-            return null;
-        }
+              for (let i = 0; i < array.length; ++i) {
+                  if (predicate(array[i], i)) {
+                      return i;
+                  }
+              }
+              return null;
+          }
         : (array, predicate) => {
-            const index = nativeFindIndex.call(array, predicate);
-            return index === -1 ? null : index;
-        };
+              const index = nativeFindIndex.call(array, predicate);
+              return index === -1 ? null : index;
+          };
 
-export function findIndexFn<T>(predicate: (element: T,
-                                           index: number) => boolean): (array: ArrayLike<T>) => number | null {
+export function findIndexFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => number | null {
     return array => findIndex(array, predicate);
 }
 
-export function find<T, U extends T>(array: ArrayLike<T>, predicate: (element: T) => element is U): U | null;
-export function find<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): T | null;
-export function find<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): T | null {
+export function find<T, U extends T>(
+    array: ArrayLike<T>,
+    predicate: (element: T) => element is U
+): U | null;
+export function find<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): T | null;
+export function find<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): T | null {
     const index = findIndex(array, predicate);
-    return index == null
-        ? null
-        : array[index];
+    return index == null ? null : array[index];
 }
 
-export function findFn<T, U extends T>(predicate: (element: T) => element is U): (array: ArrayLike<T>) => U | null;
-export function findFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => T | null;
-export function findFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => T | null {
+export function findFn<T, U extends T>(
+    predicate: (element: T) => element is U
+): (array: ArrayLike<T>) => U | null;
+export function findFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => T | null;
+export function findFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => T | null {
     return array => find(array, predicate);
 }
 
 export function maximum<T extends string | number | boolean>(array: ArrayLike<T>): T | null;
 export function maximum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | null;
-export function maximum<T>(array: ArrayLike<T>, compare: Comparator<any> = defaultCompare): T | null {
+export function maximum<T>(
+    array: ArrayLike<T>,
+    compare: Comparator<any> = defaultCompare
+): T | null {
     return internalMaximum(array, compare);
 }
 
 export function maximumFn<T extends string | number | boolean>(): (array: ArrayLike<T>) => T | null;
 export function maximumFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T | null;
-export function maximumFn<T>(compare: Comparator<any> = defaultCompare): (array: ArrayLike<T>) => T | null {
+export function maximumFn<T>(
+    compare: Comparator<any> = defaultCompare
+): (array: ArrayLike<T>) => T | null {
     return array => internalMaximum(array, compare);
 }
 
@@ -305,13 +360,18 @@ function internalMaximum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | nu
 
 export function minimum<T extends string | number | boolean>(array: ArrayLike<T>): T | null;
 export function minimum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | null;
-export function minimum<T>(array: ArrayLike<T>, compare: Comparator<any> = defaultCompare): T | null {
+export function minimum<T>(
+    array: ArrayLike<T>,
+    compare: Comparator<any> = defaultCompare
+): T | null {
     return internalMinimum(array, compare);
 }
 
 export function minimumFn<T extends string | number | boolean>(): (array: ArrayLike<T>) => T | null;
 export function minimumFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T | null;
-export function minimumFn<T>(compare: Comparator<any> = defaultCompare): (array: ArrayLike<T>) => T | null {
+export function minimumFn<T>(
+    compare: Comparator<any> = defaultCompare
+): (array: ArrayLike<T>) => T | null {
     return array => internalMinimum(array, compare);
 }
 
@@ -347,19 +407,29 @@ export function or(array: ArrayLike<boolean>): boolean {
     return findIndex(array, element => !!element) != null;
 }
 
-export function any<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): boolean {
+export function any<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): boolean {
     return findIndex(array, predicate) != null;
 }
 
-export function anyFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => boolean {
+export function anyFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => boolean {
     return array => any(array, predicate);
 }
 
-export function all<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): boolean {
+export function all<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): boolean {
     return !any(array, (element, index) => !predicate(element, index));
 }
 
-export function allFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => boolean {
+export function allFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => boolean {
     return array => all(array, predicate);
 }
 
@@ -384,12 +454,14 @@ export function concatMapFn<T, U>(f: (element: T) => ArrayLike<U>): (array: Arra
 }
 
 export function noneNull<T>(array: ArrayLike<T | null>): ArrayLike<T> | null {
-    return any(array, e => e == null)
-        ? null
-        : array as ArrayLike<T>;
+    return any(array, e => e == null) ? null : (array as ArrayLike<T>);
 }
 
-export function scan<T, U>(array: ArrayLike<T>, f: (accumulator: U, element: T, index: number) => U, initial: U): U[] {
+export function scan<T, U>(
+    array: ArrayLike<T>,
+    f: (accumulator: U, element: T, index: number) => U,
+    initial: U
+): U[] {
     const result: U[] = copy({length: array.length});
     let accumulator = initial;
 
@@ -400,14 +472,18 @@ export function scan<T, U>(array: ArrayLike<T>, f: (accumulator: U, element: T, 
     return result;
 }
 
-export function scanFn<T, U>(f: (accumulator: U, element: T, index: number) => U,
-                             initial: U): (array: ArrayLike<T>) => U[] {
+export function scanFn<T, U>(
+    f: (accumulator: U, element: T, index: number) => U,
+    initial: U
+): (array: ArrayLike<T>) => U[] {
     return array => scan(array, f, initial);
 }
 
-export function scanRight<T, U>(array: ArrayLike<T>,
-                                f: (accumulator: U, element: T, index: number) => U,
-                                initial: U): U[] {
+export function scanRight<T, U>(
+    array: ArrayLike<T>,
+    f: (accumulator: U, element: T, index: number) => U,
+    initial: U
+): U[] {
     const result: U[] = copy({length: array.length});
     let accumulator = initial;
 
@@ -418,15 +494,25 @@ export function scanRight<T, U>(array: ArrayLike<T>,
     return result;
 }
 
-export function scanRightFn<T, U>(f: (accumulator: U, element: T, index: number) => U,
-                                  initial: U): (array: ArrayLike<T>) => U[] {
+export function scanRightFn<T, U>(
+    f: (accumulator: U, element: T, index: number) => U,
+    initial: U
+): (array: ArrayLike<T>) => U[] {
     return array => scanRight(array, f, initial);
 }
 
-export function partition<T, U extends T>(array: ArrayLike<T>,
-                                          predicate: (element: T) => element is U): [U[], Array<Exclude<T, U>>];
-export function partition<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): [T[], T[]];
-export function partition<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): [T[], T[]] {
+export function partition<T, U extends T>(
+    array: ArrayLike<T>,
+    predicate: (element: T) => element is U
+): [U[], Array<Exclude<T, U>>];
+export function partition<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): [T[], T[]];
+export function partition<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): [T[], T[]] {
     const a: T[] = [];
     const b: T[] = [];
 
@@ -442,16 +528,29 @@ export function partition<T>(array: ArrayLike<T>, predicate: (element: T, index:
 }
 
 export function partitionFn<T, U extends T>(
-    predicate: (element: T) => element is U): (array: ArrayLike<T>) => [U[], Array<Exclude<T, U>>];
-export function partitionFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => [T[], T[]];
-export function partitionFn<T>(predicate: (element: T, index: number) => boolean): (array: ArrayLike<T>) => [T[], T[]] {
+    predicate: (element: T) => element is U
+): (array: ArrayLike<T>) => [U[], Array<Exclude<T, U>>];
+export function partitionFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => [T[], T[]];
+export function partitionFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => [T[], T[]] {
     return array => partition(array, predicate);
 }
 
-export function partitionWhile<T, U extends T>(array: ArrayLike<T>,
-                                               predicate: (element: T) => element is U): [U[], T[]];
-export function partitionWhile<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): [T[], T[]];
-export function partitionWhile<T>(array: ArrayLike<T>, predicate: (element: T, index: number) => boolean): [T[], T[]] {
+export function partitionWhile<T, U extends T>(
+    array: ArrayLike<T>,
+    predicate: (element: T) => element is U
+): [U[], T[]];
+export function partitionWhile<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): [T[], T[]];
+export function partitionWhile<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): [T[], T[]] {
     let i;
     for (i = 0; i < array.length; ++i) {
         if (!predicate(array[i], i)) {
@@ -463,9 +562,14 @@ export function partitionWhile<T>(array: ArrayLike<T>, predicate: (element: T, i
 }
 
 export function partitionWhileFn<T, U extends T>(
-    predicate: (element: T) => element is U): (array: ReadonlyArray<T>) => [U[], T[]];
-export function partitionWhileFn<T>(predicate: (element: T) => boolean): (array: ReadonlyArray<T>) => [T[], T[]];
-export function partitionWhileFn<T>(predicate: (element: T) => boolean): (array: ReadonlyArray<T>) => [T[], T[]] {
+    predicate: (element: T) => element is U
+): (array: readonly T[]) => [U[], T[]];
+export function partitionWhileFn<T>(
+    predicate: (element: T) => boolean
+): (array: readonly T[]) => [T[], T[]];
+export function partitionWhileFn<T>(
+    predicate: (element: T) => boolean
+): (array: readonly T[]) => [T[], T[]] {
     return array => partitionWhile(array, predicate);
 }
 
@@ -554,7 +658,11 @@ export interface HashGrouping<T> {
     readonly hash: (element: T, index: number) => Key;
 }
 
-export type Grouping<T> = IdentityGrouping<T> | EqualityGrouping<T> | OrderedGrouping<T> | HashGrouping<T>;
+export type Grouping<T> =
+    | IdentityGrouping<T>
+    | EqualityGrouping<T>
+    | OrderedGrouping<T>
+    | HashGrouping<T>;
 
 export function group<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[][] {
     if ("identity" in grouping) {
@@ -588,26 +696,29 @@ export function groupByIdentity<T>(array: ArrayLike<T>, identity?: (element: T) 
     return groupByIdentityInternal(array, identity ?? (element => element));
 }
 
-const groupByIdentityInternal = Map == null
-    ? <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[][] =>
-        groupByEquality(array, (a, b) => identity(a) === identity(b))
-    : <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[][] => {
-        const groups: T[][] = [];
-        const map = new Map<unknown, T[]>();
-        for (let i = 0; i < array.length; ++i) {
-            const element = array[i];
-            const key = identity(element);
-            const group = map.get(key) ?? [];
-            group.push(element);
-            if (map.has(key)) {
-                groups.push(group);
-                map.set(key, group);
-            }
-        }
-        return groups;
-    };
+const groupByIdentityInternal =
+    Map == null
+        ? <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[][] =>
+              groupByEquality(array, (a, b) => identity(a) === identity(b))
+        : <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[][] => {
+              const groups: T[][] = [];
+              const map = new Map<unknown, T[]>();
+              for (let i = 0; i < array.length; ++i) {
+                  const element = array[i];
+                  const key = identity(element);
+                  const group = map.get(key) ?? [];
+                  group.push(element);
+                  if (map.has(key)) {
+                      groups.push(group);
+                      map.set(key, group);
+                  }
+              }
+              return groups;
+          };
 
-export function groupByIdentityFn<T>(identity: (element: T) => unknown): (array: ArrayLike<T>) => T[][] {
+export function groupByIdentityFn<T>(
+    identity: (element: T) => unknown
+): (array: ArrayLike<T>) => T[][] {
     return array => groupByIdentityInternal(array, identity);
 }
 
@@ -628,7 +739,9 @@ export function groupByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => b
     return result;
 }
 
-export function groupByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: ArrayLike<T>) => T[][] {
+export function groupByEqualityFn<T>(
+    equal: (a: T, b: T) => boolean
+): (array: ArrayLike<T>) => T[][] {
     return array => groupByEquality(array, equal);
 }
 
@@ -641,7 +754,10 @@ export function groupByOrderFn<T>(compare: Comparator<T>): (array: ArrayLike<T>)
     return array => groupByOrder(array, compare);
 }
 
-export function groupByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => Key): T[][] {
+export function groupByHash<T>(
+    array: ArrayLike<T>,
+    hash: (element: T, index: number) => Key
+): T[][] {
     const groups = dictionary<T[], Key>();
     const result: T[][] = [];
 
@@ -661,23 +777,33 @@ export function groupByHash<T>(array: ArrayLike<T>, hash: (element: T, index: nu
     return result;
 }
 
-export function groupByHashFn<T>(hash: (element: T, index: number) => Key): (array: ArrayLike<T>) => T[][] {
+export function groupByHashFn<T>(
+    hash: (element: T, index: number) => Key
+): (array: ArrayLike<T>) => T[][] {
     return array => groupByHash(array, hash);
 }
 
-export const groupByIdentityWithHash = Map == null
-    ? <T>(array: ArrayLike<T>, identity: (element: T) => unknown, hash: (element: T) => Key): T[][] =>
-        groupByEqualityWithHash(array, (a, b) => identity(a) === identity(b), hash)
-    : groupByIdentityInternal;
+export const groupByIdentityWithHash =
+    Map == null
+        ? <T>(
+              array: ArrayLike<T>,
+              identity: (element: T) => unknown,
+              hash: (element: T) => Key
+          ): T[][] => groupByEqualityWithHash(array, (a, b) => identity(a) === identity(b), hash)
+        : groupByIdentityInternal;
 
-export function groupByIdentityWithHashFn<T>(identity: (element: T) => unknown,
-                                             hash: (element: T) => Key): (array: ArrayLike<T>) => T[][] {
+export function groupByIdentityWithHashFn<T>(
+    identity: (element: T) => unknown,
+    hash: (element: T) => Key
+): (array: ArrayLike<T>) => T[][] {
     return array => groupByIdentityWithHash(array, identity, hash);
 }
 
-export function groupByEqualityWithHash<T>(array: ArrayLike<T>,
-                                           equal: (a: T, b: T) => boolean,
-                                           hash: (element: T, index: number) => Key): T[][] {
+export function groupByEqualityWithHash<T>(
+    array: ArrayLike<T>,
+    equal: (a: T, b: T) => boolean,
+    hash: (element: T, index: number) => Key
+): T[][] {
     const groups = dictionary<T[][], Key>();
     const result: T[][] = [];
 
@@ -714,9 +840,11 @@ export function groupByEqualityWithHashFn<T>(
     return array => groupByEqualityWithHash(array, equal, hash);
 }
 
-export function groupByOrderWithHash<T>(array: ArrayLike<T>,
-                                        compare: Comparator<T>,
-                                        hash: (element: T, index: number) => Key): T[][] {
+export function groupByOrderWithHash<T>(
+    array: ArrayLike<T>,
+    compare: Comparator<T>,
+    hash: (element: T, index: number) => Key
+): T[][] {
     return groupByEqualityWithHash(array, (a, b) => compare(a, b) === Comparison.equal, hash);
 }
 
@@ -743,17 +871,25 @@ export function groupAdjacentFn<T>(grouping: Grouping<T>): (array: ArrayLike<T>)
     return array => groupAdjacent(array, grouping);
 }
 
-export function groupAdjacentByIdentity<T>(array: ArrayLike<T>, identity?: (element: T) => unknown): T[][] {
+export function groupAdjacentByIdentity<T>(
+    array: ArrayLike<T>,
+    identity?: (element: T) => unknown
+): T[][] {
     return identity == null
         ? groupAdjacentByEquality(array, (a, b) => a === b)
         : groupAdjacentByEquality(array, (a, b) => identity(a) === identity(b));
 }
 
-export function groupAdjacentByIdentityFn<T>(identity: (element: T) => unknown): (array: ArrayLike<T>) => T[][] {
+export function groupAdjacentByIdentityFn<T>(
+    identity: (element: T) => unknown
+): (array: ArrayLike<T>) => T[][] {
     return array => groupAdjacentByEquality(array, (a, b) => identity(a) === identity(b));
 }
 
-export function groupAdjacentByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[][] {
+export function groupAdjacentByEquality<T>(
+    array: ArrayLike<T>,
+    equal: (a: T, b: T) => boolean
+): T[][] {
     if (array.length === 0) {
         return [];
     }
@@ -776,7 +912,9 @@ export function groupAdjacentByEquality<T>(array: ArrayLike<T>, equal: (a: T, b:
     return result;
 }
 
-export function groupAdjacentByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: ArrayLike<T>) => T[][] {
+export function groupAdjacentByEqualityFn<T>(
+    equal: (a: T, b: T) => boolean
+): (array: ArrayLike<T>) => T[][] {
     return array => groupAdjacentByEquality(array, equal);
 }
 
@@ -788,7 +926,10 @@ export function groupAdjacentByOrderFn<T>(compare: Comparator<T>): (array: Array
     return array => groupAdjacentByOrder(array, compare);
 }
 
-export function groupAdjacentByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => Key): T[][] {
+export function groupAdjacentByHash<T>(
+    array: ArrayLike<T>,
+    hash: (element: T, index: number) => Key
+): T[][] {
     if (array.length === 0) {
         return [];
     }
@@ -813,7 +954,9 @@ export function groupAdjacentByHash<T>(array: ArrayLike<T>, hash: (element: T, i
     return result;
 }
 
-export function groupAdjacentByHashFn<T>(hash: (element: T, index: number) => string): (array: ArrayLike<T>) => T[][] {
+export function groupAdjacentByHashFn<T>(
+    hash: (element: T, index: number) => string
+): (array: ArrayLike<T>) => T[][] {
     return array => groupAdjacentByHash(array, hash);
 }
 
@@ -849,21 +992,22 @@ export function uniqueByIdentity<T>(array: ArrayLike<T>, identity?: (element: T)
     return uniqueByIdentityInternal(array, identity ?? (element => element));
 }
 
-const uniqueByIdentityInternal = Set == null
-    ? <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[] =>
-        uniqueByEquality(array, (a, b) => identity(a) === identity(b))
-    : <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[] => {
-        const seen = new Set<T>();
-        const result: T[] = [];
-        for (let i = 0; i < array.length; ++i) {
-            const element = array[i];
-            if (!seen.has(element)) {
-                seen.add(element);
-                result.push(element);
-            }
-        }
-        return result;
-    };
+const uniqueByIdentityInternal =
+    Set == null
+        ? <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[] =>
+              uniqueByEquality(array, (a, b) => identity(a) === identity(b))
+        : <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[] => {
+              const seen = new Set<T>();
+              const result: T[] = [];
+              for (let i = 0; i < array.length; ++i) {
+                  const element = array[i];
+                  if (!seen.has(element)) {
+                      seen.add(element);
+                      result.push(element);
+                  }
+              }
+              return result;
+          };
 
 export function uniqueByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[] {
     const result: T[] = [];
@@ -881,7 +1025,9 @@ export function uniqueByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => 
     return result;
 }
 
-export function uniqueByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: ArrayLike<T>) => T[] {
+export function uniqueByEqualityFn<T>(
+    equal: (a: T, b: T) => boolean
+): (array: ArrayLike<T>) => T[] {
     return array => uniqueByEquality(array, equal);
 }
 
@@ -894,7 +1040,10 @@ export function uniqueByOrderFn<T>(compare: Comparator<T>): (array: ArrayLike<T>
     return array => uniqueByOrder(array, compare);
 }
 
-export function uniqueByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => Key): T[] {
+export function uniqueByHash<T>(
+    array: ArrayLike<T>,
+    hash: (element: T, index: number) => Key
+): T[] {
     const seen = dictionary<boolean, Key>();
     const result: T[] = [];
 
@@ -911,23 +1060,33 @@ export function uniqueByHash<T>(array: ArrayLike<T>, hash: (element: T, index: n
     return result;
 }
 
-export function uniqueByHashFn<T>(hash: (element: T, index: number) => Key): (array: ArrayLike<T>) => T[] {
+export function uniqueByHashFn<T>(
+    hash: (element: T, index: number) => Key
+): (array: ArrayLike<T>) => T[] {
     return array => uniqueByHash(array, hash);
 }
 
-export const uniqueByIdentityWithHash = Set == null
-    ? <T>(array: ArrayLike<T>, identity: (element: T) => unknown, hash: (element: T) => Key): T[] =>
-        uniqueByEqualityWithHash(array, (a, b) => identity(a) === identity(b), hash)
-    : uniqueByIdentityInternal;
+export const uniqueByIdentityWithHash =
+    Set == null
+        ? <T>(
+              array: ArrayLike<T>,
+              identity: (element: T) => unknown,
+              hash: (element: T) => Key
+          ): T[] => uniqueByEqualityWithHash(array, (a, b) => identity(a) === identity(b), hash)
+        : uniqueByIdentityInternal;
 
-export function uniqueByIdentityWithHashFn<T>(identity: (element: T) => unknown,
-                                              hash: (element: T) => Key): (array: ArrayLike<T>) => T[] {
+export function uniqueByIdentityWithHashFn<T>(
+    identity: (element: T) => unknown,
+    hash: (element: T) => Key
+): (array: ArrayLike<T>) => T[] {
     return array => uniqueByIdentityWithHash(array, identity, hash);
 }
 
-export function uniqueByEqualityWithHash<T>(array: ArrayLike<T>,
-                                            equal: (a: T, b: T) => boolean,
-                                            hash: (element: T, index: number) => Key): T[] {
+export function uniqueByEqualityWithHash<T>(
+    array: ArrayLike<T>,
+    equal: (a: T, b: T) => boolean,
+    hash: (element: T, index: number) => Key
+): T[] {
     const seenGroups = dictionary<T[], Key>();
     const result: T[] = [];
 
@@ -954,19 +1113,25 @@ export function uniqueByEqualityWithHash<T>(array: ArrayLike<T>,
     return result;
 }
 
-export function uniqueByEqualityWithHashFn<T>(equal: (a: T, b: T) => boolean,
-                                              hash: (element: T, index: number) => Key): (array: ArrayLike<T>) => T[] {
+export function uniqueByEqualityWithHashFn<T>(
+    equal: (a: T, b: T) => boolean,
+    hash: (element: T, index: number) => Key
+): (array: ArrayLike<T>) => T[] {
     return array => uniqueByEqualityWithHash(array, equal, hash);
 }
 
-export function uniqueByOrderWithHash<T>(array: ArrayLike<T>,
-                                         compare: Comparator<T>,
-                                         hash: (element: T, index: number) => Key): T[] {
+export function uniqueByOrderWithHash<T>(
+    array: ArrayLike<T>,
+    compare: Comparator<T>,
+    hash: (element: T, index: number) => Key
+): T[] {
     return uniqueByEqualityWithHash(array, (a, b) => compare(a, b) === Comparison.equal, hash);
 }
 
-export function uniqueByOrderWithHashFn<T>(compare: Comparator<T>,
-                                           hash: (element: T, index: number) => Key): (array: ArrayLike<T>) => T[] {
+export function uniqueByOrderWithHashFn<T>(
+    compare: Comparator<T>,
+    hash: (element: T, index: number) => Key
+): (array: ArrayLike<T>) => T[] {
     return array => uniqueByOrderWithHash(array, compare, hash);
 }
 
@@ -986,17 +1151,25 @@ export function uniqueAdjacentFn<T>(grouping: Grouping<T>): (array: ArrayLike<T>
     return array => uniqueAdjacent(array, grouping);
 }
 
-export function uniqueAdjacentByIdentity<T>(array: ArrayLike<T>, identity?: (element: T) => unknown): T[] {
+export function uniqueAdjacentByIdentity<T>(
+    array: ArrayLike<T>,
+    identity?: (element: T) => unknown
+): T[] {
     return identity == null
         ? uniqueAdjacentByEquality(array, (a, b) => a === b)
         : uniqueAdjacentByEquality(array, (a, b) => identity(a) === identity(b));
 }
 
-export function uniqueAdjacentByIdentityFn<T>(identity: (element: T) => unknown): (array: ArrayLike<T>) => T[] {
+export function uniqueAdjacentByIdentityFn<T>(
+    identity: (element: T) => unknown
+): (array: ArrayLike<T>) => T[] {
     return array => uniqueAdjacentByIdentity(array, identity);
 }
 
-export function uniqueAdjacentByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[] {
+export function uniqueAdjacentByEquality<T>(
+    array: ArrayLike<T>,
+    equal: (a: T, b: T) => boolean
+): T[] {
     if (array.length === 0) {
         return [];
     }
@@ -1015,7 +1188,9 @@ export function uniqueAdjacentByEquality<T>(array: ArrayLike<T>, equal: (a: T, b
     return result;
 }
 
-export function uniqueAdjacentByEqualityFn<T>(equal: (a: T, b: T) => boolean): (array: ArrayLike<T>) => T[] {
+export function uniqueAdjacentByEqualityFn<T>(
+    equal: (a: T, b: T) => boolean
+): (array: ArrayLike<T>) => T[] {
     return array => uniqueAdjacentByEquality(array, equal);
 }
 
@@ -1027,7 +1202,10 @@ export function uniqueAdjacentByOrderFn<T>(compare: Comparator<T>): (array: Arra
     return array => uniqueAdjacentByOrder(array, compare);
 }
 
-export function uniqueAdjacentByHash<T>(array: ArrayLike<T>, hash: (element: T, index: number) => Key): T[] {
+export function uniqueAdjacentByHash<T>(
+    array: ArrayLike<T>,
+    hash: (element: T, index: number) => Key
+): T[] {
     if (array.length === 0) {
         return [];
     }
@@ -1048,6 +1226,8 @@ export function uniqueAdjacentByHash<T>(array: ArrayLike<T>, hash: (element: T, 
     return result;
 }
 
-export function uniqueAdjacentByHashFn<T>(hash: (element: T, index: number) => Key): (array: ArrayLike<T>) => T[] {
+export function uniqueAdjacentByHashFn<T>(
+    hash: (element: T, index: number) => Key
+): (array: ArrayLike<T>) => T[] {
     return array => uniqueAdjacentByHash(array, hash);
 }

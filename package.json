@@ -22,7 +22,7 @@
   },
   "sideEffects": false,
   "devDependencies": {
-    "@softwareventures/eslint-config": "1.6.0",
+    "@softwareventures/eslint-config": "2.2.0",
     "@softwareventures/prettier-config": "1.0.2",
     "@softwareventures/tsconfig": "2.2.0",
     "ava": "3.11.1",

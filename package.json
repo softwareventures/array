@@ -2,7 +2,6 @@
   "name": "@softwareventures/array",
   "version": "0.0.0-development",
   "description": "Pure functional array manipulation and traversal",
-  "repository": "github:softwareventures/array",
   "keywords": [
     "array",
     "functional",
@@ -10,9 +9,10 @@
     "typescript"
   ],
   "author": "Daniel Cassidy <mail@danielcassidy.me.uk>",
-  "license": "ISC",
-  "bugs": "https://github.com/softwareventures/array/issues",
   "homepage": "https://github.com/softwareventures/array",
+  "bugs": "https://github.com/softwareventures/array/issues",
+  "repository": "github:softwareventures/array",
+  "license": "ISC",
   "scripts": {
     "prepare": "tsc",
     "test": "tslint --project . && ava",

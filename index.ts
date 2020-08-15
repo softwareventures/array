@@ -662,20 +662,20 @@ export function keyFirstByFn<TElement, TKey extends Key>(
 
 export function keyLastBy<TElement, TKey extends Key>(
     array: ArrayLike<TElement>,
-    f: (element: TElement) => TKey
+    f: (element: TElement, index: number) => TKey
 ): Dictionary<TElement, TKey> {
     const result = dictionary<TElement, TKey>();
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];
-        result[f(element)] = element;
+        result[f(element, i)] = element;
     }
 
     return result;
 }
 
 export function keyLastByFn<TElement, TKey extends Key>(
-    f: (element: TElement) => TKey
+    f: (element: TElement, index: number) => TKey
 ): (array: ArrayLike<TElement>) => Dictionary<TElement, TKey> {
     return array => keyLastBy(array, f);
 }

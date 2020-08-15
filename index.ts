@@ -272,13 +272,13 @@ export function foldMapFn<T, U>(
 export function foldMapRight<T, U>(
     array: ArrayLike<T>,
     f: (accumulator: U, element: U, index: number) => U,
-    m: (element: T) => U,
+    m: (element: T, index: number) => U,
     initial: U
 ): U {
     let accumulator = initial;
     const length = array.length;
     for (let i = 0; i < array.length; ++i) {
-        accumulator = f(accumulator, m(array[length - i]), i);
+        accumulator = f(accumulator, m(array[length - i], i), i);
     }
 
     return accumulator;
@@ -286,7 +286,7 @@ export function foldMapRight<T, U>(
 
 export function foldMapRightFn<T, U>(
     f: (accumulator: U, element: U, index: number) => U,
-    m: (element: T) => U,
+    m: (element: T, index: number) => U,
     initial: U
 ): (array: ArrayLike<T>) => U {
     return array => foldMapRight(array, f, m, initial);

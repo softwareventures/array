@@ -616,13 +616,13 @@ export function partitionWhileFn<T>(
 
 export function keyBy<TElement, TKey extends Key>(
     array: ArrayLike<TElement>,
-    f: (element: TElement) => TKey
+    f: (element: TElement, index: number) => TKey
 ): Dictionary<TElement[], TKey> {
     const result = dictionary<TElement[], TKey>();
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];
-        const key = f(element);
+        const key = f(element, i);
         const group = result[key] || [];
         group.push(element);
         result[key] = group;
@@ -632,7 +632,7 @@ export function keyBy<TElement, TKey extends Key>(
 }
 
 export function keyByFn<TElement, TKey extends Key>(
-    f: (element: TElement) => TKey
+    f: (element: TElement, index: number) => TKey
 ): (array: ArrayLike<TElement>) => Dictionary<TElement[], TKey> {
     return array => keyBy(array, f);
 }

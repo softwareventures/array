@@ -1112,13 +1112,13 @@ export const uniqueByIdentityWithHash =
         ? <T>(
               array: ArrayLike<T>,
               identity: (element: T) => unknown,
-              hash: (element: T) => Key
+              hash: (element: T, index: number) => Key
           ): T[] => uniqueByEqualityWithHash(array, (a, b) => identity(a) === identity(b), hash)
         : uniqueByIdentityInternal;
 
 export function uniqueByIdentityWithHashFn<T>(
     identity: (element: T) => unknown,
-    hash: (element: T) => Key
+    hash: (element: T, index: number) => Key
 ): (array: ArrayLike<T>) => T[] {
     return array => uniqueByIdentityWithHash(array, identity, hash);
 }

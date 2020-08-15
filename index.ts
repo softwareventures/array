@@ -109,22 +109,32 @@ export function dropFn<T>(count: number): (array: ArrayLike<T>) => T[] {
 
 export function takeWhile<T, U extends T>(
     array: ArrayLike<T>,
-    predicate: (element: T) => element is U
+    predicate: (element: T, index: number) => element is U
 ): U[];
-export function takeWhile<T>(array: ArrayLike<T>, predicate: (element: T) => boolean): T[];
-export function takeWhile<T>(array: ArrayLike<T>, predicate: (element: T) => boolean): T[] {
+export function takeWhile<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): T[];
+export function takeWhile<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): T[] {
     let i = 0;
-    while (i < array.length && predicate(array[i])) {
+    while (i < array.length && predicate(array[i], i)) {
         ++i;
     }
     return take(array, i);
 }
 
 export function takeWhileFn<T, U extends T>(
-    predicate: (element: T) => element is U
+    predicate: (element: T, index: number) => element is U
 ): (array: ArrayLike<T>) => U[];
-export function takeWhileFn<T>(predicate: (element: T) => boolean): (array: ArrayLike<T>) => T[];
-export function takeWhileFn<T>(predicate: (element: T) => boolean): (array: ArrayLike<T>) => T[] {
+export function takeWhileFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => T[];
+export function takeWhileFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => T[] {
     return array => takeWhile(array, predicate);
 }
 

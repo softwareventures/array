@@ -829,13 +829,13 @@ export const groupByIdentityWithHash =
         ? <T>(
               array: ArrayLike<T>,
               identity: (element: T) => unknown,
-              hash: (element: T) => Key
+              hash: (element: T, index: number) => Key
           ): T[][] => groupByEqualityWithHash(array, (a, b) => identity(a) === identity(b), hash)
         : groupByIdentityInternal;
 
 export function groupByIdentityWithHashFn<T>(
     identity: (element: T) => unknown,
-    hash: (element: T) => Key
+    hash: (element: T, index: number) => Key
 ): (array: ArrayLike<T>) => T[][] {
     return array => groupByIdentityWithHash(array, identity, hash);
 }

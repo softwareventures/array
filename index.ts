@@ -1272,3 +1272,14 @@ export function uniqueAdjacentByHashFn<T>(
 ): (array: ArrayLike<T>) => T[] {
     return array => uniqueAdjacentByHash(array, hash);
 }
+
+export function shuffle<T>(array: readonly T[]): T[] {
+    const result = copy(array);
+    for (let i = 0; i < array.length; ++i) {
+        const j = i + Math.floor(Math.random() * (array.length - i));
+        const replacement = result[j];
+        result[j] = result[i];
+        result[i] = replacement;
+    }
+    return result;
+}

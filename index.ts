@@ -231,6 +231,14 @@ export function filterFirstFn<T>(
     return array => filterFirst(array, predicate);
 }
 
+export function excludeNull<T>(array: ArrayLike<T | null | undefined>): T[] {
+    return filter(array, notNull);
+}
+
+function notNull<T>(value: T | null | undefined): value is T {
+    return value != null;
+}
+
 export function fold<T, U>(
     array: ArrayLike<T>,
     f: (accumulator: U, element: T, index: number) => U,

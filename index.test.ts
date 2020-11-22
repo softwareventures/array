@@ -1,5 +1,6 @@
 import test from "ava";
 import {
+    excludeNull,
     filterFirst,
     find,
     findIndex,
@@ -27,6 +28,10 @@ test("filterFirst", t => {
         filterFirst([1, 2, 3, 4, 3, 2, 1], n => n < 3),
         [1, 2, 4, 3, 2, 1]
     );
+});
+
+test("excludeNull", t => {
+    t.deepEqual(excludeNull(["a", null, "b"]), ["a", "b"]);
 });
 
 test("foldMap", t => {

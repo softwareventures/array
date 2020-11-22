@@ -1338,18 +1338,18 @@ export function shuffle<T>(array: ArrayLike<T>): T[] {
     return result;
 }
 
-export function forEach<TElement, TArray extends ArrayLike<TElement>>(
-    array: TArray,
-    f: (element: TElement, index: number) => void
-): TArray {
+export function forEach<T>(
+    array: ArrayLike<T>,
+    f: (element: T, index: number) => void
+): typeof array {
     for (let i = 0; i < array.length; ++i) {
         f(array[i], i);
     }
     return array;
 }
 
-export function forEachFn<TElement, TArray extends ArrayLike<TElement>>(
-    f: (element: TElement, index: number) => void
-): (array: TArray) => TArray {
+export function forEachFn<T>(
+    f: (element: T, index: number) => void
+): (array: ArrayLike<T>) => typeof array {
     return array => forEach(array, f);
 }

@@ -26,6 +26,13 @@ const nativeIndexOf = Array.prototype.indexOf;
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeFindIndex = Array.prototype.findIndex;
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
+export function copy<T>(array: ArrayLike<T>): T[];
+
+/** @internal This implementation is for internal use only, the exported declaration is above */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
 export const copy: <T>(array: ArrayLike<T>) => T[] =
     Array.from ?? (array => nativeSlice.call(array));
 
@@ -155,6 +162,13 @@ export function dropWhileFn<T>(
     return array => dropWhile(array, predicate);
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
+export function map<T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U): U[];
+
+/** @internal This implementation is for internal use only, the exported declaration is above */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
     Array.from != null
         ? (Array.from as any) // TypeScript 3.2 incorrectly requires this cast to any.
@@ -309,6 +323,16 @@ export function indexOfFn<T>(value: T): (array: ArrayLike<T>) => number | null {
     return array => indexOf(array, value);
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
+export function findIndex<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): number | null;
+
+/** @internal This implementation is for internal use only, the exported declaration is above */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
 export const findIndex: <T>(
     array: ArrayLike<T>,
     predicate: (element: T, index: number) => boolean
@@ -824,6 +848,17 @@ export function groupByHashFn<T>(
     return array => groupByHash(array, hash);
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
+export function groupByIdentityWithHash<T>(
+    array: ArrayLike<T>,
+    identity: (element: T) => unknown,
+    hash: (element: T, index: number) => Key
+): T[];
+
+/** @internal This implementation is for internal use only, the exported declaration is above */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
 export const groupByIdentityWithHash =
     Map == null
         ? <T>(
@@ -1107,6 +1142,17 @@ export function uniqueByHashFn<T>(
     return array => uniqueByHash(array, hash);
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
+export function uniqueByIdentityWithHash<T>(
+    array: ArrayLike<T>,
+    identity: (element: T) => unknown,
+    hash: (element: T, index: number) => Key
+): T[];
+
+/** @internal This implementation is for internal use only, the exported declaration is above */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
 export const uniqueByIdentityWithHash =
     Set == null
         ? <T>(

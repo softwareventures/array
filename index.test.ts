@@ -5,6 +5,7 @@ import {
     find,
     findIndex,
     foldMap,
+    forEach,
     isArray,
     isArrayLike,
     partition,
@@ -127,4 +128,12 @@ test("partitionWhile", t => {
         [{type: "success", value: "hello"}],
         [{type: "error"}, {type: "success", value: "goodbye"}]
     ]);
+});
+
+test("forEach", t => {
+    const a = ["a", "b", "c"];
+    let s = "";
+    const b = forEach(a, c => (s += c));
+    t.is(b, a);
+    t.is(s, "abc");
 });

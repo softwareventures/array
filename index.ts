@@ -37,7 +37,7 @@ export const copy: <T>(array: ArrayLike<T>) => T[] =
     Array.from ?? (array => nativeSlice.call(array));
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
-const toString = Object.prototype.toString;
+const toString = Object.prototype.toString as (this: object) => string;
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.

@@ -6,6 +6,7 @@ import {
     findIndex,
     foldMap,
     forEach,
+    groupByIdentity,
     isArray,
     isArrayLike,
     partition,
@@ -83,6 +84,13 @@ interface Error {
 function isSuccess<T>(result: Result<T>): result is Success<T> {
     return result.type === "success";
 }
+
+test("groupByIdentity", t => {
+    t.deepEqual(
+        groupByIdentity(["abc", "adef", "bghi"], a => a.substr(0, 1)),
+        [["abc", "aghi"], ["def"]]
+    );
+});
 
 test("partition", t => {
     t.deepEqual(

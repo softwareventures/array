@@ -88,7 +88,7 @@ function isSuccess<T>(result: Result<T>): result is Success<T> {
 test("groupByIdentity", t => {
     t.deepEqual(
         groupByIdentity(["abc", "adef", "bghi"], a => a.substr(0, 1)),
-        [["abc", "aghi"], ["def"]]
+        [["abc", "adef"], ["bghi"]]
     );
 });
 

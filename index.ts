@@ -781,7 +781,7 @@ const groupByIdentityInternal =
                   const key = identity(element);
                   const group = map.get(key) ?? [];
                   group.push(element);
-                  if (map.has(key)) {
+                  if (!map.has(key)) {
                       groups.push(group);
                       map.set(key, group);
                   }

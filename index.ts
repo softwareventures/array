@@ -287,6 +287,14 @@ export function removeFn<T>(value: T): (array: ArrayLike<T>) => T[] {
     return array => remove(array, value);
 }
 
+export function removeFirst<T>(array: ArrayLike<T>, value: T): T[] {
+    return excludeFirst(array, element => element === value);
+}
+
+export function removeFirstFn<T>(value: T): (array: ArrayLike<T>) => T[] {
+    return array => removeFirst(array, value);
+}
+
 export function fold<T, U>(
     array: ArrayLike<T>,
     f: (accumulator: U, element: T, index: number) => U,

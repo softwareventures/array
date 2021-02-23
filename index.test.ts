@@ -12,7 +12,8 @@ import {
     isArray,
     isArrayLike,
     partition,
-    partitionWhile
+    partitionWhile,
+    remove
 } from "./index";
 
 test("isArray", t => {
@@ -50,6 +51,10 @@ test("excludeFirst", t => {
         excludeFirst([1, 2, 3, 4, 3, 2, 1], n => n > 2),
         [1, 2, 4, 3, 2, 1]
     );
+});
+
+test("remove", t => {
+    t.deepEqual(remove([1, 2, 3, 4, 3, 2, 1], 3), [1, 2, 4, 2, 1]);
 });
 
 test("foldMap", t => {

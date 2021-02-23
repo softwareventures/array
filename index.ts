@@ -266,6 +266,19 @@ function notNull<T>(value: T | null | undefined): value is T {
     return value != null;
 }
 
+export function excludeFirst<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): T[] {
+    return filterFirst(array, (element, index) => !predicate(element, index));
+}
+
+export function excludeFirstFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => T[] {
+    return array => excludeFirst(array, predicate);
+}
+
 export function fold<T, U>(
     array: ArrayLike<T>,
     f: (accumulator: U, element: T, index: number) => U,

@@ -1,5 +1,6 @@
 import test from "ava";
 import {
+    exclude,
     excludeNull,
     filterFirst,
     find,
@@ -29,6 +30,13 @@ test("filterFirst", t => {
     t.deepEqual(
         filterFirst([1, 2, 3, 4, 3, 2, 1], n => n < 3),
         [1, 2, 4, 3, 2, 1]
+    );
+});
+
+test("exclude", t => {
+    t.deepEqual(
+        exclude([1, 2, 3, 4, 3, 2, 1], n => n < 3),
+        [3, 4, 3]
     );
 });
 

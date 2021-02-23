@@ -231,6 +231,33 @@ export function filterFirstFn<T>(
     return array => filterFirst(array, predicate);
 }
 
+export function exclude<T, U>(
+    array: ArrayLike<T | U>,
+    predicate: (element: T | U) => element is T
+): U[];
+export function exclude<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): T[];
+export function exclude<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): T[] {
+    return filter(array, (element, index) => !predicate(element, index));
+}
+
+export function excludeFn<T, U>(
+    predicate: (element: T | U) => element is T
+): (array: ArrayLike<T | U>) => T[];
+export function excludeFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => T[];
+export function excludeFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => T[] {
+    return array => exclude(array, predicate);
+}
+
 export function excludeNull<T>(array: ArrayLike<T | null | undefined>): T[] {
     return filter(array, notNull);
 }

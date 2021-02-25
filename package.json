@@ -16,16 +16,22 @@
   "scripts": {
     "fix": "eslint . --fix && prettier --write .",
     "lint": "eslint . && prettier --check .",
-    "prepare": "tsc",
+    "prepare": "tsc && tsc --project tsconfig.esm.json",
     "semantic-release": "semantic-release",
     "test": "ava"
   },
+  "type": "module",
   "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.js",
   "devDependencies": {
     "@softwareventures/eslint-config": "3.4.2",
     "@softwareventures/prettier-config": "1.0.2",
     "@softwareventures/semantic-release-config": "1.1.1",
-    "@softwareventures/tsconfig": "2.3.3",
+    "@softwareventures/tsconfig": "5.1.0-alpha.1",
     "ava": "3.15.0",
     "cz-conventional-changelog": "3.3.0",
     "eslint": "7.20.0",
@@ -51,11 +57,14 @@
     }
   },
   "ava": {
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
+    "extensions": {
+      "ts": "module"
+    },
+    "nonSemVerExperiments": {
+      "configurableModuleFormat": true
+    },
+    "nodeArguments": [
+      "--loader=ts-node/esm"
     ]
   },
   "release": {

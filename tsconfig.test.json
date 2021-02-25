@@ -1,7 +1,7 @@
 {
-  "extends": ".",
+  "extends": "./tsconfig.esm.json",
   "compilerOptions": {
     "noEmit": true
   },
-  "exclude": []
+  "exclude": ["dist"]
 }

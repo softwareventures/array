@@ -15,7 +15,7 @@ import {
     partitionWhile,
     remove,
     removeFirst
-} from "./index";
+} from "./index.js";
 
 test("isArray", t => {
     t.true(isArray([1, 2, 3]));

@@ -1,6 +1,4 @@
-import {dictionary} from "@softwareventures/dictionary";
 import {Comparator, compare as defaultCompare, Comparison} from "@softwareventures/ordered";
-import {Dictionary, Key} from "dictionary-types";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeSlice = Array.prototype.slice;
@@ -671,69 +669,72 @@ export function partitionWhileFn<T>(
     return array => partitionWhile(array, predicate);
 }
 
-export function keyBy<TElement, TKey extends Key>(
+export function keyBy<TKey, TElement>(
     array: ArrayLike<TElement>,
     f: (element: TElement, index: number) => TKey
-): Dictionary<TElement[], TKey> {
-    const result = dictionary<TElement[], TKey>();
+): Map<TKey, TElement[]> {
+    const result = new Map<TKey, TElement[]>();
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];
         const key = f(element, i);
-        const group = result[key] || [];
+        const group = result.get(key) ?? [];
+        if (!result.has(key)) {
+            result.set(key, group);
+        }
         group.push(element);
-        result[key] = group;
     }
 
     return result;
 }
 
-export function keyByFn<TElement, TKey extends Key>(
+export function keyByFn<TKey, TElement>(
     f: (element: TElement, index: number) => TKey
-): (array: ArrayLike<TElement>) => Dictionary<TElement[], TKey> {
+): (array: ArrayLike<TElement>) => Map<TKey, TElement[]> {
     return array => keyBy(array, f);
 }
 
-export function keyFirstBy<TElement, TKey extends Key>(
+export function keyFirstBy<TKey, TElement>(
     array: ArrayLike<TElement>,
     f: (element: TElement, index: number) => TKey
-): Dictionary<TElement, TKey> {
-    const result = dictionary<TElement, TKey>();
+): Map<TKey, TElement> {
+    const result = new Map<TKey, TElement>();
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];
         const key = f(element, i);
-        if (!(key in result)) {
-            result[key] = element;
+        if (!result.has(key)) {
+            result.set(key, element);
         }
     }
 
     return result;
 }
 
-export function keyFirstByFn<TElement, TKey extends Key>(
+export function keyFirstByFn<TKey, TElement>(
     f: (element: TElement, index: number) => TKey
-): (array: ArrayLike<TElement>) => Dictionary<TElement, TKey> {
+): (array: ArrayLike<TElement>) => Map<TKey, TElement> {
     return array => keyFirstBy(array, f);
 }
 
-export function keyLastBy<TElement, TKey extends Key>(
+export function keyLastBy<TKey, TElement>(
     array: ArrayLike<TElement>,
     f: (element: TElement, index: number) => TKey
-): Dictionary<TElement, TKey> {
-    const result = dictionary<TElement, TKey>();
+): Map<TKey, TElement> {
+    const result = new Map<TKey, TElement>();
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];
-        result[f(element, i)] = element;
+        const key = f(element, i);
+        result.set(key, element);
     }
 
     return result;
 }
 
-export function keyLastByFn<TElement, TKey extends Key>(
+export function keyLastByFn<TKey, TElement>(
     f: (element: TElement, index: number) => TKey
-): (array: ArrayLike<TElement>) => Dictionary<TElement, TKey> {
+): (array: ArrayLike<TElement>) => Map<TKey, TElement> {
     return array => keyLastBy(array, f);
 }
 

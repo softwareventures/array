@@ -1125,26 +1125,6 @@ export function uniqueByHashFn<T>(
     return array => uniqueByHash(array, hash);
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
-export function uniqueByIdentityWithHash<T>(
-    array: ArrayLike<T>,
-    identity: (element: T) => unknown,
-    hash: (element: T, index: number) => unknown
-): T[];
-
-/** @internal This implementation is for internal use only, the exported declaration is above */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
-export const uniqueByIdentityWithHash = uniqueByIdentityInternal;
-
-export function uniqueByIdentityWithHashFn<T>(
-    identity: (element: T) => unknown,
-    hash: (element: T, index: number) => unknown
-): (array: ArrayLike<T>) => T[] {
-    return array => uniqueByIdentityInternal(array, identity);
-}
-
 export function uniqueByEqualityWithHash<T>(
     array: ArrayLike<T>,
     equal: (a: T, b: T) => boolean,

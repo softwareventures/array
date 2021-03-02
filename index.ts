@@ -6,10 +6,10 @@ import {Dictionary, Key} from "dictionary-types";
 const nativeSlice = Array.prototype.slice;
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
-const nativeConcat = Array.prototype.concat;
+const nativeReverse = Array.prototype.reverse;
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
-const nativeMap = Array.prototype.map;
+const nativeConcat = Array.prototype.concat;
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeFilter = Array.prototype.filter;
@@ -33,11 +33,7 @@ export function copy<T>(array: ArrayLike<T>): T[];
 /** @internal This implementation is for internal use only, the exported declaration is above */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
-export const copy: <T>(array: ArrayLike<T>) => T[] =
-    Array.from ?? (array => nativeSlice.call(array));
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const toString = Object.prototype.toString as (this: object) => string;
+export const copy: <T>(array: ArrayLike<T>) => T[] = Array.from;
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
@@ -46,8 +42,7 @@ export function isArray<T = unknown>(value: readonly T[] | unknown): value is re
 /** @internal This implementation is for internal use only, the exported declaration is above */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
-export const isArray: (value: any) => value is any[] =
-    Array.isArray ?? (((value: any) => toString.call(value) === "[object Array]") as any);
+export const isArray: (value: any) => value is any[] = Array.isArray;
 
 export function isArrayLike<T>(value: ArrayLike<T> | unknown): value is ArrayLike<T> {
     return (
@@ -83,11 +78,7 @@ export function empty<T>(array: ArrayLike<T>): boolean {
 }
 
 export function reverse<T>(array: ArrayLike<T>): T[] {
-    const result = copy<T>({length: array.length});
-    for (let i = 0; i < array.length; ++i) {
-        result[i] = array[array.length - i - 1];
-    }
-    return result;
+    return nativeReverse.call(array);
 }
 
 export function slice<T>(array: ArrayLike<T>, start?: number, end?: number): T[] {
@@ -170,12 +161,10 @@ export function map<T, U>(array: ArrayLike<T>, f: (element: T, index: number) =>
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
 export const map: <T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U) => U[] =
-    Array.from != null
-        ? (Array.from as any) // TypeScript 3.2 incorrectly requires this cast to any.
-        : (array, f) => nativeMap.call(array, f);
+    Array.from;
 
 export function mapFn<T, U>(f: (element: T, index: number) => U): (array: ArrayLike<T>) => U[] {
-    return array => map(array, f);
+    return array => Array.from(array, f);
 }
 
 export function filter<T, U extends T>(
@@ -202,7 +191,7 @@ export function filterFn<T>(
 export function filterFn<T>(
     predicate: (element: T, index: number) => boolean
 ): (array: ArrayLike<T>) => T[] {
-    return array => filter(array, predicate);
+    return array => nativeFilter.call(array, predicate);
 }
 
 export function filterFirst<T>(
@@ -387,33 +376,13 @@ export function indexOfFn<T>(value: T): (array: ArrayLike<T>) => number | null {
     return array => indexOf(array, value);
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
 export function findIndex<T>(
     array: ArrayLike<T>,
     predicate: (element: T, index: number) => boolean
-): number | null;
-
-/** @internal This implementation is for internal use only, the exported declaration is above */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
-export const findIndex: <T>(
-    array: ArrayLike<T>,
-    predicate: (element: T, index: number) => boolean
-) => number | null =
-    nativeFindIndex == null
-        ? (array, predicate) => {
-              for (let i = 0; i < array.length; ++i) {
-                  if (predicate(array[i], i)) {
-                      return i;
-                  }
-              }
-              return null;
-          }
-        : (array, predicate) => {
-              const index = nativeFindIndex.call(array, predicate);
-              return index === -1 ? null : index;
-          };
+): number | null {
+    const index = nativeFindIndex.call(array, predicate);
+    return index === -1 ? null : index;
+}
 
 export function findIndexFn<T>(
     predicate: (element: T, index: number) => boolean
@@ -770,21 +739,21 @@ export function keyLastByFn<TElement, TKey extends Key>(
 
 export interface IdentityGrouping<T> {
     readonly identity: (element: T) => unknown;
-    readonly hash?: (element: T) => Key;
+    readonly hash?: (element: T) => unknown;
 }
 
 export interface EqualityGrouping<T> {
     readonly equal: (a: T, b: T) => boolean;
-    readonly hash?: (element: T, index: number) => Key;
+    readonly hash?: (element: T, index: number) => unknown;
 }
 
 export interface OrderedGrouping<T> {
     readonly compare: Comparator<T>;
-    readonly hash?: (element: T, index: number) => Key;
+    readonly hash?: (element: T, index: number) => unknown;
 }
 
 export interface HashGrouping<T> {
-    readonly hash: (element: T, index: number) => Key;
+    readonly hash: (element: T, index: number) => unknown;
 }
 
 export type Grouping<T> =
@@ -795,11 +764,7 @@ export type Grouping<T> =
 
 export function group<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[][] {
     if ("identity" in grouping) {
-        if (typeof grouping.hash === "function") {
-            return groupByIdentityWithHash(array, grouping.identity, grouping.hash);
-        } else {
-            return groupByIdentity(array, grouping.identity);
-        }
+        return groupByIdentity(array, grouping.identity);
     } else if ("compare" in grouping) {
         if (typeof grouping.hash === "function") {
             return groupByOrderWithHash(array, grouping.compare, grouping.hash);
@@ -821,34 +786,29 @@ export function groupFn<T>(grouping: Grouping<T>): (array: ArrayLike<T>) => T[][
     return array => group(array, grouping);
 }
 
-export function groupByIdentity<T>(array: ArrayLike<T>, identity?: (element: T) => unknown): T[][] {
-    return groupByIdentityInternal(array, identity ?? (element => element));
+export function groupByIdentity<T>(
+    array: ArrayLike<T>,
+    identity: (element: T) => unknown = element => element
+): T[][] {
+    const groups: T[][] = [];
+    const map = new Map<unknown, T[]>();
+    for (let i = 0; i < array.length; ++i) {
+        const element = array[i];
+        const key = identity(element);
+        const group = map.get(key) ?? [];
+        group.push(element);
+        if (!map.has(key)) {
+            groups.push(group);
+            map.set(key, group);
+        }
+    }
+    return groups;
 }
-
-const groupByIdentityInternal =
-    Map == null
-        ? <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[][] =>
-              groupByEquality(array, (a, b) => identity(a) === identity(b))
-        : <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[][] => {
-              const groups: T[][] = [];
-              const map = new Map<unknown, T[]>();
-              for (let i = 0; i < array.length; ++i) {
-                  const element = array[i];
-                  const key = identity(element);
-                  const group = map.get(key) ?? [];
-                  group.push(element);
-                  if (!map.has(key)) {
-                      groups.push(group);
-                      map.set(key, group);
-                  }
-              }
-              return groups;
-          };
 
 export function groupByIdentityFn<T>(
     identity: (element: T) => unknown
 ): (array: ArrayLike<T>) => T[][] {
-    return array => groupByIdentityInternal(array, identity);
+    return array => groupByIdentity(array, identity);
 }
 
 export function groupByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[][] {
@@ -885,29 +845,28 @@ export function groupByOrderFn<T>(compare: Comparator<T>): (array: ArrayLike<T>)
 
 export function groupByHash<T>(
     array: ArrayLike<T>,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): T[][] {
-    const groups = dictionary<T[], Key>();
+    const groups = new Map<unknown, T[]>();
     const result: T[][] = [];
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];
         const h = hash(element, i);
 
-        if (h in groups) {
-            groups[h as any].push(element); // Cast to any because TypeScript doesn't support symbol indexers yet
-        } else {
-            const group = [element];
-            groups[h as any] = group; // Cast to any because TypeScript doesn't support symbol indexers yet
+        const group = groups.get(h) ?? [];
+        if (!groups.has(h)) {
             result.push(group);
+            groups.set(h, group);
         }
+        group.push(element);
     }
 
     return result;
 }
 
 export function groupByHashFn<T>(
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): (array: ArrayLike<T>) => T[][] {
     return array => groupByHash(array, hash);
 }
@@ -917,56 +876,44 @@ export function groupByHashFn<T>(
 export function groupByIdentityWithHash<T>(
     array: ArrayLike<T>,
     identity: (element: T) => unknown,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): T[];
 
 /** @internal This implementation is for internal use only, the exported declaration is above */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
-export const groupByIdentityWithHash =
-    Map == null
-        ? <T>(
-              array: ArrayLike<T>,
-              identity: (element: T) => unknown,
-              hash: (element: T, index: number) => Key
-          ): T[][] => groupByEqualityWithHash(array, (a, b) => identity(a) === identity(b), hash)
-        : groupByIdentityInternal;
+export const groupByIdentityWithHash = groupByIdentity;
 
 export function groupByIdentityWithHashFn<T>(
     identity: (element: T) => unknown,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): (array: ArrayLike<T>) => T[][] {
-    return array => groupByIdentityWithHash(array, identity, hash);
+    return array => groupByIdentity(array, identity);
 }
 
 export function groupByEqualityWithHash<T>(
     array: ArrayLike<T>,
     equal: (a: T, b: T) => boolean,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): T[][] {
-    const groups = dictionary<T[][], Key>();
+    const groups = new Map<unknown, T[][]>();
     const result: T[][] = [];
 
-    outer: for (let i = 0; i < array.length; ++i) {
+    for (let i = 0; i < array.length; ++i) {
         const element = array[i];
         const h = hash(element, i);
 
-        if (h in groups) {
-            const hashGroups = groups[h as any]; // Cast to any because TypeScript doesn't support symbol indexers yet
-            for (let j = 0; j < hashGroups.length; ++j) {
-                if (equal(hashGroups[j][0], element)) {
-                    hashGroups[j].push(element);
-                    continue outer;
-                }
-            }
-
-            const group = [element];
-            hashGroups.push(group);
-            result.push(group);
+        const hashGroup = groups.get(h) ?? [];
+        if (!groups.has(h)) {
+            groups.set(h, hashGroup);
+        }
+        const group = find(hashGroup, group => equal(group[0], element));
+        if (group == null) {
+            const newGroup = [element];
+            hashGroup.push(newGroup);
+            result.push(newGroup);
         } else {
-            const group = [element];
-            groups[h as any] = [group]; // Cast to any because TypeScript doesn't support symbol indexers yet
-            result.push(group);
+            group.push(element);
         }
     }
 
@@ -975,7 +922,7 @@ export function groupByEqualityWithHash<T>(
 
 export function groupByEqualityWithHashFn<T>(
     equal: (a: T, b: T) => boolean,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): (array: ArrayLike<T>) => T[][] {
     return array => groupByEqualityWithHash(array, equal, hash);
 }
@@ -983,14 +930,14 @@ export function groupByEqualityWithHashFn<T>(
 export function groupByOrderWithHash<T>(
     array: ArrayLike<T>,
     compare: Comparator<T>,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): T[][] {
     return groupByEqualityWithHash(array, (a, b) => compare(a, b) === Comparison.equal, hash);
 }
 
 export function groupByOrderWithHashFn<T>(
     compare: Comparator<T>,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): (array: ArrayLike<T>) => T[][] {
     return array => groupByOrderWithHash(array, compare, hash);
 }
@@ -1068,7 +1015,7 @@ export function groupAdjacentByOrderFn<T>(compare: Comparator<T>): (array: Array
 
 export function groupAdjacentByHash<T>(
     array: ArrayLike<T>,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): T[][] {
     if (array.length === 0) {
         return [];
@@ -1095,18 +1042,14 @@ export function groupAdjacentByHash<T>(
 }
 
 export function groupAdjacentByHashFn<T>(
-    hash: (element: T, index: number) => string
+    hash: (element: T, index: number) => unknown
 ): (array: ArrayLike<T>) => T[][] {
     return array => groupAdjacentByHash(array, hash);
 }
 
 export function unique<T>(array: ArrayLike<T>, grouping: Grouping<T>): T[] {
     if ("identity" in grouping) {
-        if (typeof grouping.hash === "function") {
-            return uniqueByIdentityWithHash(array, grouping.identity, grouping.hash);
-        } else {
-            return uniqueByIdentityInternal(array, grouping.identity);
-        }
+        return uniqueByIdentityInternal(array, grouping.identity);
     } else if ("compare" in grouping) {
         if (typeof grouping.hash === "function") {
             return uniqueByOrderWithHash(array, grouping.compare, grouping.hash);
@@ -1132,22 +1075,18 @@ export function uniqueByIdentity<T>(array: ArrayLike<T>, identity?: (element: T)
     return uniqueByIdentityInternal(array, identity ?? (element => element));
 }
 
-const uniqueByIdentityInternal =
-    Set == null
-        ? <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[] =>
-              uniqueByEquality(array, (a, b) => identity(a) === identity(b))
-        : <T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[] => {
-              const seen = new Set<T>();
-              const result: T[] = [];
-              for (let i = 0; i < array.length; ++i) {
-                  const element = array[i];
-                  if (!seen.has(element)) {
-                      seen.add(element);
-                      result.push(element);
-                  }
-              }
-              return result;
-          };
+function uniqueByIdentityInternal<T>(array: ArrayLike<T>, identity: (element: T) => unknown): T[] {
+    const set = new Set<unknown>();
+    const result: T[] = [];
+    for (let i = 0; i < array.length; ++i) {
+        const element = array[i];
+        if (!set.has(identity(element))) {
+            set.add(identity(element));
+            result.push(element);
+        }
+    }
+    return result;
+}
 
 export function uniqueByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => boolean): T[] {
     const result: T[] = [];
@@ -1182,17 +1121,16 @@ export function uniqueByOrderFn<T>(compare: Comparator<T>): (array: ArrayLike<T>
 
 export function uniqueByHash<T>(
     array: ArrayLike<T>,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): T[] {
-    const seen = dictionary<boolean, Key>();
+    const seen = new Set<unknown>();
     const result: T[] = [];
 
     for (let i = 0; i < array.length; ++i) {
         const element = array[i];
         const h = hash(element, i);
-        if (seen[h as any] == null) {
-            // Cast to any because TypeScript doesn't support symbol indexers yet
-            seen[h as any] = true;
+        if (!seen.has(h)) {
+            seen.add(h);
             result.push(element);
         }
     }
@@ -1201,7 +1139,7 @@ export function uniqueByHash<T>(
 }
 
 export function uniqueByHashFn<T>(
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): (array: ArrayLike<T>) => T[] {
     return array => uniqueByHash(array, hash);
 }
@@ -1211,51 +1149,40 @@ export function uniqueByHashFn<T>(
 export function uniqueByIdentityWithHash<T>(
     array: ArrayLike<T>,
     identity: (element: T) => unknown,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): T[];
 
 /** @internal This implementation is for internal use only, the exported declaration is above */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
-export const uniqueByIdentityWithHash =
-    Set == null
-        ? <T>(
-              array: ArrayLike<T>,
-              identity: (element: T) => unknown,
-              hash: (element: T, index: number) => Key
-          ): T[] => uniqueByEqualityWithHash(array, (a, b) => identity(a) === identity(b), hash)
-        : uniqueByIdentityInternal;
+export const uniqueByIdentityWithHash = uniqueByIdentityInternal;
 
 export function uniqueByIdentityWithHashFn<T>(
     identity: (element: T) => unknown,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): (array: ArrayLike<T>) => T[] {
-    return array => uniqueByIdentityWithHash(array, identity, hash);
+    return array => uniqueByIdentityInternal(array, identity);
 }
 
 export function uniqueByEqualityWithHash<T>(
     array: ArrayLike<T>,
     equal: (a: T, b: T) => boolean,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): T[] {
-    const seenGroups = dictionary<T[], Key>();
+    const seenGroups = new Map<unknown, T[]>();
     const result: T[] = [];
 
-    outer: for (let i = 0; i < array.length; ++i) {
+    for (let i = 0; i < array.length; ++i) {
         const element = array[i];
         const h = hash(element, i);
 
-        const seenGroup = seenGroups[h as any]; // Cast to any because TypeScript doesn't support symbol indexers yet
-        if (seenGroup == null) {
-            seenGroups[h as any] = [element];
-            result.push(element);
-        } else {
-            for (let j = 0; j < seenGroup.length; ++j) {
-                if (equal(seenGroup[j], element)) {
-                    continue outer;
-                }
-            }
+        const seenGroup = seenGroups.get(h) ?? [];
 
+        if (!seenGroups.has(h)) {
+            seenGroups.set(h, seenGroup);
+        }
+
+        if (all(seenGroup, seenElement => !equal(seenElement, element))) {
             seenGroup.push(element);
             result.push(element);
         }
@@ -1266,7 +1193,7 @@ export function uniqueByEqualityWithHash<T>(
 
 export function uniqueByEqualityWithHashFn<T>(
     equal: (a: T, b: T) => boolean,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): (array: ArrayLike<T>) => T[] {
     return array => uniqueByEqualityWithHash(array, equal, hash);
 }
@@ -1274,14 +1201,14 @@ export function uniqueByEqualityWithHashFn<T>(
 export function uniqueByOrderWithHash<T>(
     array: ArrayLike<T>,
     compare: Comparator<T>,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): T[] {
     return uniqueByEqualityWithHash(array, (a, b) => compare(a, b) === Comparison.equal, hash);
 }
 
 export function uniqueByOrderWithHashFn<T>(
     compare: Comparator<T>,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): (array: ArrayLike<T>) => T[] {
     return array => uniqueByOrderWithHash(array, compare, hash);
 }
@@ -1355,7 +1282,7 @@ export function uniqueAdjacentByOrderFn<T>(compare: Comparator<T>): (array: Arra
 
 export function uniqueAdjacentByHash<T>(
     array: ArrayLike<T>,
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): T[] {
     if (array.length === 0) {
         return [];
@@ -1378,7 +1305,7 @@ export function uniqueAdjacentByHash<T>(
 }
 
 export function uniqueAdjacentByHashFn<T>(
-    hash: (element: T, index: number) => Key
+    hash: (element: T, index: number) => unknown
 ): (array: ArrayLike<T>) => T[] {
     return array => uniqueAdjacentByHash(array, hash);
 }

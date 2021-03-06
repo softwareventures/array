@@ -1,4 +1,5 @@
 import {dictionary} from "@softwareventures/dictionary";
+import {isNotNull, isNull} from "@softwareventures/nullable";
 import {Comparator, compare as defaultCompare, Comparison} from "@softwareventures/ordered";
 import {Dictionary, Key} from "dictionary-types";
 
@@ -259,11 +260,7 @@ export function excludeFn<T>(
 }
 
 export function excludeNull<T>(array: ArrayLike<T | null | undefined>): T[] {
-    return filter(array, notNull);
-}
-
-function notNull<T>(value: T | null | undefined): value is T {
-    return value != null;
+    return filter(array, isNotNull);
 }
 
 export function excludeFirst<T>(
@@ -583,7 +580,7 @@ export function concatMapFn<T, U>(
 }
 
 export function noneNull<T>(array: ArrayLike<T | null>): ArrayLike<T> | null {
-    return any(array, e => e == null) ? null : (array as ArrayLike<T>);
+    return any(array, isNull) ? null : (array as ArrayLike<T>);
 }
 
 export function scan<T, U>(

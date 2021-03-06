@@ -322,6 +322,13 @@
     tslib "^1.11.2 || ^2.0.0"
     tslint "^6.1.2"
 
+"@softwareventures/nullable@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@softwareventures/nullable/-/nullable-1.0.0.tgz#2d380560e1ccc307721f381470cb630bd17c641b"
+  integrity sha512-QDnL/lmGbH65iHEpJuucw2srkr3WQKEoJG/5ExmK80yNY9oJ/fXzq4EX9XdjkwmafH9mre6j/TgnmXbVn9/lSQ==
+  dependencies:
+    tslib "2.1.0"
+
 "@softwareventures/ordered@^0.2.0":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@softwareventures/ordered/-/ordered-0.2.2.tgz#e8b55c57a7219a90e0cc6a27a793c4598e5ae9aa"
@@ -4758,7 +4765,6 @@ npm@^6.14.9:
     cmd-shim "^3.0.3"
     columnify "~1.5.4"
     config-chain "^1.1.12"
-    debuglog "*"
     detect-indent "~5.0.0"
     detect-newline "^2.1.0"
     dezalgo "~1.0.3"
@@ -4773,7 +4779,6 @@ npm@^6.14.9:
     has-unicode "~2.0.1"
     hosted-git-info "^2.8.8"
     iferr "^1.0.2"
-    imurmurhash "*"
     infer-owner "^1.0.4"
     inflight "~1.0.6"
     inherits "^2.0.4"
@@ -4792,14 +4797,8 @@ npm@^6.14.9:
     libnpx "^10.2.4"
     lock-verify "^2.1.0"
     lockfile "^1.0.4"
-    lodash._baseindexof "*"
     lodash._baseuniq "~4.6.0"
-    lodash._bindcallback "*"
-    lodash._cacheindexof "*"
-    lodash._createcache "*"
-    lodash._getnative "*"
     lodash.clonedeep "~4.5.0"
-    lodash.restparam "*"
     lodash.union "~4.6.0"
     lodash.uniq "~4.5.0"
     lodash.without "~4.4.0"

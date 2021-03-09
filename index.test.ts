@@ -16,7 +16,8 @@ import {
     partition,
     partitionWhile,
     remove,
-    removeFirst
+    removeFirst,
+    tail
 } from "./index";
 
 test("isArray", t => {
@@ -34,6 +35,11 @@ test("isArrayLike", t => {
 test("head", t => {
     t.is(1, head([1, 2, 3]));
     t.is(null, head([]));
+});
+
+test("tail", t => {
+    t.deepEqual([2, 3, 4], tail([1, 2, 3, 4]));
+    t.deepEqual([], tail([]));
 });
 
 test("filterFirst", t => {

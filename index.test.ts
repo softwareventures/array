@@ -14,6 +14,7 @@ import {
     initial,
     isArray,
     isArrayLike,
+    last,
     partition,
     partitionWhile,
     remove,
@@ -46,6 +47,11 @@ test("tail", t => {
 test("initial", t => {
     t.deepEqual([1, 2, 3], initial([1, 2, 3, 4]));
     t.deepEqual([], initial([]));
+});
+
+test("last", t => {
+    t.is(null, last([]));
+    t.is(3, last([1, 2, 3]));
 });
 
 test("filterFirst", t => {

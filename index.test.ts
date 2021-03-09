@@ -5,6 +5,7 @@ import {
     exclude,
     excludeFirst,
     excludeNull,
+    filter,
     filterFirst,
     find,
     findIndex,
@@ -102,6 +103,17 @@ test("map", t => {
     t.deepEqual(
         [1, 20, 3],
         map([1, 2, 3], (e, i) => (i === 1 ? e * 10 : e))
+    );
+});
+
+test("filter", t => {
+    t.deepEqual(
+        [1, 3],
+        filter([1, 2, 3], e => e % 2 === 1)
+    );
+    t.deepEqual(
+        [1, 2, 5],
+        filter([1, 3, 2, 4, 5], (_, i) => i % 2 === 0)
     );
 });
 

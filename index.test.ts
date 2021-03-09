@@ -1,5 +1,6 @@
 import test from "ava";
 import {
+    all,
     any,
     contains,
     dropWhile,
@@ -235,6 +236,11 @@ test("product", t => {
 test("any", t => {
     t.true(any([1, 2, 3], e => e > 2));
     t.false(any([1, 2, 3], e => e > 4));
+});
+
+test("all", t => {
+    t.true(all([1, 2, 3], e => e < 4));
+    t.false(all([1, 2, 3], e => e > 2));
 });
 
 type Result<T> = Success<T> | Error;

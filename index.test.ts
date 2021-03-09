@@ -1,5 +1,6 @@
 import test from "ava";
 import {
+    contains,
     dropWhile,
     empty,
     exclude,
@@ -183,6 +184,11 @@ test("foldMap", t => {
         foldMap(["2"], (a, b) => a + b, parseFloat, 0),
         2
     );
+});
+
+test("contains", t => {
+    t.true(contains([1, 2, 3], 1));
+    t.false(contains([1, 2, 3], 0));
 });
 
 test("findIndex", t => {

@@ -1,5 +1,6 @@
 import test from "ava";
 import {
+    dropWhile,
     empty,
     exclude,
     excludeFirst,
@@ -78,6 +79,17 @@ test("takeWhile", t => {
     t.deepEqual(
         [1, 2],
         takeWhile([1, 2, 3], (_, i) => i < 2)
+    );
+});
+
+test("dropWhile", t => {
+    t.deepEqual(
+        [4, 3, 2, 1],
+        dropWhile([1, 2, 3, 4, 3, 2, 1], e => e < 4)
+    );
+    t.deepEqual(
+        [3],
+        dropWhile([1, 2, 3], (_, i) => i < 2)
     );
 });
 

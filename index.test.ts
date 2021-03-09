@@ -25,6 +25,7 @@ import {
     minimum,
     partition,
     partitionWhile,
+    product,
     remove,
     removeFirst,
     slice,
@@ -223,6 +224,11 @@ test("minimum", t => {
 test("sum", t => {
     t.is(sum([1, 2, 3]), 6);
     t.is(sum([]), 0);
+});
+
+test("product", t => {
+    t.is(product([1, 2, 3]), 6);
+    t.is(product([]), 1);
 });
 
 type Result<T> = Success<T> | Error;

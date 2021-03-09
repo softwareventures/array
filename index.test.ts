@@ -22,6 +22,7 @@ import {
     last,
     map,
     maximum,
+    minimum,
     partition,
     partitionWhile,
     remove,
@@ -210,6 +211,12 @@ test("maximum", t => {
     t.is(maximum([1, 2, 3]), 3);
     t.is(maximum([1, 2, 3, 4, 3, 2, 1]), 4);
     t.is(maximum([]), null);
+});
+
+test("minimum", t => {
+    t.is(minimum([1, 2, 3]), 1);
+    t.is(minimum([2, 3, 4, 1, 2, 3]), 1);
+    t.is(minimum([]), null);
 });
 
 type Result<T> = Success<T> | Error;

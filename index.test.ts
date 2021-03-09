@@ -28,6 +28,7 @@ import {
     remove,
     removeFirst,
     slice,
+    sum,
     tail,
     takeWhile
 } from "./index";
@@ -217,6 +218,11 @@ test("minimum", t => {
     t.is(minimum([1, 2, 3]), 1);
     t.is(minimum([2, 3, 4, 1, 2, 3]), 1);
     t.is(minimum([]), null);
+});
+
+test("sum", t => {
+    t.is(sum([1, 2, 3]), 6);
+    t.is(sum([]), 0);
 });
 
 type Result<T> = Success<T> | Error;

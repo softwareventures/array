@@ -30,6 +30,7 @@ import {
     or,
     partition,
     partitionWhile,
+    prepend,
     product,
     remove,
     removeFirst,
@@ -261,6 +262,12 @@ test("all", t => {
 test("concat", t => {
     t.deepEqual(concat([[1, 2], [], [3], [4, 5]]), [1, 2, 3, 4, 5]);
     t.deepEqual(concat([[], []]), []);
+});
+
+test("prepend", t => {
+    t.deepEqual(prepend([1, 2, 3])([4, 5, 6]), [1, 2, 3, 4, 5, 6]);
+    t.deepEqual(prepend<number>([])([4, 5, 6]), [4, 5, 6]);
+    t.deepEqual(prepend([1, 2, 3])([]), [1, 2, 3]);
 });
 
 type Result<T> = Success<T> | Error;

@@ -1,5 +1,6 @@
 import test from "ava";
 import {
+    any,
     contains,
     dropWhile,
     empty,
@@ -229,6 +230,11 @@ test("sum", t => {
 test("product", t => {
     t.is(product([1, 2, 3]), 6);
     t.is(product([]), 1);
+});
+
+test("any", t => {
+    t.true(any([1, 2, 3], e => e > 2));
+    t.false(any([1, 2, 3], e => e > 4));
 });
 
 type Result<T> = Success<T> | Error;

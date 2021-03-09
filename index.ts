@@ -307,6 +307,19 @@ export function foldFn<T, U>(
     return array => (nativeReduce as (...args: any[]) => any).call(array, f, initial);
 }
 
+export function fold1<T>(
+    array: ArrayLike<T>,
+    f: (accumulator: T, element: T, index: number) => T
+): T {
+    return (nativeReduce as (...args: any[]) => any).call(array, f);
+}
+
+export function fold1Fn<T>(
+    f: (accumulator: T, element: T, index: number) => T
+): (array: ArrayLike<T>) => T {
+    return array => fold1(array, f);
+}
+
 export function foldRight<T, U>(
     array: ArrayLike<T>,
     f: (accumulator: U, element: T, index: number) => U,

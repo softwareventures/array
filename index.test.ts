@@ -6,6 +6,7 @@ import {
     filterFirst,
     find,
     findIndex,
+    fold1,
     foldMap,
     forEach,
     groupByIdentity,
@@ -60,6 +61,13 @@ test("remove", t => {
 
 test("removeFirst", t => {
     t.deepEqual(removeFirst([1, 2, 3, 4, 3, 2, 1], 3), [1, 2, 4, 3, 2, 1]);
+});
+
+test("fold1", t => {
+    t.is(
+        9,
+        fold1([1, 2, 3], (a, e, i) => a + e * i)
+    );
 });
 
 test("foldMap", t => {

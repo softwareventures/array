@@ -21,7 +21,8 @@ import {
     remove,
     removeFirst,
     slice,
-    tail
+    tail,
+    takeWhile
 } from "./index";
 
 test("isArray", t => {
@@ -67,6 +68,17 @@ test("slice", t => {
     t.deepEqual([3], slice([1, 2, 3], 2));
     t.deepEqual([1, 2], slice([1, 2, 3], 0, 2));
     t.deepEqual([], slice([], 3, 5));
+});
+
+test("takeWhile", t => {
+    t.deepEqual(
+        [1, 2, 3],
+        takeWhile([1, 2, 3, 4, 3, 2, 1], e => e < 4)
+    );
+    t.deepEqual(
+        [1, 2],
+        takeWhile([1, 2, 3], (_, i) => i < 2)
+    );
 });
 
 test("filterFirst", t => {

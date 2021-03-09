@@ -20,6 +20,7 @@ import {
     partitionWhile,
     remove,
     removeFirst,
+    slice,
     tail
 } from "./index";
 
@@ -58,6 +59,14 @@ test("last", t => {
 test("empty", t => {
     t.true(empty([]));
     t.false(empty([1, 2, 3]));
+});
+
+test("slice", t => {
+    t.deepEqual([2, 3, 4], slice([1, 2, 3, 4], 1));
+    t.deepEqual([2, 3, 4], slice([1, 2, 3, 4, 5], 1, 4));
+    t.deepEqual([3], slice([1, 2, 3], 2));
+    t.deepEqual([1, 2], slice([1, 2, 3], 0, 2));
+    t.deepEqual([], slice([], 3, 5));
 });
 
 test("filterFirst", t => {

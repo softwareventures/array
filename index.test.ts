@@ -10,6 +10,7 @@ import {
     foldMap,
     forEach,
     groupByIdentity,
+    head,
     isArray,
     isArrayLike,
     partition,
@@ -28,6 +29,11 @@ test("isArrayLike", t => {
     t.true(isArrayLike({length: 3}));
     t.false(isArrayLike({}));
     t.false(isArrayLike(3));
+});
+
+test("head", t => {
+    t.is(1, head([1, 2, 3]));
+    t.is(null, head([]));
 });
 
 test("filterFirst", t => {

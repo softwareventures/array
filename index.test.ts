@@ -21,6 +21,7 @@ import {
     isArrayLike,
     last,
     map,
+    maximum,
     partition,
     partitionWhile,
     remove,
@@ -203,6 +204,12 @@ test("find", t => {
         find([1, 2, 3, 4, 3, 2, 1], n => n >= 3),
         3
     );
+});
+
+test("maximum", t => {
+    t.is(maximum([1, 2, 3]), 3);
+    t.is(maximum([1, 2, 3, 4, 3, 2, 1]), 4);
+    t.is(maximum([]), null);
 });
 
 type Result<T> = Success<T> | Error;

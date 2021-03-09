@@ -41,23 +41,23 @@ test("isArrayLike", t => {
 });
 
 test("head", t => {
-    t.is(1, head([1, 2, 3]));
-    t.is(null, head([]));
+    t.is(head([1, 2, 3]), 1);
+    t.is(head([]), null);
 });
 
 test("tail", t => {
-    t.deepEqual([2, 3, 4], tail([1, 2, 3, 4]));
-    t.deepEqual([], tail([]));
+    t.deepEqual(tail([1, 2, 3, 4]), [2, 3, 4]);
+    t.deepEqual(tail([]), []);
 });
 
 test("initial", t => {
-    t.deepEqual([1, 2, 3], initial([1, 2, 3, 4]));
-    t.deepEqual([], initial([]));
+    t.deepEqual(initial([1, 2, 3, 4]), [1, 2, 3]);
+    t.deepEqual(initial([]), []);
 });
 
 test("last", t => {
-    t.is(null, last([]));
-    t.is(3, last([1, 2, 3]));
+    t.is(last([]), null);
+    t.is(last([1, 2, 3]), 3);
 });
 
 test("empty", t => {
@@ -66,54 +66,54 @@ test("empty", t => {
 });
 
 test("slice", t => {
-    t.deepEqual([2, 3, 4], slice([1, 2, 3, 4], 1));
-    t.deepEqual([2, 3, 4], slice([1, 2, 3, 4, 5], 1, 4));
-    t.deepEqual([3], slice([1, 2, 3], 2));
-    t.deepEqual([1, 2], slice([1, 2, 3], 0, 2));
-    t.deepEqual([], slice([], 3, 5));
+    t.deepEqual(slice([1, 2, 3, 4], 1), [2, 3, 4]);
+    t.deepEqual(slice([1, 2, 3, 4, 5], 1, 4), [2, 3, 4]);
+    t.deepEqual(slice([1, 2, 3], 2), [3]);
+    t.deepEqual(slice([1, 2, 3], 0, 2), [1, 2]);
+    t.deepEqual(slice([], 3, 5), []);
 });
 
 test("takeWhile", t => {
     t.deepEqual(
-        [1, 2, 3],
-        takeWhile([1, 2, 3, 4, 3, 2, 1], e => e < 4)
+        takeWhile([1, 2, 3, 4, 3, 2, 1], e => e < 4),
+        [1, 2, 3]
     );
     t.deepEqual(
-        [1, 2],
-        takeWhile([1, 2, 3], (_, i) => i < 2)
+        takeWhile([1, 2, 3], (_, i) => i < 2),
+        [1, 2]
     );
 });
 
 test("dropWhile", t => {
     t.deepEqual(
-        [4, 3, 2, 1],
-        dropWhile([1, 2, 3, 4, 3, 2, 1], e => e < 4)
+        dropWhile([1, 2, 3, 4, 3, 2, 1], e => e < 4),
+        [4, 3, 2, 1]
     );
     t.deepEqual(
-        [3],
-        dropWhile([1, 2, 3], (_, i) => i < 2)
+        dropWhile([1, 2, 3], (_, i) => i < 2),
+        [3]
     );
 });
 
 test("map", t => {
     t.deepEqual(
-        [2, 3, 4],
-        map([1, 2, 3], e => e + 1)
+        map([1, 2, 3], e => e + 1),
+        [2, 3, 4]
     );
     t.deepEqual(
-        [1, 20, 3],
-        map([1, 2, 3], (e, i) => (i === 1 ? e * 10 : e))
+        map([1, 2, 3], (e, i) => (i === 1 ? e * 10 : e)),
+        [1, 20, 3]
     );
 });
 
 test("filter", t => {
     t.deepEqual(
-        [1, 3],
-        filter([1, 2, 3], e => e % 2 === 1)
+        filter([1, 2, 3], e => e % 2 === 1),
+        [1, 3]
     );
     t.deepEqual(
-        [1, 2, 5],
-        filter([1, 3, 2, 4, 5], (_, i) => i % 2 === 0)
+        filter([1, 3, 2, 4, 5], (_, i) => i % 2 === 0),
+        [1, 2, 5]
     );
 });
 
@@ -152,8 +152,8 @@ test("removeFirst", t => {
 
 test("fold1", t => {
     t.is(
-        9,
-        fold1([1, 2, 3], (a, e, i) => a + e * i)
+        fold1([1, 2, 3], (a, e, i) => a + e * i),
+        9
     );
 });
 

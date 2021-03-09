@@ -17,6 +17,7 @@ import {
     isArray,
     isArrayLike,
     last,
+    map,
     partition,
     partitionWhile,
     remove,
@@ -90,6 +91,17 @@ test("dropWhile", t => {
     t.deepEqual(
         [3],
         dropWhile([1, 2, 3], (_, i) => i < 2)
+    );
+});
+
+test("map", t => {
+    t.deepEqual(
+        [2, 3, 4],
+        map([1, 2, 3], e => e + 1)
+    );
+    t.deepEqual(
+        [1, 20, 3],
+        map([1, 2, 3], (e, i) => (i === 1 ? e * 10 : e))
     );
 });
 

@@ -3,6 +3,7 @@ import {
     all,
     and,
     any,
+    append,
     concat,
     contains,
     dropWhile,
@@ -268,6 +269,12 @@ test("prepend", t => {
     t.deepEqual(prepend([1, 2, 3])([4, 5, 6]), [1, 2, 3, 4, 5, 6]);
     t.deepEqual(prepend<number>([])([4, 5, 6]), [4, 5, 6]);
     t.deepEqual(prepend([1, 2, 3])([]), [1, 2, 3]);
+});
+
+test("append", t => {
+    t.deepEqual(append([4, 5, 6])([1, 2, 3]), [1, 2, 3, 4, 5, 6]);
+    t.deepEqual(append<number>([])([1, 2, 3]), [1, 2, 3]);
+    t.deepEqual(append([4, 5, 6])([]), [4, 5, 6]);
 });
 
 type Result<T> = Success<T> | Error;

@@ -1,20 +1,34 @@
 import test from "ava";
 import {
+    contains,
+    dropWhile,
+    empty,
     exclude,
     excludeFirst,
     excludeNull,
+    filter,
     filterFirst,
     find,
     findIndex,
+    fold,
+    fold1,
     foldMap,
     forEach,
     groupByIdentity,
+    head,
+    initial,
     isArray,
     isArrayLike,
+    last,
+    map,
+    maximum,
     partition,
     partitionWhile,
     remove,
-    removeFirst
+    removeFirst,
+    slice,
+    tail,
+    takeWhile
 } from "./index";
 
 test("isArray", t => {
@@ -27,6 +41,83 @@ test("isArrayLike", t => {
     t.true(isArrayLike({length: 3}));
     t.false(isArrayLike({}));
     t.false(isArrayLike(3));
+});
+
+test("head", t => {
+    t.is(head([1, 2, 3]), 1);
+    t.is(head([]), null);
+});
+
+test("tail", t => {
+    t.deepEqual(tail([1, 2, 3, 4]), [2, 3, 4]);
+    t.deepEqual(tail([]), []);
+});
+
+test("initial", t => {
+    t.deepEqual(initial([1, 2, 3, 4]), [1, 2, 3]);
+    t.deepEqual(initial([]), []);
+});
+
+test("last", t => {
+    t.is(last([]), null);
+    t.is(last([1, 2, 3]), 3);
+});
+
+test("empty", t => {
+    t.true(empty([]));
+    t.false(empty([1, 2, 3]));
+});
+
+test("slice", t => {
+    t.deepEqual(slice([1, 2, 3, 4], 1), [2, 3, 4]);
+    t.deepEqual(slice([1, 2, 3, 4, 5], 1, 4), [2, 3, 4]);
+    t.deepEqual(slice([1, 2, 3], 2), [3]);
+    t.deepEqual(slice([1, 2, 3], 0, 2), [1, 2]);
+    t.deepEqual(slice([], 3, 5), []);
+});
+
+test("takeWhile", t => {
+    t.deepEqual(
+        takeWhile([1, 2, 3, 4, 3, 2, 1], e => e < 4),
+        [1, 2, 3]
+    );
+    t.deepEqual(
+        takeWhile([1, 2, 3], (_, i) => i < 2),
+        [1, 2]
+    );
+});
+
+test("dropWhile", t => {
+    t.deepEqual(
+        dropWhile([1, 2, 3, 4, 3, 2, 1], e => e < 4),
+        [4, 3, 2, 1]
+    );
+    t.deepEqual(
+        dropWhile([1, 2, 3], (_, i) => i < 2),
+        [3]
+    );
+});
+
+test("map", t => {
+    t.deepEqual(
+        map([1, 2, 3], e => e + 1),
+        [2, 3, 4]
+    );
+    t.deepEqual(
+        map([1, 2, 3], (e, i) => (i === 1 ? e * 10 : e)),
+        [1, 20, 3]
+    );
+});
+
+test("filter", t => {
+    t.deepEqual(
+        filter([1, 2, 3], e => e % 2 === 1),
+        [1, 3]
+    );
+    t.deepEqual(
+        filter([1, 3, 2, 4, 5], (_, i) => i % 2 === 0),
+        [1, 2, 5]
+    );
 });
 
 test("filterFirst", t => {
@@ -62,6 +153,20 @@ test("removeFirst", t => {
     t.deepEqual(removeFirst([1, 2, 3, 4, 3, 2, 1], 3), [1, 2, 4, 3, 2, 1]);
 });
 
+test("fold", t => {
+    t.is(
+        fold([1, 2, 3], (a, e, i) => a + e * i, 0),
+        8
+    );
+});
+
+test("fold1", t => {
+    t.is(
+        fold1([1, 2, 3], (a, e, i) => a + e * i),
+        9
+    );
+});
+
 test("foldMap", t => {
     t.is(
         foldMap(["2", "3", "4"], (a, b) => a + b, parseFloat, 2),
@@ -82,6 +187,11 @@ test("foldMap", t => {
     );
 });
 
+test("contains", t => {
+    t.true(contains([1, 2, 3], 1));
+    t.false(contains([1, 2, 3], 0));
+});
+
 test("findIndex", t => {
     t.is(
         findIndex([1, 2, 3, 4, 3, 2, 1], n => n >= 3),
@@ -94,6 +204,12 @@ test("find", t => {
         find([1, 2, 3, 4, 3, 2, 1], n => n >= 3),
         3
     );
+});
+
+test("maximum", t => {
+    t.is(maximum([1, 2, 3]), 3);
+    t.is(maximum([1, 2, 3, 4, 3, 2, 1]), 4);
+    t.is(maximum([]), null);
 });
 
 type Result<T> = Success<T> | Error;

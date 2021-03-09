@@ -1,3 +1,4 @@
+import {isNotNull, isNull} from "@softwareventures/nullable";
 import {Comparator, compare as defaultCompare, Comparison} from "@softwareventures/ordered";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -74,7 +75,7 @@ export function tail<T>(array: ArrayLike<T>): T[] {
 }
 
 export function initial<T>(array: ArrayLike<T>): T[] {
-    return array.length === 0 ? [] : nativeSlice.call(array, array.length - 1);
+    return array.length === 0 ? [] : nativeSlice.call(array, 0, array.length - 1);
 }
 
 export function last<T>(array: ArrayLike<T>): T | null {
@@ -256,11 +257,7 @@ export function excludeFn<T>(
 }
 
 export function excludeNull<T>(array: ArrayLike<T | null | undefined>): T[] {
-    return filter(array, notNull);
-}
-
-function notNull<T>(value: T | null | undefined): value is T {
-    return value != null;
+    return filter(array, isNotNull);
 }
 
 export function excludeFirst<T>(
@@ -305,6 +302,19 @@ export function foldFn<T, U>(
     initial: U
 ): (array: ArrayLike<T>) => U {
     return array => (nativeReduce as (...args: any[]) => any).call(array, f, initial);
+}
+
+export function fold1<T>(
+    array: ArrayLike<T>,
+    f: (accumulator: T, element: T, index: number) => T
+): T {
+    return (nativeReduce as (...args: any[]) => any).call(array, f);
+}
+
+export function fold1Fn<T>(
+    f: (accumulator: T, element: T, index: number) => T
+): (array: ArrayLike<T>) => T {
+    return array => fold1(array, f);
 }
 
 export function foldRight<T, U>(
@@ -560,7 +570,7 @@ export function concatMapFn<T, U>(
 }
 
 export function noneNull<T>(array: ArrayLike<T | null>): ArrayLike<T> | null {
-    return any(array, e => e == null) ? null : (array as ArrayLike<T>);
+    return any(array, isNull) ? null : (array as ArrayLike<T>);
 }
 
 export function scan<T, U>(

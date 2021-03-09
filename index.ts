@@ -72,7 +72,7 @@ export function tail<T>(array: ArrayLike<T>): T[] {
 }
 
 export function initial<T>(array: ArrayLike<T>): T[] {
-    return array.length === 0 ? [] : nativeSlice.call(array, array.length - 1);
+    return array.length === 0 ? [] : nativeSlice.call(array, 0, array.length - 1);
 }
 
 export function last<T>(array: ArrayLike<T>): T | null {

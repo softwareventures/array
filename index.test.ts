@@ -11,6 +11,7 @@ import {
     forEach,
     groupByIdentity,
     head,
+    initial,
     isArray,
     isArrayLike,
     partition,
@@ -40,6 +41,11 @@ test("head", t => {
 test("tail", t => {
     t.deepEqual([2, 3, 4], tail([1, 2, 3, 4]));
     t.deepEqual([], tail([]));
+});
+
+test("initial", t => {
+    t.deepEqual([1, 2, 3], initial([1, 2, 3, 4]));
+    t.deepEqual([], initial([]));
 });
 
 test("filterFirst", t => {

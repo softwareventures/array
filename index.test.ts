@@ -10,12 +10,12 @@ import {
     filterFirst,
     find,
     findIndex,
+    first,
     fold,
     fold1,
     foldMap,
     forEach,
     groupByIdentity,
-    head,
     initial,
     isArray,
     isArrayLike,
@@ -43,9 +43,9 @@ test("isArrayLike", t => {
     t.false(isArrayLike(3));
 });
 
-test("head", t => {
-    t.is(head([1, 2, 3]), 1);
-    t.is(head([]), null);
+test("first", t => {
+    t.is(first([1, 2, 3]), 1);
+    t.is(first([]), null);
 });
 
 test("tail", t => {

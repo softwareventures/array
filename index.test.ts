@@ -1,5 +1,6 @@
 import test from "ava";
 import {
+    empty,
     exclude,
     excludeFirst,
     excludeNull,
@@ -52,6 +53,11 @@ test("initial", t => {
 test("last", t => {
     t.is(null, last([]));
     t.is(3, last([1, 2, 3]));
+});
+
+test("empty", t => {
+    t.true(empty([]));
+    t.false(empty([1, 2, 3]));
 });
 
 test("filterFirst", t => {

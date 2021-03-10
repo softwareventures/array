@@ -608,6 +608,30 @@ export function scanFn<T, U>(
     return array => scan(array, f, initial);
 }
 
+export function scan1<T>(
+    array: ArrayLike<T>,
+    f: (accumulator: T, element: T, index: number) => T
+): T[] {
+    if (array.length === 0) {
+        return [];
+    }
+
+    let accumulator = array[0];
+    const result: T[] = copy({0: accumulator, length: array.length});
+
+    for (let i = 1; i < array.length; ++i) {
+        result[i] = accumulator = f(accumulator, array[i], i);
+    }
+
+    return result;
+}
+
+export function scan1Fn<T>(
+    f: (accumulator: T, element: T, index: number) => T
+): (array: ArrayLike<T>) => T[] {
+    return array => scan1(array, f);
+}
+
 export function scanRight<T, U>(
     array: ArrayLike<T>,
     f: (accumulator: U, element: T, index: number) => U,
@@ -628,6 +652,30 @@ export function scanRightFn<T, U>(
     initial: U
 ): (array: ArrayLike<T>) => U[] {
     return array => scanRight(array, f, initial);
+}
+
+export function scanRight1<T>(
+    array: ArrayLike<T>,
+    f: (accumulator: T, element: T, index: number) => T
+): T[] {
+    if (array.length === 0) {
+        return [];
+    }
+
+    let accumulator = array[array.length - 1];
+    const result: T[] = copy({[array.length - 1]: accumulator, length: array.length});
+
+    for (let i = array.length - 2; i >= 0; --i) {
+        result[i] = accumulator = f(accumulator, array[i], i);
+    }
+
+    return result;
+}
+
+export function scanRight1Fn<T>(
+    f: (accumulator: T, element: T, index: number) => T
+): (array: ArrayLike<T>) => T[] {
+    return array => scanRight1(array, f);
 }
 
 export function partition<T, U extends T>(

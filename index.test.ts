@@ -1,5 +1,11 @@
 import test from "ava";
 import {
+    all,
+    and,
+    any,
+    append,
+    concat,
+    concatMap,
     contains,
     dropWhile,
     empty,
@@ -22,11 +28,20 @@ import {
     last,
     map,
     maximum,
+    minimum,
+    or,
     partition,
     partitionWhile,
+    prepend,
+    product,
     remove,
     removeFirst,
+    scan,
+    scan1,
+    scanRight,
+    scanRight1,
     slice,
+    sum,
     tail,
     takeWhile
 } from "./index";
@@ -210,6 +225,100 @@ test("maximum", t => {
     t.is(maximum([1, 2, 3]), 3);
     t.is(maximum([1, 2, 3, 4, 3, 2, 1]), 4);
     t.is(maximum([]), null);
+});
+
+test("minimum", t => {
+    t.is(minimum([1, 2, 3]), 1);
+    t.is(minimum([2, 3, 4, 1, 2, 3]), 1);
+    t.is(minimum([]), null);
+});
+
+test("sum", t => {
+    t.is(sum([1, 2, 3]), 6);
+    t.is(sum([]), 0);
+});
+
+test("product", t => {
+    t.is(product([1, 2, 3]), 6);
+    t.is(product([]), 1);
+});
+
+test("and", t => {
+    t.true(and([true, true, true]));
+    t.false(and([true, false, true]));
+    t.true(and([]));
+});
+
+test("or", t => {
+    t.true(or([true, false, true]));
+    t.false(or([false, false, false]));
+    t.false(or([]));
+});
+
+test("any", t => {
+    t.true(any([1, 2, 3], e => e > 2));
+    t.false(any([1, 2, 3], e => e > 4));
+});
+
+test("all", t => {
+    t.true(all([1, 2, 3], e => e < 4));
+    t.false(all([1, 2, 3], e => e > 2));
+});
+
+test("concat", t => {
+    t.deepEqual(concat([[1, 2], [], [3], [4, 5]]), [1, 2, 3, 4, 5]);
+    t.deepEqual(concat([[], []]), []);
+});
+
+test("prepend", t => {
+    t.deepEqual(prepend([1, 2, 3])([4, 5, 6]), [1, 2, 3, 4, 5, 6]);
+    t.deepEqual(prepend<number>([])([4, 5, 6]), [4, 5, 6]);
+    t.deepEqual(prepend([1, 2, 3])([]), [1, 2, 3]);
+});
+
+test("append", t => {
+    t.deepEqual(append([4, 5, 6])([1, 2, 3]), [1, 2, 3, 4, 5, 6]);
+    t.deepEqual(append<number>([])([1, 2, 3]), [1, 2, 3]);
+    t.deepEqual(append([4, 5, 6])([]), [4, 5, 6]);
+});
+
+test("concatMap", t => {
+    t.deepEqual(
+        concatMap(["1,2,3", "4,5,6"], s => s.split(",")),
+        ["1", "2", "3", "4", "5", "6"]
+    );
+});
+
+test("scan", t => {
+    t.deepEqual(
+        scan([1, 2, 3], (a, e, i) => a + e * i, 0),
+        [0, 2, 8]
+    );
+    t.deepEqual(
+        scan(["a", "b", "c"], (a, e, i) => `${a} ${i} ${e}`, "_"),
+        ["_ 0 a", "_ 0 a 1 b", "_ 0 a 1 b 2 c"]
+    );
+});
+
+test("scan1", t => {
+    t.deepEqual(
+        scan1([1, 2, 3], (a, e, i) => a + e * i),
+        [1, 3, 9]
+    );
+});
+
+test("scanRight", t => {
+    t.deepEqual(
+        scanRight(["a", "b", "c"], (a, e, i) => `${a} ${i} ${e}`, "_"),
+        ["_ 2 c 1 b 0 a", "_ 2 c 1 b", "_ 2 c"]
+    );
+});
+
+test("scanRight1", t => {
+    t.deepEqual(
+        scanRight1(["a", "b", "c"], (a, e, i) => `${a} ${i} ${e}`),
+        ["c 1 b 0 a", "c 1 b", "c"]
+    );
 });
 
 type Result<T> = Success<T> | Error;

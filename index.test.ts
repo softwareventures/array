@@ -36,6 +36,7 @@ import {
     product,
     remove,
     removeFirst,
+    scan,
     slice,
     sum,
     tail,
@@ -282,6 +283,13 @@ test("concatMap", t => {
     t.deepEqual(
         concatMap(["1,2,3", "4,5,6"], s => s.split(",")),
         ["1", "2", "3", "4", "5", "6"]
+    );
+});
+
+test("scan", t => {
+    t.deepEqual(
+        scan([1, 2, 3], (a, e, i) => a + e * i, 0),
+        [0, 2, 8]
     );
 });
 

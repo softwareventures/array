@@ -293,6 +293,10 @@ test("scan", t => {
         scan([1, 2, 3], (a, e, i) => a + e * i, 0),
         [0, 2, 8]
     );
+    t.deepEqual(
+        scan(["a", "b", "c"], (a, e, i) => `${a} ${i} ${e}`, "_"),
+        ["_ 0 a", "_ 0 a 1 b", "_ 0 a 1 b 2 c"]
+    );
 });
 
 test("scan1", t => {

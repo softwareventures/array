@@ -677,6 +677,30 @@ export function scanRightFn<T, U>(
     return array => scanRight(array, f, initial);
 }
 
+export function scanRight1<T>(
+    array: ArrayLike<T>,
+    f: (accumulator: T, element: T, index: number) => T
+): T[] {
+    if (array.length === 0) {
+        return [];
+    }
+
+    let accumulator = array[array.length - 1];
+    const result: T[] = copy({[array.length - 1]: accumulator, length: array.length});
+
+    for (let i = array.length - 2; i >= 0; --i) {
+        result[i] = accumulator = f(accumulator, array[i], i);
+    }
+
+    return result;
+}
+
+export function scanRight1Fn<T>(
+    f: (accumulator: T, element: T, index: number) => T
+): (array: ArrayLike<T>) => T[] {
+    return array => scanRight1(array, f);
+}
+
 export function partition<T, U extends T>(
     array: ArrayLike<T>,
     predicate: (element: T) => element is U

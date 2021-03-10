@@ -39,6 +39,7 @@ import {
     scan,
     scan1,
     scanRight,
+    scanRight1,
     slice,
     sum,
     tail,
@@ -310,6 +311,13 @@ test("scanRight", t => {
     t.deepEqual(
         scanRight(["a", "b", "c"], (a, e, i) => `${a} ${i} ${e}`, "_"),
         ["_ 2 c 1 b 0 a", "_ 2 c 1 b", "_ 2 c"]
+    );
+});
+
+test("scanRight1", t => {
+    t.deepEqual(
+        scanRight1(["a", "b", "c"], (a, e, i) => `${a} ${i} ${e}`),
+        ["c 1 b 0 a", "c 1 b", "c"]
     );
 });
 

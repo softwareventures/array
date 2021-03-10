@@ -37,6 +37,7 @@ import {
     remove,
     removeFirst,
     scan,
+    scan1,
     slice,
     sum,
     tail,
@@ -290,6 +291,13 @@ test("scan", t => {
     t.deepEqual(
         scan([1, 2, 3], (a, e, i) => a + e * i, 0),
         [0, 2, 8]
+    );
+});
+
+test("scan1", t => {
+    t.deepEqual(
+        scan1([1, 2, 3], (a, e, i) => a + e * i),
+        [1, 3, 9]
     );
 });
 

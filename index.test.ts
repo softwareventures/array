@@ -369,6 +369,14 @@ test("partition", t => {
 
 test("partitionWhile", t => {
     t.deepEqual(
+        partitionWhile([1, 3, 2, 4, 5, 6], e => e % 2 === 1),
+        [
+            [1, 3],
+            [2, 4, 5, 6]
+        ]
+    );
+
+    t.deepEqual(
         partitionWhile(["abc", "def", "ghi"], (_: string, i: number) => i % 2 === 0),
         [["abc"], ["def", "ghi"]]
     );

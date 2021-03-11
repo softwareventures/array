@@ -819,6 +819,30 @@ export function keyLastByFn<TKey, TElement>(
     return array => keyLastBy(array, f);
 }
 
+export function mapKeyBy<TKey, TElement, TNewElement>(
+    array: ArrayLike<TElement>,
+    f: (element: TElement, index: number) => [TKey, TNewElement]
+): Map<TKey, TNewElement[]> {
+    const result = new Map<TKey, TNewElement[]>();
+
+    for (let i = 0; i < array.length; ++i) {
+        const [key, element] = f(array[i], i);
+        const group = result.get(key) ?? [];
+        if (!result.has(key)) {
+            result.set(key, group);
+        }
+        group.push(element);
+    }
+
+    return result;
+}
+
+export function mapKeyByFn<TKey, TElement, TNewElement>(
+    f: (element: TElement, index: number) => [TKey, TNewElement]
+): (array: ArrayLike<TElement>) => Map<TKey, TNewElement[]> {
+    return array => mapKeyBy(array, f);
+}
+
 export interface IdentityGrouping<T> {
     readonly identity: (element: T) => unknown;
     readonly hash?: (element: T) => unknown;

@@ -336,14 +336,15 @@ function isSuccess<T>(result: Result<T>): result is Success<T> {
     return result.type === "success";
 }
 
-test("groupByIdentity", t => {
-    t.deepEqual(
-        groupByIdentity(["abc", "adef", "bghi"], a => a.substr(0, 1)),
-        [["abc", "adef"], ["bghi"]]
-    );
-});
-
 test("partition", t => {
+    t.deepEqual(
+        partition([2, 1, 3, 4, 5, 6], e => e % 2 === 1),
+        [
+            [1, 3, 5],
+            [2, 4, 6]
+        ]
+    );
+
     t.deepEqual(
         partition(["abc", "def", "ghi"], (_: string, i: number) => i % 2 === 0),
         [["abc", "ghi"], ["def"]]
@@ -368,6 +369,14 @@ test("partition", t => {
 
 test("partitionWhile", t => {
     t.deepEqual(
+        partitionWhile([1, 3, 2, 4, 5, 6], e => e % 2 === 1),
+        [
+            [1, 3],
+            [2, 4, 5, 6]
+        ]
+    );
+
+    t.deepEqual(
         partitionWhile(["abc", "def", "ghi"], (_: string, i: number) => i % 2 === 0),
         [["abc"], ["def", "ghi"]]
     );
@@ -387,6 +396,13 @@ test("partitionWhile", t => {
         [{type: "success", value: "hello"}],
         [{type: "error"}, {type: "success", value: "goodbye"}]
     ]);
+});
+
+test("groupByIdentity", t => {
+    t.deepEqual(
+        groupByIdentity(["abc", "adef", "bghi"], a => a.substr(0, 1)),
+        [["abc", "adef"], ["bghi"]]
+    );
 });
 
 test("forEach", t => {

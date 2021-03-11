@@ -843,6 +843,22 @@ export function mapKeyByFn<TKey, TElement, TNewElement>(
     return array => mapKeyBy(array, f);
 }
 
+export function mapKeyFirstBy<TKey, TElement, TNewElement>(
+    array: ArrayLike<TElement>,
+    f: (element: TElement, index: number) => [TKey, TNewElement]
+): Map<TKey, TNewElement> {
+    const result = new Map<TKey, TNewElement>();
+
+    for (let i = 0; i < array.length; ++i) {
+        const [key, element] = f(array[i], i);
+        if (!result.has(key)) {
+            result.set(key, element);
+        }
+    }
+
+    return result;
+}
+
 export interface IdentityGrouping<T> {
     readonly identity: (element: T) => unknown;
     readonly hash?: (element: T) => unknown;

@@ -25,6 +25,7 @@ import {
     initial,
     isArray,
     isArrayLike,
+    keyBy,
     last,
     map,
     maximum,
@@ -396,6 +397,13 @@ test("partitionWhile", t => {
         [{type: "success", value: "hello"}],
         [{type: "error"}, {type: "success", value: "goodbye"}]
     ]);
+});
+
+test("keyBy", t => {
+    const map = keyBy([1, 3, 4, 2, 5, 6], e => (e % 2 === 0 ? "even" : "odd"));
+    t.deepEqual(map.get("even"), [4, 2, 6]);
+    t.deepEqual(map.get("odd"), [1, 3, 5]);
+    t.deepEqual(Array.from(map.keys()), ["odd", "even"]);
 });
 
 test("groupByIdentity", t => {

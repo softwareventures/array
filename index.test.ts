@@ -27,6 +27,7 @@ import {
     isArrayLike,
     keyBy,
     keyFirstBy,
+    keyLastBy,
     last,
     map,
     maximum,
@@ -411,6 +412,13 @@ test("keyFirstBy", t => {
     const map = keyFirstBy([1, 3, 4, 2, 5, 6], e => (e % 2 === 0 ? "even" : "odd"));
     t.is(map.get("even"), 4);
     t.is(map.get("odd"), 1);
+    t.deepEqual(Array.from(map.keys()), ["odd", "even"]);
+});
+
+test("keyLastBy", t => {
+    const map = keyLastBy([1, 3, 4, 2, 5, 6], e => (e % 2 === 0 ? "even" : "odd"));
+    t.is(map.get("even"), 6);
+    t.is(map.get("odd"), 5);
     t.deepEqual(Array.from(map.keys()), ["odd", "even"]);
 });
 

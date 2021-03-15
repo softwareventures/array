@@ -82,6 +82,14 @@ export function pushFn<T>(value: T): (array: ArrayLike<T>) => T[] {
     return array => push(array, value);
 }
 
+export function unshift<T>(array: ArrayLike<T>, value: T): T[] {
+    return [value, ...coerce(array)];
+}
+
+export function unshiftFn<T>(value: T): (array: ArrayLike<T>) => T[] {
+    return array => unshift(array, value);
+}
+
 export function initial<T>(array: ArrayLike<T>): T[] {
     return array.length === 0 ? [] : nativeSlice.call(array, 0, array.length - 1);
 }

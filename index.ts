@@ -1392,6 +1392,7 @@ export function uniqueAdjacentByHashFn<T>(
     return array => uniqueAdjacentByHash(array, hash);
 }
 
+/** @deprecated Use [array-shuffle](https://npmjs.com/array-shuffle) instead. */
 export function shuffle<T>(array: ArrayLike<T>): T[] {
     const result = copy(array);
     for (let i = 0; i < array.length; ++i) {

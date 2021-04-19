@@ -881,7 +881,6 @@ export function mapKeyFirstBy<TKey, TElement, TNewElement>(
 
 export interface IdentityGrouping<T> {
     readonly identity: (element: T) => unknown;
-    readonly hash?: (element: T) => unknown;
 }
 
 export interface EqualityGrouping<T> {

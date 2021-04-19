@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@softwareventures/dictionary": "^0.6.0 || ^0.7.0 || ^0.8.0",
-    "@softwareventures/nullable": "^1.0.0",
+    "@softwareventures/nullable": "^1.0.0 || ^1.2.1",
     "@softwareventures/ordered": "^0.2.0",
     "dictionary-types": "^1.2.0",
     "tslib": "^1.9.3 || ^2.0.0"

@@ -446,12 +446,12 @@
     tslib "^1.11.2 || ^2.0.0"
     tslint "^6.1.2"
 
-"@softwareventures/nullable@^1.0.0":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@softwareventures/nullable/-/nullable-1.2.1.tgz#b0fb43f344595d77fc141154737b94ad7561c26b"
-  integrity sha512-qngwMZ7IBpjaJuoFC5b5OqJRhiZg/ilZ+qqggy+rXWs0MHXfs43DmNCJUD8EWMmYiaD5fj7tpR6zP7aQzCYOaQ==
+"@softwareventures/nullable@^1.0.0 || ^1.2.1":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@softwareventures/nullable/-/nullable-1.2.2.tgz#231410cfd39c6d31cc86501ddef2d9d3db8d1c18"
+  integrity sha512-aq6wwLWlosUtXh81ngnr+rbc9xTj7hZwa3tBygBz1Drz6cNCZgyTN4g7TXVa7AT+mLL3KZBtBPJAW0z21bHPgA==
   dependencies:
-    tslib "2.1.0"
+    tslib "2.2.0"
 
 "@softwareventures/ordered@^0.2.0":
   version "0.2.2"
@@ -6009,7 +6009,7 @@ tslib@2.1.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.1.0.tgz#da60860f1c2ecaa5703ab7d39bc05b6bf988b97a"
   integrity sha512-hcVC3wYEziELGGmEEXue7D75zbwIIVUMWAVbHItGPx0ziyXxrOMQx4rQEVEV45Ut/1IotuEvwqPopzIOkDMf0A==
 
-"tslib@^1.11.2 || ^2.0.0", "tslib@^1.9.3 || ^2.0.0":
+tslib@2.2.0, "tslib@^1.11.2 || ^2.0.0", "tslib@^1.9.3 || ^2.0.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.2.0.tgz#fb2c475977e35e241311ede2693cee1ec6698f5c"
   integrity sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==

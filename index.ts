@@ -83,6 +83,10 @@ export function empty<T>(array: ArrayLike<T>): boolean {
     return array.length === 0;
 }
 
+export function notEmpty<T>(array: ArrayLike<T>): boolean {
+    return array.length > 0;
+}
+
 export function reverse<T>(array: ArrayLike<T>): T[] {
     const result = copy<T>({length: array.length});
     for (let i = 0; i < array.length; ++i) {

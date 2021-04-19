@@ -102,6 +102,10 @@ export function empty<T>(array: ArrayLike<T>): boolean {
     return array.length === 0;
 }
 
+export function notEmpty<T>(array: ArrayLike<T>): boolean {
+    return array.length > 0;
+}
+
 export function reverse<T>(array: ArrayLike<T>): T[] {
     return nativeReverse.call(array);
 }

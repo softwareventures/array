@@ -35,7 +35,7 @@
     "typescript": "4.2.4"
   },
   "dependencies": {
-    "@softwareventures/nullable": "^1.0.0 || ^1.0.0",
+    "@softwareventures/nullable": "^1.0.0 || ^1.0.0 || ^1.2.1",
     "@softwareventures/ordered": "^0.2.0",
     "tslib": "^2.0.0"
   },

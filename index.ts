@@ -698,6 +698,21 @@ export function scanRight1Fn<T>(
     return array => scanRight1(array, f);
 }
 
+/** Splits the array at the specified index.
+ *
+ * Returns a tuple where the first element is the first `index` elements of the
+ * array, and the second element is the remaining elements of the array. */
+export function split<T>(array: readonly T[], index: number): [T[], T[]] {
+    return [take(array, index), drop(array, index)];
+}
+
+/** Returns a function that splits an array at the specified index.
+ *
+ * This is the curried form of {@link split}. */
+export function splitFn<T>(index: number): (array: readonly T[]) => [T[], T[]] {
+    return array => split(array, index);
+}
+
 export function partition<T, U extends T>(
     array: ArrayLike<T>,
     predicate: (element: T) => element is U

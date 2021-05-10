@@ -41,6 +41,7 @@ import {
     scanRight,
     scanRight1,
     slice,
+    split,
     sum,
     tail,
     takeWhile
@@ -331,6 +332,15 @@ interface Success<T> {
 interface Error {
     type: "error";
 }
+
+test("split", t => {
+    t.deepEqual(split([2, 1, 3, 4, 5, 6], 2), [
+        [2, 1],
+        [3, 4, 5, 6]
+    ]);
+    t.deepEqual(split([2, 1, 3, 4, 5, 6], 0), [[], [2, 1, 3, 4, 5, 6]]);
+    t.deepEqual(split([2, 1, 3, 4, 5, 6], 10), [[2, 1, 3, 4, 5, 6], []]);
+});
 
 function isSuccess<T>(result: Result<T>): result is Success<T> {
     return result.type === "success";

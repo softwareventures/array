@@ -21,6 +21,9 @@
     "test": "ava"
   },
   "sideEffects": false,
+  "engines": {
+    "node": ">= 12"
+  },
   "devDependencies": {
     "@softwareventures/eslint-config": "3.6.2",
     "@softwareventures/prettier-config": "1.0.2",

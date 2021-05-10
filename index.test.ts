@@ -49,7 +49,8 @@ import {
     split,
     sum,
     tail,
-    takeWhile
+    takeWhile,
+    zip
 } from "./index";
 
 test("isArray", t => {
@@ -410,6 +411,14 @@ test("partitionWhile", t => {
     t.deepEqual(partitionedResults, [
         [{type: "success", value: "hello"}],
         [{type: "error"}, {type: "success", value: "goodbye"}]
+    ]);
+});
+
+test("zip", t => {
+    t.deepEqual(zip([1, 2, 3], [6, 5, 4, 3, 2, 1]), [
+        [1, 6],
+        [2, 5],
+        [3, 4]
     ]);
 });
 

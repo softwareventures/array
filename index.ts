@@ -785,6 +785,29 @@ export function partitionWhileFn<T>(
     return array => partitionWhile(array, predicate);
 }
 
+/** Takes two arrays and returns an array of corresponding pairs.
+ *
+ * If one of the supplied arrays is shorter than the other, then the excess
+ * elements of the longer array will be discarded. */
+export function zip<T, U>(a: readonly T[], b: readonly U[]): Array<[T, U]> {
+    const result: Array<[T, U]> = [];
+    for (let i = 0; i < a.length && i < b.length; ++i) {
+        result.push([a[i], b[i]]);
+    }
+    return result;
+}
+
+/** Returns a function that combines the elements of `a` with the elements of
+ * `b` and returns an array of corresponding pairs.
+ *
+ * If one of the supplied arrays is shorter than the other, then the excess
+ * elements of the longer array will be discarded.
+ *
+ * This is the curried variant of {@link zip}. */
+export function zipFn<T, U>(b: readonly U[]): (a: readonly T[]) => Array<[T, U]> {
+    return a => zip(a, b);
+}
+
 export function keyBy<TKey, TElement>(
     array: ArrayLike<TElement>,
     f: (element: TElement, index: number) => TKey

@@ -68,7 +68,7 @@ export function head<T>(array: ArrayLike<T>): T | null;
 /** @internal This implementation is for internal use only, the exported declaration is above */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
-const head = first;
+export const head = first;
 
 export function tail<T>(array: ArrayLike<T>): T[] {
     return nativeSlice.call(array, 1);

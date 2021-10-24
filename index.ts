@@ -602,8 +602,10 @@ export function concatMapFn<T, U>(
     return array => concatMap(array, f);
 }
 
-export function noneNull<T>(array: ArrayLike<T | null>): ArrayLike<T> | null {
-    return any(array, isNull) ? null : (array as ArrayLike<T>);
+export type NoneNull<T extends ArrayLike<unknown>> = {[K in keyof T]: NonNullable<T[K]>};
+
+export function noneNull<T extends ArrayLike<unknown>>(array: T): NoneNull<T> | null {
+    return any(array, isNull) ? null : (array as NoneNull<T>);
 }
 
 export function scan<T, U>(

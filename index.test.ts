@@ -44,6 +44,7 @@ import {
     scanRight1,
     slice,
     sort,
+    sortBy,
     split,
     sum,
     tail,
@@ -470,6 +471,30 @@ test("sort", t => {
     t.deepEqual(sort(["hello", "goodbye"]), ["goodbye", "hello"]);
     t.deepEqual(
         sort([-2, 4, -3, 1], (a, b) => Math.abs(a) - Math.abs(b)),
+        [1, -2, -3, 4]
+    );
+});
+
+test("sortBy", t => {
+    t.deepEqual(
+        sortBy(
+            [
+                {x: "a", y: 2},
+                {x: "b", y: 4},
+                {x: "c", y: 3},
+                {x: "d", y: 1}
+            ],
+            ({y}) => y
+        ),
+        [
+            {x: "d", y: 1},
+            {x: "a", y: 2},
+            {x: "c", y: 3},
+            {x: "b", y: 4}
+        ]
+    );
+    t.deepEqual(
+        sortBy([-2, 4, -3, 1], e => Math.abs(e)),
         [1, -2, -3, 4]
     );
 });

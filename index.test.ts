@@ -30,6 +30,7 @@ import {
     map,
     maximum,
     minimum,
+    only,
     or,
     partition,
     partitionWhile,
@@ -79,6 +80,12 @@ test("initial", t => {
 test("last", t => {
     t.is(last([]), null);
     t.is(last([1, 2, 3]), 3);
+});
+
+test("only", t => {
+    t.is(only([]), null);
+    t.is(only([4]), 4);
+    t.is(only([3, 4, 5]), null);
 });
 
 test("empty", t => {

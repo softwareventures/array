@@ -1512,6 +1512,18 @@ export function shuffle<T>(array: ArrayLike<T>): T[] {
     return result;
 }
 
+export function sort(array: ArrayLike<boolean>): boolean[];
+export function sort(array: ArrayLike<number>): number[];
+export function sort(array: ArrayLike<string>): string[];
+export function sort<T>(array: ArrayLike<T>, comparator: Comparator<T>): T[];
+export function sort<T>(array: ArrayLike<T>, comparator?: Comparator<T>): T[] {
+    return copy(array).sort(comparator ?? (defaultCompare as any));
+}
+
+export function sortFn<T>(comparator: Comparator<T>): (array: ArrayLike<T>) => T[] {
+    return array => sort(array, comparator);
+}
+
 export function forEach<T>(
     array: ArrayLike<T>,
     f: (element: T, index: number) => void

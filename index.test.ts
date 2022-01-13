@@ -48,6 +48,7 @@ import {
     scanRight,
     scanRight1,
     slice,
+    sort,
     split,
     sum,
     tail,
@@ -501,6 +502,15 @@ test("groupByIdentity", t => {
     t.deepEqual(
         groupByIdentity(["abc", "adef", "bghi"], a => a.substr(0, 1)),
         [["abc", "adef"], ["bghi"]]
+    );
+});
+
+test("sort", t => {
+    t.deepEqual(sort([2, 4, 3, 1]), [1, 2, 3, 4]);
+    t.deepEqual(sort(["hello", "goodbye"]), ["goodbye", "hello"]);
+    t.deepEqual(
+        sort([-2, 4, -3, 1], (a, b) => Math.abs(a) - Math.abs(b)),
+        [1, -2, -3, 4]
     );
 });
 

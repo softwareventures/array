@@ -490,6 +490,13 @@ test("mapKeyBy", t => {
     t.deepEqual(Array.from(map.keys()), ["odd", "even"]);
 });
 
+test("mapKeyFirstBy", t => {
+    const map = mapKeyFirstBy([1, 3, 4, 2, 5, 6], e => [e % 2 === 0 ? "even" : "odd", String(e)]);
+    t.is(map.get("even"), "4");
+    t.is(map.get("odd"), "1");
+    t.deepEqual(Array.from(map.keys()), ["odd", "even"]);
+});
+
 test("groupByIdentity", t => {
     t.deepEqual(
         groupByIdentity(["abc", "adef", "bghi"], a => a.substr(0, 1)),
@@ -503,11 +510,4 @@ test("forEach", t => {
     const b = forEach(a, c => (s += c));
     t.is(b, a);
     t.is(s, "abc");
-});
-
-test("mapKeyFirstBy", t => {
-    const map = mapKeyFirstBy([1, 3, 4, 2, 5, 6], e => [e % 2 === 0 ? "even" : "odd", String(e)]);
-    t.is(map.get("even"), "4");
-    t.is(map.get("odd"), "1");
-    t.deepEqual(Array.from(map.keys()), ["odd", "even"]);
 });

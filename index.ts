@@ -182,6 +182,35 @@ export function dropWhileFn<T>(
     return array => dropWhile(array, predicate);
 }
 
+export function equal<T>(
+    a: ArrayLike<T>,
+    b: ArrayLike<T>,
+    elementsEqual: (a: T, b: T) => boolean = defaultEqual
+): boolean {
+    if (a.length !== b.length) {
+        return false;
+    }
+
+    for (let i = 0; i < a.length; ++i) {
+        if (!elementsEqual(a[i], b[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+export function equalFn<T>(
+    b: ArrayLike<T>,
+    elementsEqual: (a: T, b: T) => boolean = defaultEqual
+): (a: ArrayLike<T>) => boolean {
+    return a => equal(a, b, elementsEqual);
+}
+
+function defaultEqual(a: unknown, b: unknown): boolean {
+    return a === b;
+}
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
 export function map<T, U>(array: ArrayLike<T>, f: (element: T, index: number) => U): U[];

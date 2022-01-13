@@ -9,6 +9,7 @@ import {
     contains,
     dropWhile,
     empty,
+    equal,
     exclude,
     excludeFirst,
     excludeNull,
@@ -117,6 +118,38 @@ test("dropWhile", t => {
     t.deepEqual(
         dropWhile([1, 2, 3], (_, i) => i < 2),
         [3]
+    );
+});
+
+test("equal", t => {
+    t.true(equal([1, 2, 3], [1, 2, 3]));
+    t.false(equal([1, 2, 3], [1, 2, 3, 4]));
+    t.false(equal([1, 2, 3, 4], [1, 2, 3]));
+    t.false(equal([1, 3, 3], [1, 2, 3]));
+    t.true(
+        equal(
+            [
+                [1, 2],
+                [3, 4]
+            ],
+            [
+                [1, 2],
+                [3, 4]
+            ],
+            equal
+        )
+    );
+    t.false(
+        equal(
+            [
+                [1, 2],
+                [3, 4]
+            ],
+            [
+                [1, 2],
+                [3, 4]
+            ]
+        )
     );
 });
 

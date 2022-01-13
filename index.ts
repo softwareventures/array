@@ -192,6 +192,21 @@ export function equalFn<T>(
     return a => equal(a, b, elementsEqual);
 }
 
+export function notEqual<T>(
+    a: ArrayLike<T>,
+    b: ArrayLike<T>,
+    elementsEqual: (a: T, b: T) => boolean = defaultEqual
+): boolean {
+    return !equal(a, b, elementsEqual);
+}
+
+export function notEqualFn<T>(
+    b: ArrayLike<T>,
+    elementsEqual: (a: T, b: T) => boolean = defaultEqual
+): (a: ArrayLike<T>) => boolean {
+    return a => notEqual(a, b, elementsEqual);
+}
+
 function defaultEqual(a: unknown, b: unknown): boolean {
     return a === b;
 }

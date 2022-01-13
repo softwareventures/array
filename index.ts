@@ -98,6 +98,12 @@ export function last<T>(array: ArrayLike<T>): T | null {
     return array.length === 0 ? null : array[array.length - 1];
 }
 
+/** If the array contains exactly one element, returns that element.
+ * Otherwise, returns null. */
+export function only<T>(array: ArrayLike<T>): T | null {
+    return array.length === 1 ? array[0] : null;
+}
+
 export function empty<T>(array: ArrayLike<T>): boolean {
     return array.length === 0;
 }

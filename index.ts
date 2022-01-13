@@ -1573,14 +1573,22 @@ export function sortBy<T>(array: ArrayLike<T>, select: SortSelect<T>): T[] {
     return sort(array, (a, b) => defaultCompare(select(a) as any, select(b) as any));
 }
 
+export function sortByFn<T>(select: SortSelect<T>): (array: ArrayLike<T>) => T[] {
+    return array => sortBy(array, select);
+}
+
+export function sortByDescending<T>(array: ArrayLike<T>, select: SortSelect<T>): T[] {
+    return sort(array, (a, b) => -defaultCompare(select(a) as any, select(b) as any));
+}
+
+export function sortByDescendingFn<T>(select: SortSelect<T>): (array: ArrayLike<T>) => T[] {
+    return array => sortByDescending(array, select);
+}
+
 export type SortSelect<T> =
     | ((element: T) => boolean)
     | ((element: T) => number)
     | ((element: T) => string);
-
-export function sortByFn<T>(select: SortSelect<T>): (array: ArrayLike<T>) => T[] {
-    return array => sortBy(array, select);
-}
 
 export function forEach<T>(
     array: ArrayLike<T>,

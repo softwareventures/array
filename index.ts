@@ -834,9 +834,10 @@ export function partitionWhileFn<T>(
  * If one of the supplied arrays is shorter than the other, then the excess
  * elements of the longer array will be discarded. */
 export function zip<T, U>(a: readonly T[], b: readonly U[]): Array<[T, U]> {
-    const result: Array<[T, U]> = [];
-    for (let i = 0; i < a.length && i < b.length; ++i) {
-        result.push([a[i], b[i]]);
+    const length = Math.min(a.length, b.length);
+    const result = new Array<[T, U]>(length);
+    for (let i = 0; i < length; ++i) {
+        result[i] = [a[i], b[i]];
     }
     return result;
 }

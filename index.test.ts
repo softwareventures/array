@@ -9,6 +9,7 @@ import {
     contains,
     dropWhile,
     empty,
+    equal,
     exclude,
     excludeFirst,
     excludeNull,
@@ -34,6 +35,7 @@ import {
     mapKeyFirstBy,
     maximum,
     minimum,
+    only,
     or,
     partition,
     partitionWhile,
@@ -46,6 +48,8 @@ import {
     scanRight,
     scanRight1,
     slice,
+    sort,
+    sortBy,
     split,
     sum,
     tail,
@@ -85,6 +89,12 @@ test("last", t => {
     t.is(last([1, 2, 3]), 3);
 });
 
+test("only", t => {
+    t.is(only([]), null);
+    t.is(only([4]), 4);
+    t.is(only([3, 4, 5]), null);
+});
+
 test("empty", t => {
     t.true(empty([]));
     t.false(empty([1, 2, 3]));
@@ -117,6 +127,38 @@ test("dropWhile", t => {
     t.deepEqual(
         dropWhile([1, 2, 3], (_, i) => i < 2),
         [3]
+    );
+});
+
+test("equal", t => {
+    t.true(equal([1, 2, 3], [1, 2, 3]));
+    t.false(equal([1, 2, 3], [1, 2, 3, 4]));
+    t.false(equal([1, 2, 3, 4], [1, 2, 3]));
+    t.false(equal([1, 3, 3], [1, 2, 3]));
+    t.true(
+        equal(
+            [
+                [1, 2],
+                [3, 4]
+            ],
+            [
+                [1, 2],
+                [3, 4]
+            ],
+            equal
+        )
+    );
+    t.false(
+        equal(
+            [
+                [1, 2],
+                [3, 4]
+            ],
+            [
+                [1, 2],
+                [3, 4]
+            ]
+        )
     );
 });
 
@@ -450,10 +492,50 @@ test("mapKeyBy", t => {
     t.deepEqual(Array.from(map.keys()), ["odd", "even"]);
 });
 
+test("mapKeyFirstBy", t => {
+    const map = mapKeyFirstBy([1, 3, 4, 2, 5, 6], e => [e % 2 === 0 ? "even" : "odd", String(e)]);
+    t.is(map.get("even"), "4");
+    t.is(map.get("odd"), "1");
+    t.deepEqual(Array.from(map.keys()), ["odd", "even"]);
+});
+
 test("groupByIdentity", t => {
     t.deepEqual(
         groupByIdentity(["abc", "adef", "bghi"], a => a.substr(0, 1)),
         [["abc", "adef"], ["bghi"]]
+    );
+});
+
+test("sort", t => {
+    t.deepEqual(sort([2, 4, 3, 1]), [1, 2, 3, 4]);
+    t.deepEqual(sort(["hello", "goodbye"]), ["goodbye", "hello"]);
+    t.deepEqual(
+        sort([-2, 4, -3, 1], (a, b) => Math.abs(a) - Math.abs(b)),
+        [1, -2, -3, 4]
+    );
+});
+
+test("sortBy", t => {
+    t.deepEqual(
+        sortBy(
+            [
+                {x: "a", y: 2},
+                {x: "b", y: 4},
+                {x: "c", y: 3},
+                {x: "d", y: 1}
+            ],
+            ({y}) => y
+        ),
+        [
+            {x: "d", y: 1},
+            {x: "a", y: 2},
+            {x: "c", y: 3},
+            {x: "b", y: 4}
+        ]
+    );
+    t.deepEqual(
+        sortBy([-2, 4, -3, 1], e => Math.abs(e)),
+        [1, -2, -3, 4]
     );
 });
 
@@ -463,11 +545,4 @@ test("forEach", t => {
     const b = forEach(a, c => (s += c));
     t.is(b, a);
     t.is(s, "abc");
-});
-
-test("mapKeyFirstBy", t => {
-    const map = mapKeyFirstBy([1, 3, 4, 2, 5, 6], e => [e % 2 === 0 ? "even" : "odd", String(e)]);
-    t.is(map.get("even"), "4");
-    t.is(map.get("odd"), "1");
-    t.deepEqual(Array.from(map.keys()), ["odd", "even"]);
 });

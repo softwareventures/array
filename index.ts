@@ -98,6 +98,12 @@ export function last<T>(array: ArrayLike<T>): T | null {
     return array.length === 0 ? null : array[array.length - 1];
 }
 
+/** If the array contains exactly one element, returns that element.
+ * Otherwise, returns null. */
+export function only<T>(array: ArrayLike<T>): T | null {
+    return array.length === 1 ? array[0] : null;
+}
+
 export function empty<T>(array: ArrayLike<T>): boolean {
     return array.length === 0;
 }
@@ -180,6 +186,50 @@ export function dropWhileFn<T>(
     predicate: (element: T, index: number) => boolean
 ): (array: ArrayLike<T>) => T[] {
     return array => dropWhile(array, predicate);
+}
+
+export function equal<T>(
+    a: ArrayLike<T>,
+    b: ArrayLike<T>,
+    elementsEqual: (a: T, b: T) => boolean = defaultEqual
+): boolean {
+    if (a.length !== b.length) {
+        return false;
+    }
+
+    for (let i = 0; i < a.length; ++i) {
+        if (!elementsEqual(a[i], b[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+export function equalFn<T>(
+    b: ArrayLike<T>,
+    elementsEqual: (a: T, b: T) => boolean = defaultEqual
+): (a: ArrayLike<T>) => boolean {
+    return a => equal(a, b, elementsEqual);
+}
+
+export function notEqual<T>(
+    a: ArrayLike<T>,
+    b: ArrayLike<T>,
+    elementsEqual: (a: T, b: T) => boolean = defaultEqual
+): boolean {
+    return !equal(a, b, elementsEqual);
+}
+
+export function notEqualFn<T>(
+    b: ArrayLike<T>,
+    elementsEqual: (a: T, b: T) => boolean = defaultEqual
+): (a: ArrayLike<T>) => boolean {
+    return a => notEqual(a, b, elementsEqual);
+}
+
+function defaultEqual(a: unknown, b: unknown): boolean {
+    return a === b;
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -792,9 +842,10 @@ export function partitionWhileFn<T>(
  * If one of the supplied arrays is shorter than the other, then the excess
  * elements of the longer array will be discarded. */
 export function zip<T, U>(a: readonly T[], b: readonly U[]): Array<[T, U]> {
-    const result: Array<[T, U]> = [];
-    for (let i = 0; i < a.length && i < b.length; ++i) {
-        result.push([a[i], b[i]]);
+    const length = Math.min(a.length, b.length);
+    const result = new Array<[T, U]>(length);
+    for (let i = 0; i < length; ++i) {
+        result[i] = [a[i], b[i]];
     }
     return result;
 }
@@ -1462,6 +1513,39 @@ export function shuffle<T>(array: ArrayLike<T>): T[] {
     }
     return result;
 }
+
+export function sort(array: ArrayLike<boolean>): boolean[];
+export function sort(array: ArrayLike<number>): number[];
+export function sort(array: ArrayLike<string>): string[];
+export function sort<T>(array: ArrayLike<T>, comparator: Comparator<T>): T[];
+export function sort<T>(array: ArrayLike<T>, comparator?: Comparator<T>): T[] {
+    return copy(array).sort(comparator ?? (defaultCompare as any));
+}
+
+export function sortFn<T>(comparator: Comparator<T>): (array: ArrayLike<T>) => T[] {
+    return array => sort(array, comparator);
+}
+
+export function sortBy<T>(array: ArrayLike<T>, select: SortSelect<T>): T[] {
+    return sort(array, (a, b) => defaultCompare(select(a) as any, select(b) as any));
+}
+
+export function sortByFn<T>(select: SortSelect<T>): (array: ArrayLike<T>) => T[] {
+    return array => sortBy(array, select);
+}
+
+export function sortByDescending<T>(array: ArrayLike<T>, select: SortSelect<T>): T[] {
+    return sort(array, (a, b) => -defaultCompare(select(a) as any, select(b) as any));
+}
+
+export function sortByDescendingFn<T>(select: SortSelect<T>): (array: ArrayLike<T>) => T[] {
+    return array => sortByDescending(array, select);
+}
+
+export type SortSelect<T> =
+    | ((element: T) => boolean)
+    | ((element: T) => number)
+    | ((element: T) => string);
 
 export function forEach<T>(
     array: ArrayLike<T>,

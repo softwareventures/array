@@ -38,6 +38,7 @@ import {
     product,
     remove,
     removeFirst,
+    reverse,
     scan,
     scan1,
     scanRight,
@@ -93,6 +94,12 @@ test("only", t => {
 test("empty", t => {
     t.true(empty([]));
     t.false(empty([1, 2, 3]));
+});
+
+test("reverse", t => {
+    const a = [1, 2, 4, 3];
+    t.deepEqual(reverse(a), [3, 4, 2, 1]);
+    t.deepEqual(a, [1, 2, 4, 3]); // Ensure original array is untouched.
 });
 
 test("slice", t => {

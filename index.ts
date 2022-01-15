@@ -171,6 +171,19 @@ export function takeWhileFn<T>(
     return array => takeWhile(array, predicate);
 }
 
+export function takeUntil<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): T[] {
+    return takeWhile(array, (element, index) => !predicate(element, index));
+}
+
+export function takeUntilFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => T[] {
+    return array => takeUntil(array, predicate);
+}
+
 export function dropWhile<T>(
     array: ArrayLike<T>,
     predicate: (element: T, index: number) => boolean

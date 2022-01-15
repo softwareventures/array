@@ -107,7 +107,7 @@ export function notEmpty<T>(array: ArrayLike<T>): boolean {
 }
 
 export function reverse<T>(array: ArrayLike<T>): T[] {
-    return nativeReverse.call(array);
+    return nativeReverse.call(copy(array));
 }
 
 export function slice<T>(array: ArrayLike<T>, start?: number, end?: number): T[] {

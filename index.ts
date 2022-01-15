@@ -201,6 +201,19 @@ export function dropWhileFn<T>(
     return array => dropWhile(array, predicate);
 }
 
+export function dropUntil<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): T[] {
+    return dropWhile(array, (element, index) => !predicate(element, index));
+}
+
+export function dropUntilFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => T[] {
+    return array => dropWhile(array, predicate);
+}
+
 export function equal<T>(
     a: ArrayLike<T>,
     b: ArrayLike<T>,

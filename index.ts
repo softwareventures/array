@@ -863,6 +863,19 @@ export function partitionWhileFn<T>(
     return array => partitionWhile(array, predicate);
 }
 
+export function partitionUntil<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T) => boolean
+): [T[], T[]] {
+    return partitionWhile(array, element => !predicate(element));
+}
+
+export function partitionUntilFn<T>(
+    predicate: (element: T) => boolean
+): (array: ArrayLike<T>) => [T[], T[]] {
+    return array => partitionUntil(array, predicate);
+}
+
 /** Takes two arrays and returns an array of corresponding pairs.
  *
  * If one of the supplied arrays is shorter than the other, then the excess

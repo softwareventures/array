@@ -239,6 +239,31 @@ export function notEqualFn<T>(
     return a => notEqual(a, b, elementsEqual);
 }
 
+export function prefixMatch<T>(
+    a: ArrayLike<T>,
+    b: ArrayLike<T>,
+    elementsEqual: (a: T, b: T) => boolean = defaultEqual
+): boolean {
+    if (a.length < b.length) {
+        return false;
+    }
+
+    for (let i = 0; i < b.length; ++i) {
+        if (a[i] !== b[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+export function prefixMatchFn<T>(
+    b: ArrayLike<T>,
+    elementsEqual: (a: T, b: T) => boolean = defaultEqual
+): (a: ArrayLike<T>) => boolean {
+    return a => prefixMatch(a, b, elementsEqual);
+}
+
 function defaultEqual(a: unknown, b: unknown): boolean {
     return a === b;
 }

@@ -34,6 +34,7 @@ import {
     or,
     partition,
     partitionWhile,
+    prefixMatch,
     prepend,
     product,
     remove,
@@ -162,6 +163,14 @@ test("equal", t => {
             ]
         )
     );
+});
+
+test("prefixMatch", t => {
+    t.true(prefixMatch([], []));
+    t.true(prefixMatch([1, 2, 3], []));
+    t.true(prefixMatch([1, 2, 3, 4], [1, 2]));
+    t.false(prefixMatch([1, 3, 4], [1, 2]));
+    t.false(prefixMatch([], [1]));
 });
 
 test("map", t => {

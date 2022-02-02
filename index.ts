@@ -1,5 +1,6 @@
 import {isNotNull, isNull} from "@softwareventures/nullable";
-import {Comparator, compare as defaultCompare, Comparison} from "@softwareventures/ordered";
+import type {Comparator} from "@softwareventures/ordered";
+import {compare as defaultCompare, Comparison} from "@softwareventures/ordered";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeSlice = Array.prototype.slice;
@@ -41,7 +42,7 @@ export function isArray<T = unknown>(value: readonly T[] | unknown): value is re
 /** @internal This implementation is for internal use only, the exported declaration is above */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
-export const isArray: (value: any) => value is any[] = Array.isArray;
+export const isArray: (value: unknown) => value is unknown[] = Array.isArray;
 
 export function isArrayLike<T>(value: ArrayLike<T> | unknown): value is ArrayLike<T> {
     return (
@@ -53,7 +54,7 @@ export function isArrayLike<T>(value: ArrayLike<T> | unknown): value is ArrayLik
 }
 
 export function coerce<T>(array: ArrayLike<T>): readonly T[] {
-    return isArray(array) ? array : copy(array);
+    return isArray(array) ? (array as readonly T[]) : copy(array);
 }
 
 export function first<T>(array: ArrayLike<T>): T | null {
@@ -71,7 +72,7 @@ export function head<T>(array: ArrayLike<T>): T | null;
 export const head = first;
 
 export function tail<T>(array: ArrayLike<T>): T[] {
-    return nativeSlice.call(array, 1);
+    return nativeSlice.call(array, 1) as T[];
 }
 
 export function push<T>(array: ArrayLike<T>, value: T): T[] {
@@ -91,7 +92,7 @@ export function unshiftFn<T>(value: T): (array: ArrayLike<T>) => T[] {
 }
 
 export function initial<T>(array: ArrayLike<T>): T[] {
-    return array.length === 0 ? [] : nativeSlice.call(array, 0, array.length - 1);
+    return array.length === 0 ? [] : (nativeSlice.call(array, 0, array.length - 1) as T[]);
 }
 
 export function last<T>(array: ArrayLike<T>): T | null {
@@ -113,31 +114,31 @@ export function notEmpty<T>(array: ArrayLike<T>): boolean {
 }
 
 export function reverse<T>(array: ArrayLike<T>): T[] {
-    return nativeReverse.call(copy(array));
+    return nativeReverse.call(copy(array)) as T[];
 }
 
 export function slice<T>(array: ArrayLike<T>, start?: number, end?: number): T[] {
-    return nativeSlice.call(array, start, end);
+    return nativeSlice.call(array, start, end) as T[];
 }
 
 export function sliceFn<T>(start?: number, end?: number): (array: ArrayLike<T>) => T[] {
-    return array => nativeSlice.call(array, start, end);
+    return array => nativeSlice.call(array, start, end) as T[];
 }
 
 export function take<T>(array: ArrayLike<T>, count: number): T[] {
-    return nativeSlice.call(array, 0, count);
+    return nativeSlice.call(array, 0, count) as T[];
 }
 
 export function takeFn<T>(count: number): (array: ArrayLike<T>) => T[] {
-    return array => nativeSlice.call(array, 0, count);
+    return array => nativeSlice.call(array, 0, count) as T[];
 }
 
 export function drop<T>(array: ArrayLike<T>, count: number): T[] {
-    return nativeSlice.call(array, count);
+    return nativeSlice.call(array, count) as T[];
 }
 
 export function dropFn<T>(count: number): (array: ArrayLike<T>) => T[] {
-    return array => nativeSlice.call(array, count);
+    return array => nativeSlice.call(array, count) as T[];
 }
 
 export function takeWhile<T, U extends T>(
@@ -309,7 +310,7 @@ export function filter<T>(
     array: ArrayLike<T>,
     predicate: (element: T, index: number) => boolean
 ): T[] {
-    return nativeFilter.call(array, predicate);
+    return nativeFilter.call(array, predicate) as T[];
 }
 
 export function filterFn<T, U extends T>(
@@ -321,7 +322,7 @@ export function filterFn<T>(
 export function filterFn<T>(
     predicate: (element: T, index: number) => boolean
 ): (array: ArrayLike<T>) => T[] {
-    return array => nativeFilter.call(array, predicate);
+    return array => nativeFilter.call(array, predicate) as T[];
 }
 
 export function filterFirst<T>(
@@ -415,21 +416,29 @@ export function fold<T, U>(
     f: (accumulator: U, element: T, index: number) => U,
     initial: U
 ): U {
-    return (nativeReduce as (...args: any[]) => any).call(array, f, initial);
+    return (
+        nativeReduce as (f: (accumulator: U, element: T, index: number) => U, initial: U) => U
+    ).call(array, f, initial);
 }
 
 export function foldFn<T, U>(
     f: (accumulator: U, element: T, index: number) => U,
     initial: U
 ): (array: ArrayLike<T>) => U {
-    return array => (nativeReduce as (...args: any[]) => any).call(array, f, initial);
+    return array =>
+        (
+            nativeReduce as (f: (accumulator: U, element: T, index: number) => U, initial: U) => U
+        ).call(array, f, initial);
 }
 
 export function fold1<T>(
     array: ArrayLike<T>,
     f: (accumulator: T, element: T, index: number) => T
 ): T {
-    return (nativeReduce as (...args: any[]) => any).call(array, f);
+    return (nativeReduce as (f: (accumulator: T, element: T, index: number) => T) => T).call(
+        array,
+        f
+    );
 }
 
 export function fold1Fn<T>(
@@ -443,21 +452,32 @@ export function foldRight<T, U>(
     f: (accumulator: U, element: T, index: number) => U,
     initial: U
 ): U {
-    return (nativeReduceRight as (...args: any[]) => any).call(array, f, initial);
+    return (
+        nativeReduceRight as (f: (accumulator: U, element: T, index: number) => U, initial: U) => U
+    ).call(array, f, initial);
 }
 
 export function foldRightFn<T, U>(
     f: (accumulator: U, element: T, index: number) => U,
     initial: U
 ): (array: ArrayLike<T>) => U {
-    return array => (nativeReduceRight as (...args: any[]) => any).call(array, f, initial);
+    return array =>
+        (
+            nativeReduceRight as (
+                f: (accumulator: U, element: T, index: number) => U,
+                initial: U
+            ) => U
+        ).call(array, f, initial);
 }
 
 export function foldRight1<T>(
     array: ArrayLike<T>,
     f: (accumulator: T, element: T, index: number) => T
 ): T {
-    return (nativeReduceRight as (...args: any[]) => any).call(array, f);
+    return (nativeReduceRight as (f: (accumulator: T, element: T, index: number) => T) => T).call(
+        array,
+        f
+    );
 }
 
 export function foldRight1Fn<T>(
@@ -572,19 +592,14 @@ export function findFn<T>(
 
 export function maximum<T extends string | number | boolean>(array: ArrayLike<T>): T | null;
 export function maximum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | null;
-export function maximum<T>(
-    array: ArrayLike<T>,
-    compare: Comparator<any> = defaultCompare
-): T | null {
-    return internalMaximum(array, compare);
+export function maximum<T>(array: ArrayLike<T>, compare?: Comparator<T>): T | null {
+    return internalMaximum(array, compare ?? (defaultCompare as unknown as Comparator<T>));
 }
 
 export function maximumFn<T extends string | number | boolean>(): (array: ArrayLike<T>) => T | null;
 export function maximumFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T | null;
-export function maximumFn<T>(
-    compare: Comparator<any> = defaultCompare
-): (array: ArrayLike<T>) => T | null {
-    return array => internalMaximum(array, compare);
+export function maximumFn<T>(compare?: Comparator<T>): (array: ArrayLike<T>) => T | null {
+    return array => internalMaximum(array, compare ?? (defaultCompare as unknown as Comparator<T>));
 }
 
 function internalMaximum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | null {
@@ -605,19 +620,14 @@ function internalMaximum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | nu
 
 export function minimum<T extends string | number | boolean>(array: ArrayLike<T>): T | null;
 export function minimum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | null;
-export function minimum<T>(
-    array: ArrayLike<T>,
-    compare: Comparator<any> = defaultCompare
-): T | null {
-    return internalMinimum(array, compare);
+export function minimum<T>(array: ArrayLike<T>, compare?: Comparator<T>): T | null {
+    return internalMinimum(array, compare ?? (defaultCompare as unknown as Comparator<T>));
 }
 
 export function minimumFn<T extends string | number | boolean>(): (array: ArrayLike<T>) => T | null;
 export function minimumFn<T>(compare: Comparator<T>): (array: ArrayLike<T>) => T | null;
-export function minimumFn<T>(
-    compare: Comparator<any> = defaultCompare
-): (array: ArrayLike<T>) => T | null {
-    return array => internalMinimum(array, compare);
+export function minimumFn<T>(compare?: Comparator<T>): (array: ArrayLike<T>) => T | null {
+    return array => internalMinimum(array, compare ?? (defaultCompare as unknown as Comparator<T>));
 }
 
 function internalMinimum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | null {
@@ -649,7 +659,7 @@ export function and(array: ArrayLike<boolean>): boolean {
 }
 
 export function or(array: ArrayLike<boolean>): boolean {
-    return findIndex(array, element => !!element) != null;
+    return findIndex(array, element => Boolean(element)) != null;
 }
 
 export function any<T>(
@@ -679,7 +689,7 @@ export function allFn<T>(
 }
 
 export function concat<T>(arrays: ArrayLike<ArrayLike<T>>): T[] {
-    return nativeConcat.apply([], map(arrays, coerce));
+    return nativeConcat.apply([], map(arrays, coerce)) as T[];
 }
 
 export function prepend<T>(a: ArrayLike<T>): (b: ArrayLike<T>) => T[] {
@@ -1583,7 +1593,7 @@ export function sort(array: ArrayLike<number>): number[];
 export function sort(array: ArrayLike<string>): string[];
 export function sort<T>(array: ArrayLike<T>, comparator: Comparator<T>): T[];
 export function sort<T>(array: ArrayLike<T>, comparator?: Comparator<T>): T[] {
-    return copy(array).sort(comparator ?? (defaultCompare as any));
+    return copy(array).sort(comparator ?? (defaultCompare as unknown as Comparator<T>));
 }
 
 export function sortFn<T>(comparator: Comparator<T>): (array: ArrayLike<T>) => T[] {
@@ -1591,7 +1601,9 @@ export function sortFn<T>(comparator: Comparator<T>): (array: ArrayLike<T>) => T
 }
 
 export function sortBy<T>(array: ArrayLike<T>, select: SortSelect<T>): T[] {
-    return sort(array, (a, b) => defaultCompare(select(a) as any, select(b) as any));
+    return sort(array, (a, b) =>
+        (defaultCompare as Comparator<string | number | boolean>)(select(a), select(b))
+    );
 }
 
 export function sortByFn<T>(select: SortSelect<T>): (array: ArrayLike<T>) => T[] {
@@ -1599,7 +1611,10 @@ export function sortByFn<T>(select: SortSelect<T>): (array: ArrayLike<T>) => T[]
 }
 
 export function sortByDescending<T>(array: ArrayLike<T>, select: SortSelect<T>): T[] {
-    return sort(array, (a, b) => -defaultCompare(select(a) as any, select(b) as any));
+    return sort(
+        array,
+        (a, b) => -(defaultCompare as Comparator<string | number | boolean>)(select(a), select(b))
+    );
 }
 
 export function sortByDescendingFn<T>(select: SortSelect<T>): (array: ArrayLike<T>) => T[] {

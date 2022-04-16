@@ -328,6 +328,18 @@ test("any", t => {
 test("all", t => {
     t.true(all([1, 2, 3], e => e < 4));
     t.false(all([1, 2, 3], e => e > 2));
+
+    const mixed1: Array<string | number> = [1, 2, "hello", 3, "goodbye"];
+    const mixed2: Array<string | number> = [1, 2, 3];
+
+    const acceptNumbers = (array: readonly number[]): boolean => true;
+    const isNumber = (v: unknown): v is number => typeof v === "number";
+
+    t.false(all(mixed1, isNumber));
+    t.true(all(mixed2, isNumber));
+
+    t.false(all(mixed1, isNumber) ? acceptNumbers(mixed1) : false);
+    t.true(all(mixed2, isNumber) ? acceptNumbers(mixed2) : false);
 });
 
 test("concat", t => {

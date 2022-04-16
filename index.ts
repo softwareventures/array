@@ -675,6 +675,18 @@ export function anyFn<T>(
     return array => any(array, predicate);
 }
 
+export function all<T, U extends T>(
+    array: readonly T[],
+    predicate: (element: T, index: number) => element is U
+): array is readonly U[];
+export function all<T, U extends T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => element is U
+): array is ArrayLike<U>;
+export function all<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): boolean;
 export function all<T>(
     array: ArrayLike<T>,
     predicate: (element: T, index: number) => boolean
@@ -682,6 +694,12 @@ export function all<T>(
     return !any(array, (element, index) => !predicate(element, index));
 }
 
+export function allFn<T, U extends T>(
+    predicate: (element: T, index: number) => element is U
+): (array: ArrayLike<T>) => array is ArrayLike<U>;
+export function allFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => boolean;
 export function allFn<T>(
     predicate: (element: T, index: number) => boolean
 ): (array: ArrayLike<T>) => boolean {

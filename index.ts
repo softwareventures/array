@@ -667,6 +667,14 @@ export function product(array: ArrayLike<number>): number {
     return fold(array, (a, b) => a * b, 1);
 }
 
+export function average(array: ArrayLike<number>): number | null {
+    if (array.length === 0) {
+        return null;
+    } else {
+        return sum(array) / array.length;
+    }
+}
+
 export function and(array: ArrayLike<boolean>): boolean {
     return findIndex(array, element => !element) == null;
 }

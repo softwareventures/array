@@ -654,6 +654,14 @@ function internalMinimum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | nu
     return result;
 }
 
+export function minimumBy<T>(array: ArrayLike<T>, select: (element: T) => number): T | null {
+    return minimum(array, (a, b) => defaultCompare(select(a), select(b)));
+}
+
+export function minimumByFn<T>(select: (element: T) => number): (array: ArrayLike<T>) => T | null {
+    return array => minimumBy(array, select);
+}
+
 export function sum(array: ArrayLike<number>): number {
     return fold(array, (a, b) => a + b, 0);
 }

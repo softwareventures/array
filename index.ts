@@ -610,6 +610,14 @@ function internalMaximum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | nu
     return result;
 }
 
+export function maximumBy<T>(array: ArrayLike<T>, select: (element: T) => number): T | null {
+    return maximum(array, (a, b) => defaultCompare(select(a), select(b)));
+}
+
+export function maximumByFn<T>(select: (element: T) => number): (array: ArrayLike<T>) => T | null {
+    return array => maximumBy(array, select);
+}
+
 export function minimum<T extends string | number | boolean>(array: ArrayLike<T>): T | null;
 export function minimum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | null;
 export function minimum<T>(

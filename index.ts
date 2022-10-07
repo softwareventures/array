@@ -1,6 +1,10 @@
 import {isNotNull, isNull} from "@softwareventures/nullable";
 import type {Comparator} from "@softwareventures/ordered";
-import {compare as defaultCompare, Comparison} from "@softwareventures/ordered";
+import {
+    compare as defaultCompare,
+    Comparison,
+    equal as defaultEqual
+} from "@softwareventures/ordered";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeSlice = Array.prototype.slice;
@@ -278,10 +282,6 @@ export function prefixMatchFn<T>(
     elementsEqual: (a: T, b: T) => boolean = defaultEqual
 ): (a: ArrayLike<T>) => boolean {
     return a => prefixMatch(a, b, elementsEqual);
-}
-
-function defaultEqual(a: unknown, b: unknown): boolean {
-    return a === b;
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

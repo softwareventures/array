@@ -324,6 +324,8 @@ export function filterFn<T>(
     return array => nativeFilter.call(array, predicate);
 }
 
+/** @deprecated This function is confusing, use {@link excludeFirst} instead,
+ * and invert the predicate. */
 export function filterFirst<T>(
     array: ArrayLike<T>,
     predicate: (element: T, index: number) => boolean
@@ -344,6 +346,8 @@ export function filterFirst<T>(
     return result;
 }
 
+/** @deprecated This function is confusing, use {@link excludeFirstFn} instead,
+ * and invert the predicate. */
 export function filterFirstFn<T>(
     predicate: (element: T, index: number) => boolean
 ): (array: ArrayLike<T>) => T[] {

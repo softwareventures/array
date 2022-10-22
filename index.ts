@@ -1076,7 +1076,7 @@ export function mapKeyByFn<TKey, TElement, TNewElement>(
 
 export function mapKeyFirstBy<TKey, TElement, TNewElement>(
     array: ArrayLike<TElement>,
-    f: (element: TElement, index: number) => [TKey, TNewElement]
+    f: (element: TElement, index: number) => readonly [TKey, TNewElement]
 ): Map<TKey, TNewElement> {
     const result = new Map<TKey, TNewElement>();
 

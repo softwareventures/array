@@ -1090,6 +1090,12 @@ export function mapKeyFirstBy<TKey, TElement, TNewElement>(
     return result;
 }
 
+export function mapKeyFirstByFn<TKey, TElement, TNewElement>(
+    f: (element: TElement, index: number) => readonly [TKey, TNewElement]
+): (array: ArrayLike<TElement>) => Map<TKey, TNewElement> {
+    return array => mapKeyFirstBy(array, f);
+}
+
 export interface IdentityGrouping<T> {
     readonly identity: (element: T) => unknown;
 }

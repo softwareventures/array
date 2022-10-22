@@ -1096,6 +1096,26 @@ export function mapKeyFirstByFn<TKey, TElement, TNewElement>(
     return array => mapKeyFirstBy(array, f);
 }
 
+export function mapKeyLastBy<TKey, TElement, TNewElement>(
+    array: ArrayLike<TElement>,
+    f: (element: TElement, index: number) => readonly [TKey, TNewElement]
+): Map<TKey, TNewElement> {
+    const result = new Map<TKey, TNewElement>();
+
+    for (let i = 0; i < array.length; ++i) {
+        const [key, element] = f(array[i], i);
+        result.set(key, element);
+    }
+
+    return result;
+}
+
+export function mapKeyLastByFn<TKey, TElement, TNewElement>(
+    f: (element: TElement, index: number) => readonly [TKey, TNewElement]
+): (array: ArrayLike<TElement>) => Map<TKey, TNewElement> {
+    return array => mapKeyLastBy(array, f);
+}
+
 export interface IdentityGrouping<T> {
     readonly identity: (element: T) => unknown;
 }

@@ -1052,7 +1052,7 @@ export function keyLastByFn<TKey, TElement>(
 
 export function mapKeyBy<TKey, TElement, TNewElement>(
     array: ArrayLike<TElement>,
-    f: (element: TElement, index: number) => [TKey, TNewElement]
+    f: (element: TElement, index: number) => readonly [TKey, TNewElement]
 ): Map<TKey, TNewElement[]> {
     const result = new Map<TKey, TNewElement[]>();
 
@@ -1069,7 +1069,7 @@ export function mapKeyBy<TKey, TElement, TNewElement>(
 }
 
 export function mapKeyByFn<TKey, TElement, TNewElement>(
-    f: (element: TElement, index: number) => [TKey, TNewElement]
+    f: (element: TElement, index: number) => readonly [TKey, TNewElement]
 ): (array: ArrayLike<TElement>) => Map<TKey, TNewElement[]> {
     return array => mapKeyBy(array, f);
 }

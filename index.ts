@@ -1,4 +1,4 @@
-import {isNotNull, isNull} from "@softwareventures/nullable";
+import {isNotNull, isNull, notNull} from "@softwareventures/nullable";
 import type {Comparator} from "@softwareventures/ordered";
 import {
     compare as defaultCompare,
@@ -62,7 +62,7 @@ export function coerce<T>(array: ArrayLike<T>): readonly T[] {
 }
 
 export function first<T>(array: ArrayLike<T>): T | null {
-    return array.length === 0 ? null : array[0];
+    return array.length === 0 ? null : (array[0] as T);
 }
 
 /** @deprecated Use {@link first} instead. */
@@ -100,13 +100,13 @@ export function initial<T>(array: ArrayLike<T>): T[] {
 }
 
 export function last<T>(array: ArrayLike<T>): T | null {
-    return array.length === 0 ? null : array[array.length - 1];
+    return array.length === 0 ? null : (array[array.length - 1] as T);
 }
 
 /** If the array contains exactly one element, returns that element.
  * Otherwise, returns null. */
 export function only<T>(array: ArrayLike<T>): T | null {
-    return array.length === 1 ? array[0] : null;
+    return array.length === 1 ? (array[0] as T) : null;
 }
 
 export function empty<T>(array: ArrayLike<T>): boolean {
@@ -158,7 +158,7 @@ export function takeWhile<T>(
     predicate: (element: T, index: number) => boolean
 ): T[] {
     let i = 0;
-    while (i < array.length && predicate(array[i], i)) {
+    while (i < array.length && predicate(array[i] as T, i)) {
         ++i;
     }
     return take(array, i);
@@ -194,7 +194,7 @@ export function dropWhile<T>(
     predicate: (element: T, index: number) => boolean
 ): T[] {
     let i = 0;
-    while (i < array.length && predicate(array[i], i)) {
+    while (i < array.length && predicate(array[i] as T, i)) {
         ++i;
     }
     return drop(array, i);
@@ -229,7 +229,7 @@ export function equal<T>(
     }
 
     for (let i = 0; i < a.length; ++i) {
-        if (!elementsEqual(a[i], b[i])) {
+        if (!elementsEqual(a[i] as T, b[i] as T)) {
             return false;
         }
     }
@@ -331,10 +331,10 @@ export function filterFirst<T>(
     array: ArrayLike<T>,
     predicate: (element: T, index: number) => boolean
 ): T[] {
-    const result = [];
+    const result: T[] = [];
     let i = 0;
     for (; i < array.length; ++i) {
-        const element = array[i];
+        const element = array[i] as T;
         if (predicate(element, i)) {
             result.push(element);
         } else {
@@ -342,7 +342,7 @@ export function filterFirst<T>(
         }
     }
     for (++i; i < array.length; ++i) {
-        result.push(array[i]);
+        result.push(array[i] as T);
     }
     return result;
 }
@@ -498,7 +498,7 @@ export function foldMap<T, U>(
 ): U {
     let accumulator = initial;
     for (let i = 0; i < array.length; ++i) {
-        accumulator = f(accumulator, m(array[i], i), i);
+        accumulator = f(accumulator, m(array[i] as T, i), i);
     }
 
     return accumulator;
@@ -521,7 +521,7 @@ export function foldMapRight<T, U>(
     let accumulator = initial;
     const length = array.length;
     for (let i = 0; i < array.length; ++i) {
-        accumulator = f(accumulator, m(array[length - i], i), i);
+        accumulator = f(accumulator, m(array[length - i] as T, i), i);
     }
 
     return accumulator;
@@ -579,7 +579,7 @@ export function find<T>(
     predicate: (element: T, index: number) => boolean
 ): T | null {
     const index = findIndex(array, predicate);
-    return index == null ? null : array[index];
+    return index == null ? null : (array[index] as T);
 }
 
 export function findFn<T, U extends T>(
@@ -611,11 +611,11 @@ function internalMaximum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | nu
         return null;
     }
 
-    let result = array[0];
+    let result = array[0] as T;
 
     for (let i = 1; i < array.length; ++i) {
-        if (compare(array[i], result) > 0) {
-            result = array[i];
+        if (compare(array[i] as T, result) > 0) {
+            result = array[i] as T;
         }
     }
 
@@ -647,11 +647,11 @@ function internalMinimum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | nu
         return null;
     }
 
-    let result = array[0];
+    let result = array[0] as T;
 
     for (let i = 1; i < array.length; ++i) {
-        if (compare(array[i], result) < 0) {
-            result = array[i];
+        if (compare(array[i] as T, result) < 0) {
+            result = array[i] as T;
         }
     }
 
@@ -774,7 +774,7 @@ export function scan<T, U>(
     let accumulator = initial;
 
     for (let i = 0; i < array.length; ++i) {
-        result[i] = accumulator = f(accumulator, array[i], i);
+        result[i] = accumulator = f(accumulator, array[i] as T, i);
     }
 
     return result;
@@ -795,11 +795,11 @@ export function scan1<T>(
         return [];
     }
 
-    let accumulator = array[0];
+    let accumulator = array[0] as T;
     const result: T[] = copy({0: accumulator, length: array.length});
 
     for (let i = 1; i < array.length; ++i) {
-        result[i] = accumulator = f(accumulator, array[i], i);
+        result[i] = accumulator = f(accumulator, array[i] as T, i);
     }
 
     return result;
@@ -820,7 +820,7 @@ export function scanRight<T, U>(
     let accumulator = initial;
 
     for (let i = array.length - 1; i >= 0; --i) {
-        result[i] = accumulator = f(accumulator, array[i], i);
+        result[i] = accumulator = f(accumulator, array[i] as T, i);
     }
 
     return result;
@@ -841,11 +841,11 @@ export function scanRight1<T>(
         return [];
     }
 
-    let accumulator = array[array.length - 1];
+    let accumulator = array[array.length - 1] as T;
     const result: T[] = copy({[array.length - 1]: accumulator, length: array.length});
 
     for (let i = array.length - 2; i >= 0; --i) {
-        result[i] = accumulator = f(accumulator, array[i], i);
+        result[i] = accumulator = f(accumulator, array[i] as T, i);
     }
 
     return result;
@@ -888,10 +888,10 @@ export function partition<T>(
     const b: T[] = [];
 
     for (let i = 0; i < array.length; ++i) {
-        if (predicate(array[i], i)) {
-            a.push(array[i]);
+        if (predicate(array[i] as T, i)) {
+            a.push(array[i] as T);
         } else {
-            b.push(array[i]);
+            b.push(array[i] as T);
         }
     }
 
@@ -924,7 +924,7 @@ export function partitionWhile<T>(
 ): [T[], T[]] {
     let i;
     for (i = 0; i < array.length; ++i) {
-        if (!predicate(array[i], i)) {
+        if (!predicate(array[i] as T, i)) {
             break;
         }
     }
@@ -965,7 +965,7 @@ export function zip<T, U>(a: readonly T[], b: readonly U[]): Array<[T, U]> {
     const length = Math.min(a.length, b.length);
     const result = new Array<[T, U]>(length);
     for (let i = 0; i < length; ++i) {
-        result[i] = [a[i], b[i]];
+        result[i] = [a[i] as T, b[i] as U];
     }
     return result;
 }
@@ -988,7 +988,7 @@ export function keyBy<TKey, TElement>(
     const result = new Map<TKey, TElement[]>();
 
     for (let i = 0; i < array.length; ++i) {
-        const element = array[i];
+        const element = array[i] as TElement;
         const key = f(element, i);
         const group = result.get(key) ?? [];
         if (!result.has(key)) {
@@ -1013,7 +1013,7 @@ export function keyFirstBy<TKey, TElement>(
     const result = new Map<TKey, TElement>();
 
     for (let i = 0; i < array.length; ++i) {
-        const element = array[i];
+        const element = array[i] as TElement;
         const key = f(element, i);
         if (!result.has(key)) {
             result.set(key, element);
@@ -1036,7 +1036,7 @@ export function keyLastBy<TKey, TElement>(
     const result = new Map<TKey, TElement>();
 
     for (let i = 0; i < array.length; ++i) {
-        const element = array[i];
+        const element = array[i] as TElement;
         const key = f(element, i);
         result.set(key, element);
     }
@@ -1057,7 +1057,7 @@ export function mapKeyBy<TKey, TElement, TNewElement>(
     const result = new Map<TKey, TNewElement[]>();
 
     for (let i = 0; i < array.length; ++i) {
-        const [key, element] = f(array[i], i);
+        const [key, element] = f(array[i] as TElement, i);
         const group = result.get(key) ?? [];
         if (!result.has(key)) {
             result.set(key, group);
@@ -1081,7 +1081,7 @@ export function mapKeyFirstBy<TKey, TElement, TNewElement>(
     const result = new Map<TKey, TNewElement>();
 
     for (let i = 0; i < array.length; ++i) {
-        const [key, element] = f(array[i], i);
+        const [key, element] = f(array[i] as TElement, i);
         if (!result.has(key)) {
             result.set(key, element);
         }
@@ -1103,7 +1103,7 @@ export function mapKeyLastBy<TKey, TElement, TNewElement>(
     const result = new Map<TKey, TNewElement>();
 
     for (let i = 0; i < array.length; ++i) {
-        const [key, element] = f(array[i], i);
+        const [key, element] = f(array[i] as TElement, i);
         result.set(key, element);
     }
 
@@ -1171,7 +1171,7 @@ export function groupByIdentity<T>(
     const groups: T[][] = [];
     const map = new Map<unknown, T[]>();
     for (let i = 0; i < array.length; ++i) {
-        const element = array[i];
+        const element = array[i] as T;
         const key = identity(element);
         const group = map.get(key) ?? [];
         group.push(element);
@@ -1194,13 +1194,14 @@ export function groupByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => b
 
     outer: for (let i = 0; i < array.length; ++i) {
         for (let j = 0; j < result.length; ++j) {
-            if (equal(result[j][0], array[i])) {
-                result[j].push(array[i]);
+            const group = notNull(result[j]);
+            if (equal(group[0] as T, array[i] as T)) {
+                group.push(array[i] as T);
                 continue outer;
             }
         }
 
-        result.push([array[i]]);
+        result.push([array[i] as T]);
     }
 
     return result;
@@ -1229,7 +1230,7 @@ export function groupByHash<T>(
     const result: T[][] = [];
 
     for (let i = 0; i < array.length; ++i) {
-        const element = array[i];
+        const element = array[i] as T;
         const h = hash(element, i);
 
         const group = groups.get(h) ?? [];
@@ -1258,14 +1259,14 @@ export function groupByEqualityWithHash<T>(
     const result: T[][] = [];
 
     for (let i = 0; i < array.length; ++i) {
-        const element = array[i];
+        const element = array[i] as T;
         const h = hash(element, i);
 
         const hashGroup = groups.get(h) ?? [];
         if (!groups.has(h)) {
             groups.set(h, hashGroup);
         }
-        const group = find(hashGroup, group => equal(group[0], element));
+        const group = find(hashGroup, group => equal(group[0] as T, element));
         if (group == null) {
             const newGroup = [element];
             hashGroup.push(newGroup);
@@ -1339,13 +1340,13 @@ export function groupAdjacentByEquality<T>(
         return [];
     }
 
-    let element: T = array[0];
+    let element = array[0] as T;
     let group: T[] = [element];
     const result: T[][] = [group];
 
     for (let i = 1; i < array.length; ++i) {
         const prev = element;
-        element = array[i];
+        element = array[i] as T;
         if (equal(prev, element)) {
             group.push(element);
         } else {
@@ -1379,13 +1380,13 @@ export function groupAdjacentByHash<T>(
         return [];
     }
 
-    const element = array[0];
+    const element = array[0] as T;
     let h = hash(element, 0);
     let group: T[] = [element];
     const result: T[][] = [group];
 
     for (let i = 1; i < array.length; ++i) {
-        const element = array[i];
+        const element = array[i] as T;
         const h1 = hash(element, i);
         if (h === h1) {
             group.push(element);
@@ -1437,7 +1438,7 @@ function uniqueByIdentityInternal<T>(array: ArrayLike<T>, identity: (element: T)
     const set = new Set<unknown>();
     const result: T[] = [];
     for (let i = 0; i < array.length; ++i) {
-        const element = array[i];
+        const element = array[i] as T;
         if (!set.has(identity(element))) {
             set.add(identity(element));
             result.push(element);
@@ -1450,9 +1451,9 @@ export function uniqueByEquality<T>(array: ArrayLike<T>, equal: (a: T, b: T) => 
     const result: T[] = [];
 
     outer: for (let i = 0; i < array.length; ++i) {
-        const element = array[i];
+        const element = array[i] as T;
         for (let j = 0; j < result.length; ++j) {
-            if (equal(element, result[j])) {
+            if (equal(element, result[j] as T)) {
                 continue outer;
             }
         }
@@ -1485,7 +1486,7 @@ export function uniqueByHash<T>(
     const result: T[] = [];
 
     for (let i = 0; i < array.length; ++i) {
-        const element = array[i];
+        const element = array[i] as T;
         const h = hash(element, i);
         if (!seen.has(h)) {
             seen.add(h);
@@ -1511,7 +1512,7 @@ export function uniqueByEqualityWithHash<T>(
     const result: T[] = [];
 
     for (let i = 0; i < array.length; ++i) {
-        const element = array[i];
+        const element = array[i] as T;
         const h = hash(element, i);
 
         const seenGroup = seenGroups.get(h) ?? [];
@@ -1590,12 +1591,12 @@ export function uniqueAdjacentByEquality<T>(
         return [];
     }
 
-    let element: T = array[0];
+    let element = array[0] as T;
     const result = [element];
 
     for (let i = 1; i < array.length; ++i) {
         const prev = element;
-        element = array[i];
+        element = array[i] as T;
         if (!equal(prev, element)) {
             result.push(element);
         }
@@ -1626,12 +1627,12 @@ export function uniqueAdjacentByHash<T>(
         return [];
     }
 
-    const element = array[0];
+    const element = array[0] as T;
     let h = hash(element, 0);
     const result = [element];
 
     for (let i = 1; i < array.length; ++i) {
-        const element = array[i];
+        const element = array[i] as T;
         const h1 = hash(element, i);
         if (h !== h1) {
             h = h1;
@@ -1653,8 +1654,8 @@ export function shuffle<T>(array: ArrayLike<T>): T[] {
     const result = copy(array);
     for (let i = 0; i < array.length; ++i) {
         const j = i + Math.floor(Math.random() * (array.length - i));
-        const replacement = result[j];
-        result[j] = result[i];
+        const replacement = result[j] as T;
+        result[j] = result[i] as T;
         result[i] = replacement;
     }
     return result;
@@ -1703,7 +1704,7 @@ export function forEach<T>(
     f: (element: T, index: number) => void
 ): typeof array {
     for (let i = 0; i < array.length; ++i) {
-        f(array[i], i);
+        f(array[i] as T, i);
     }
     return array;
 }

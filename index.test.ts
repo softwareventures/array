@@ -31,6 +31,7 @@ import {
     keyFirstBy,
     keyLastBy,
     last,
+    lastIndexOf,
     map,
     mapKeyBy,
     mapKeyFirstBy,
@@ -272,6 +273,10 @@ test("foldMap", t => {
 test("contains", t => {
     t.true(contains([1, 2, 3], 1));
     t.false(contains([1, 2, 3], 0));
+});
+
+test("lastIndexOf", t => {
+    t.is(lastIndexOf([1, 2, 3, 4, 3, 2, 1], 3), 4);
 });
 
 test("findIndex", t => {

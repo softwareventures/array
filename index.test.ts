@@ -17,6 +17,7 @@ import {
     filterFirst,
     find,
     findIndex,
+    findLast,
     findLastIndex,
     first,
     fold,
@@ -297,6 +298,13 @@ test("find", t => {
     t.is(
         find([1, 2, 3, 4, 3, 2, 1], n => n >= 3),
         3
+    );
+});
+
+test("findLast", t => {
+    t.is(
+        findLast([1, 2, 3, 4, 5, 2, 1], n => n >= 3),
+        5
     );
 });
 

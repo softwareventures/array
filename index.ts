@@ -566,6 +566,24 @@ export function findIndexFn<T>(
     return array => findIndex(array, predicate);
 }
 
+export function findLastIndex<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): number | null {
+    for (let i = array.length - 1; i >= 0; --i) {
+        if (predicate(array[i] as T, i)) {
+            return i;
+        }
+    }
+    return null;
+}
+
+export function findLastIndexFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => number | null {
+    return array => findLastIndex(array, predicate);
+}
+
 export function find<T, U extends T>(
     array: ArrayLike<T>,
     predicate: (element: T) => element is U

@@ -612,6 +612,39 @@ export function findFn<T>(
     return array => find(array, predicate);
 }
 
+export function findLast<T, U extends T>(
+    array: ArrayLike<T>,
+    predicate: (element: T) => element is U
+): U | null;
+export function findLast<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): T | null;
+export function findLast<T>(
+    array: ArrayLike<T>,
+    predicate: (element: T, index: number) => boolean
+): T | null {
+    for (let i = array.length - 1; i >= 0; --i) {
+        const element = array[i];
+        if (predicate(element, i)) {
+            return element;
+        }
+    }
+    return null;
+}
+
+export function findLastFn<T, U extends T>(
+    predicate: (element: T) => element is U
+): (array: ArrayLike<T>) => U | null;
+export function findLastFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => T | null;
+export function findLastFn<T>(
+    predicate: (element: T, index: number) => boolean
+): (array: ArrayLike<T>) => T | null {
+    return array => findLast(array, predicate);
+}
+
 export function maximum<T extends string | number | boolean>(array: ArrayLike<T>): T | null;
 export function maximum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | null;
 export function maximum<T>(

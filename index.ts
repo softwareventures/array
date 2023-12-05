@@ -42,7 +42,7 @@ export const copy: <T>(array: ArrayLike<T>) => T[] = Array.from;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
 // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
-export function isArray<T = unknown>(value: readonly T[] | unknown): value is readonly T[];
+export function isArray(value: unknown): value is readonly unknown[];
 
 /** @internal This implementation is for internal use only, the exported declaration is above */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

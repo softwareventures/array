@@ -552,6 +552,19 @@ export function indexOfFn<T>(value: T): (array: ArrayLike<T>) => number | null {
     return array => indexOf(array, value);
 }
 
+export function lastIndexOf<T>(array: ArrayLike<T>, value: T): number | null {
+    for (let i = array.length - 1; i >= 0; --i) {
+        if (array[i] === value) {
+            return i;
+        }
+    }
+    return null;
+}
+
+export function lastIndexOfFn<T>(value: T): (array: ArrayLike<T>) => number | null {
+    return array => lastIndexOf(array, value);
+}
+
 export function findIndex<T>(
     array: ArrayLike<T>,
     predicate: (element: T, index: number) => boolean

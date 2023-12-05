@@ -67,16 +67,6 @@ export function first<T>(array: ArrayLike<T>): T | null {
     return array.length === 0 ? null : (array[0] as T);
 }
 
-/** @deprecated Use {@link first} instead. */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
-export function head<T>(array: ArrayLike<T>): T | null;
-
-/** @internal This implementation is for internal use only, the exported declaration is above */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
-export const head = first;
-
 export function tail<T>(array: ArrayLike<T>): T[] {
     return nativeSlice.call(array, 1) as T[];
 }

@@ -680,7 +680,7 @@ function internalMaximum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | nu
     let result = array[0] as T;
 
     for (let i = 1; i < array.length; ++i) {
-        if (compare(array[i] as T, result) > 0) {
+        if (compare(array[i] as T, result) > Comparison.equal) {
             result = array[i] as T;
         }
     }
@@ -716,7 +716,7 @@ function internalMinimum<T>(array: ArrayLike<T>, compare: Comparator<T>): T | nu
     let result = array[0] as T;
 
     for (let i = 1; i < array.length; ++i) {
-        if (compare(array[i] as T, result) < 0) {
+        if (compare(array[i] as T, result) < Comparison.equal) {
             result = array[i] as T;
         }
     }

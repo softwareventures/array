@@ -317,36 +317,6 @@ export function filterFn<T>(
     return array => nativeFilter.call(array, predicate) as T[];
 }
 
-/** @deprecated This function is confusing, use {@link excludeFirst} instead,
- * and invert the predicate. */
-export function filterFirst<T>(
-    array: ArrayLike<T>,
-    predicate: (element: T, index: number) => boolean
-): T[] {
-    const result: T[] = [];
-    let i = 0;
-    for (; i < array.length; ++i) {
-        const element = array[i] as T;
-        if (predicate(element, i)) {
-            result.push(element);
-        } else {
-            break;
-        }
-    }
-    for (++i; i < array.length; ++i) {
-        result.push(array[i] as T);
-    }
-    return result;
-}
-
-/** @deprecated This function is confusing, use {@link excludeFirstFn} instead,
- * and invert the predicate. */
-export function filterFirstFn<T>(
-    predicate: (element: T, index: number) => boolean
-): (array: ArrayLike<T>) => T[] {
-    return array => filterFirst(array, predicate);
-}
-
 export function exclude<T, U>(
     array: ArrayLike<T | U>,
     predicate: (element: T | U) => element is T
@@ -382,7 +352,20 @@ export function excludeFirst<T>(
     array: ArrayLike<T>,
     predicate: (element: T, index: number) => boolean
 ): T[] {
-    return filterFirst(array, (element, index) => !predicate(element, index));
+    const result: T[] = [];
+    let i = 0;
+    for (; i < array.length; ++i) {
+        const element = array[i] as T;
+        if (!predicate(element, i)) {
+            result.push(element);
+        } else {
+            break;
+        }
+    }
+    for (++i; i < array.length; ++i) {
+        result.push(array[i] as T);
+    }
+    return result;
 }
 
 export function excludeFirstFn<T>(

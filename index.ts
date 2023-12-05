@@ -50,7 +50,7 @@ export function isArray(value: unknown): value is readonly unknown[];
 export const isArray: (value: unknown) => value is unknown[] = Array.isArray;
 
 // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
-export function isArrayLike<T>(value: ArrayLike<T> | unknown): value is ArrayLike<T> {
+export function isArrayLike(value: unknown): value is ArrayLike<unknown> {
     return (
         typeof value === "object" &&
         value != null &&

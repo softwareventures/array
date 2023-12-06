@@ -42,7 +42,7 @@ export const copy: <T>(array: ArrayLike<T>) => T[] = Array.from;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
 // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
-export function isArray<T = unknown>(value: readonly T[] | unknown): value is readonly T[];
+export function isArray(value: unknown): value is readonly unknown[];
 
 /** @internal This implementation is for internal use only, the exported declaration is above */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -50,7 +50,7 @@ export function isArray<T = unknown>(value: readonly T[] | unknown): value is re
 export const isArray: (value: unknown) => value is unknown[] = Array.isArray;
 
 // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
-export function isArrayLike<T>(value: ArrayLike<T> | unknown): value is ArrayLike<T> {
+export function isArrayLike(value: unknown): value is ArrayLike<unknown> {
     return (
         typeof value === "object" &&
         value != null &&
@@ -66,16 +66,6 @@ export function coerce<T>(array: ArrayLike<T>): readonly T[] {
 export function first<T>(array: ArrayLike<T>): T | null {
     return array.length === 0 ? null : (array[0] as T);
 }
-
-/** @deprecated Use {@link first} instead. */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
-export function head<T>(array: ArrayLike<T>): T | null;
-
-/** @internal This implementation is for internal use only, the exported declaration is above */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
-export const head = first;
 
 export function tail<T>(array: ArrayLike<T>): T[] {
     return nativeSlice.call(array, 1) as T[];
@@ -327,36 +317,6 @@ export function filterFn<T>(
     return array => nativeFilter.call(array, predicate) as T[];
 }
 
-/** @deprecated This function is confusing, use {@link excludeFirst} instead,
- * and invert the predicate. */
-export function filterFirst<T>(
-    array: ArrayLike<T>,
-    predicate: (element: T, index: number) => boolean
-): T[] {
-    const result: T[] = [];
-    let i = 0;
-    for (; i < array.length; ++i) {
-        const element = array[i] as T;
-        if (predicate(element, i)) {
-            result.push(element);
-        } else {
-            break;
-        }
-    }
-    for (++i; i < array.length; ++i) {
-        result.push(array[i] as T);
-    }
-    return result;
-}
-
-/** @deprecated This function is confusing, use {@link excludeFirstFn} instead,
- * and invert the predicate. */
-export function filterFirstFn<T>(
-    predicate: (element: T, index: number) => boolean
-): (array: ArrayLike<T>) => T[] {
-    return array => filterFirst(array, predicate);
-}
-
 export function exclude<T, U>(
     array: ArrayLike<T | U>,
     predicate: (element: T | U) => element is T
@@ -392,7 +352,20 @@ export function excludeFirst<T>(
     array: ArrayLike<T>,
     predicate: (element: T, index: number) => boolean
 ): T[] {
-    return filterFirst(array, (element, index) => !predicate(element, index));
+    const result: T[] = [];
+    let i = 0;
+    for (; i < array.length; ++i) {
+        const element = array[i] as T;
+        if (!predicate(element, i)) {
+            result.push(element);
+        } else {
+            break;
+        }
+    }
+    for (++i; i < array.length; ++i) {
+        result.push(array[i] as T);
+    }
+    return result;
 }
 
 export function excludeFirstFn<T>(
@@ -1713,18 +1686,6 @@ export function uniqueAdjacentByHashFn<T>(
     hash: (element: T, index: number) => unknown
 ): (array: ArrayLike<T>) => T[] {
     return array => uniqueAdjacentByHash(array, hash);
-}
-
-/** @deprecated Use [array-shuffle](https://npmjs.com/array-shuffle) instead. */
-export function shuffle<T>(array: ArrayLike<T>): T[] {
-    const result = copy(array);
-    for (let i = 0; i < array.length; ++i) {
-        const j = i + Math.floor(Math.random() * (array.length - i));
-        const replacement = result[j] as T;
-        result[j] = result[i] as T;
-        result[i] = replacement;
-    }
-    return result;
 }
 
 export function sort(array: ArrayLike<boolean>): boolean[];

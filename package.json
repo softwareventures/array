@@ -17,7 +17,7 @@
     "fix": "tsc --noEmit && eslint . --fix && prettier --write .",
     "lint": "tsc --noEmit && eslint . && prettier --check .",
     "pre-commit": "precise-commits",
-    "prepare": "husky install && tsc",
+    "prepare": "husky && tsc",
     "semantic-release": "semantic-release",
     "test": "ava"
   },

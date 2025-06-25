@@ -72,5 +72,6 @@
   },
   "release": {
     "extends": "@softwareventures/semantic-release-config"
-  }
+  },
+  "packageManager": "yarn@1.22.22"
 }

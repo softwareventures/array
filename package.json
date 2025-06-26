@@ -42,7 +42,7 @@
     "cz-conventional-changelog": "3.3.0",
     "eslint": "8.57.1",
     "eslint-config-prettier": "10.1.5",
-    "eslint-plugin-import": "2.31.0",
+    "eslint-plugin-import": "2.32.0",
     "eslint-plugin-jsdoc": "48.11.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-sonarjs": "3.0.3",

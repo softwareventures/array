@@ -14,6 +14,7 @@
   "repository": "github:softwareventures/array",
   "license": "ISC",
   "scripts": {
+    "commit": "cz",
     "fix": "tsc --noEmit && eslint . --fix && prettier --write .",
     "postinstall": "husky",
     "lint": "tsc --noEmit && eslint . && prettier --check .",
@@ -30,6 +31,9 @@
     "tslib": "^2.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "19.8.1",
+    "@commitlint/config-conventional": "19.8.1",
+    "@commitlint/cz-commitlint": "19.8.1",
     "@softwareventures/eslint-config": "9.2.3",
     "@softwareventures/precise-commits": "4.0.23",
     "@softwareventures/prettier-config": "4.0.0",
@@ -39,8 +43,8 @@
     "@typescript-eslint/eslint-plugin": "8.55.0",
     "@typescript-eslint/parser": "8.55.0",
     "ava": "6.4.0",
+    "commitizen": "4.3.1",
     "conventional-changelog-conventionalcommits": "7.0.2",
-    "cz-conventional-changelog": "3.3.0",
     "eslint": "8.57.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-import": "2.32.0",
@@ -48,6 +52,7 @@
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-sonarjs": "3.0.4",
     "husky": "9.1.7",
+    "inquirer": "9.3.8",
     "pinst": "3.0.0",
     "prettier": "3.8.1",
     "semantic-release": "22.0.12",
@@ -62,7 +67,7 @@
   "prettier": "@softwareventures/prettier-config",
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "@commitlint/cz-commitlint"
     }
   },
   "ava": {

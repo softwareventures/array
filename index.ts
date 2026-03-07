@@ -6,28 +6,20 @@ import {
     equal as defaultEqual
 } from "@softwareventures/ordered";
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeSlice = Array.prototype.slice;
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeReverse = Array.prototype.reverse;
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeConcat = Array.prototype.concat;
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeFilter = Array.prototype.filter;
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeReduce = Array.prototype.reduce;
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeReduceRight = Array.prototype.reduceRight;
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeIndexOf = Array.prototype.indexOf;
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeFindIndex = Array.prototype.findIndex;
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -41,7 +33,6 @@ export const copy: <T>(array: ArrayLike<T>) => T[] = Array.from;
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore duplicate identifier: This is the exported declaration, the implementation is below.
-// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export function isArray(value: unknown): value is readonly unknown[];
 
 /** @internal This implementation is for internal use only, the exported declaration is above */
@@ -49,7 +40,6 @@ export function isArray(value: unknown): value is readonly unknown[];
 // @ts-ignore duplicate identifier: This is the actual implementation, the exported declaration is above.
 export const isArray: (value: unknown) => value is unknown[] = Array.isArray;
 
-// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export function isArrayLike(value: unknown): value is ArrayLike<unknown> {
     return (
         typeof value === "object" &&

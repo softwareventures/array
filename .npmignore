@@ -3,8 +3,16 @@
 /tsconfig.test.json
 /.eslintignore
 /.github
+/.prettierignore
 /renovate.json
 /.snyk
+/.husky
+/*.config.js
+/*.config.cjs
+/*.config.mjs
+/*.config.ts
+/*.config.cts
+/*.config.mts
 *.ts
 !*.d.ts
 
@@ -13,6 +21,8 @@ package-lock.json
 yarn.lock
 yarn-error.log
 npm-debug.log*
+/.yarn
+/.yarnrc.yml
 
 # macOS
 .DS_Store

@@ -1,3 +1,6 @@
 {
-  "extends": "@softwareventures/tsconfig"
+  "extends": "@softwareventures/tsconfig",
+  "compilerOptions": {
+    "stripInternal": true
+  }
 }

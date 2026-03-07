@@ -15,9 +15,9 @@
   "license": "ISC",
   "scripts": {
     "fix": "tsc --noEmit && eslint . --fix && prettier --write .",
+    "postinstall": "husky",
     "lint": "tsc --noEmit && eslint . && prettier --check .",
-    "prepare": "husky && tsc",
-    "semantic-release": "semantic-release",
+    "prepack": "tsc",
     "test": "ava"
   },
   "sideEffects": false,
@@ -76,5 +76,5 @@
   "release": {
     "extends": "@softwareventures/semantic-release-config"
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@4.12.0"
 }

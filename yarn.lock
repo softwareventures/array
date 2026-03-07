@@ -566,7 +566,7 @@ __metadata:
     "@commitlint/config-conventional": "npm:19.8.1"
     "@commitlint/cz-commitlint": "npm:19.8.1"
     "@eslint/js": "npm:9.39.4"
-    "@softwareventures/eslint-config": "npm:10.0.0-alpha.2"
+    "@softwareventures/eslint-config": "npm:10.0.0"
     "@softwareventures/nullable": "npm:^1.0.0 || ^2.0.0 || ^3.0.0"
     "@softwareventures/ordered": "npm:^1.1.0 || ^2.0.0"
     "@softwareventures/precise-commits": "npm:4.0.23"
@@ -592,9 +592,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@softwareventures/eslint-config@npm:10.0.0-alpha.2":
-  version: 10.0.0-alpha.2
-  resolution: "@softwareventures/eslint-config@npm:10.0.0-alpha.2"
+"@softwareventures/eslint-config@npm:10.0.0":
+  version: 10.0.0
+  resolution: "@softwareventures/eslint-config@npm:10.0.0"
   dependencies:
     "@softwareventures/nullable": "npm:^3.2.0"
     tslib: "npm:^2.3.1"
@@ -609,7 +609,7 @@ __metadata:
     eslint-plugin-prefer-arrow: ^1.2.3
     eslint-plugin-sonarjs: ^4.0.0
     typescript: ^5.0.0
-  checksum: 10c0/67c095cc43927bb2f342894c8a825742e8f1c50a09dc08dbdf4fe8fd65454823e113542aabb9897ef28c2d7d0759fa1265e6846a89d02e302056c667a5c45cba
+  checksum: 10c0/6f34d94e63354f3f8aeea7e0a5be69fda39b37cc93c9bd6b0eed5ff0c6e88c200883d3cf2a42832d5deffa029f912b6903f97e3a29d719cbaedf3882080cc38d
   languageName: node
   linkType: hard
 
